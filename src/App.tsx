@@ -1,4 +1,4 @@
-import { Box, Button, ThemeProvider, Typography } from '@mui/material'
+import { Box, Button, InputAdornment, TextField, ThemeProvider, Typography } from '@mui/material'
 import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import { useState } from 'react'
 import { darkTheme, lightTheme } from './themes'
@@ -6,8 +6,8 @@ import { CalculateFruits } from './adapters/CalculateFruits';
 
 
 const columns: GridColDef[] = [
-  { field: 'col1', headerName: 'Fruta'},
-  { field: 'col2', headerName: 'Gramos'},
+  { field: 'col1', headerName: 'Fruta' },
+  { field: 'col2', headerName: 'Gramos' },
 ];
 
 // const rows: GridRowsProp = [
@@ -19,16 +19,21 @@ const columns: GridColDef[] = [
 // TODO: Move to a reusable component 
 const App = () => {
 
-  const mapFriuts = ():GridRowsProp  => {
-    return CalculateFruits(150).map((fruit, index) => {
+  const mapFriuts = (gramsTarget: number): GridRowsProp => {
+    return CalculateFruits(gramsTarget).map((fruit, index) => {
       console.log(fruit)
-      return {id: index, col1: fruit.name, col2: fruit.totalGrams}
+      return { id: index, col1: fruit.name, col2: fruit.totalGrams }
     })
   }
-  const [datos, setDatos] = useState({
-    gramsTarget: 150,
-    rows: mapFriuts()
+  const [data, setData] = useState({
+    gramsTarget: 0,
+    rows: mapFriuts(0)
   });
+
+  const handleFruitGramsChange = 
+  (event: React.ChangeEvent<HTMLInputElement>) => {
+      setData({ ...data, gramsTarget: parseInt(event.target.value), rows: mapFriuts(parseInt(event.target.value))  });
+    };
 
   return (
     <ThemeProvider theme={lightTheme}>
@@ -36,9 +41,19 @@ const App = () => {
 
       {/* Se debe remplazar todo lo de acá por el enrutador */}
       <Typography variant='h2' component='h2' sx={{ mb: 2 }}>Current theme: Light</Typography>
-      <Box sx={{height: 500, backgroundColor: 'primary' }}>
+      <TextField
+        id="gramsTarget"
+        label="Gramos"
+        type="number"
+        variant="outlined"
+        InputProps={{
+          endAdornment: <InputAdornment position="start">gr</InputAdornment>,
+        }}
+        onChange={handleFruitGramsChange}
+      />
+      <Box sx={{ height: 500, backgroundColor: 'primary' }}>
         <DataGrid
-          rows={datos.rows}
+          rows={data.rows}
           columns={columns}
           pageSize={10}
           rowsPerPageOptions={[10]}
