@@ -1,52 +1,49 @@
 import { Box, Button, ThemeProvider, Typography } from '@mui/material'
+import { DataGrid, GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import { useState } from 'react'
 import { darkTheme, lightTheme } from './themes'
+import { CalculateFruits } from './adapters/CalculateFruits';
 
 
-// Aca va todo lo que se pueda poner como HOC High Order Coponent
+const columns: GridColDef[] = [
+  { field: 'col1', headerName: 'Fruta'},
+  { field: 'col2', headerName: 'Gramos'},
+];
+
+// const rows: GridRowsProp = [
+//   { id: 1, col1: 'Hello', col2: 'World' },
+//   { id: 2, col1: 'DataGridPro', col2: 'is Awesome' },
+//   { id: 3, col1: 'MUI', col2: 'is Amazing' },
+// ];
+
+// TODO: Move to a reusable component 
 const App = () => {
 
+  const mapFriuts = ():GridRowsProp  => {
+    return CalculateFruits(150).map((fruit, index) => {
+      console.log(fruit)
+      return {id: index, col1: fruit.name, col2: fruit.totalGrams}
+    })
+  }
   const [datos, setDatos] = useState({
-    gramsInput: '',
-    fruits: [
-      { 'name': 'Pina', 'grams': 150 },
-      { 'name': 'papaya', 'grams': 175 },
-      { 'name': 'Melon', 'grams': 207 },
-      { 'name': 'Pera', 'grams': 130 },
-      { 'name': 'Mango', 'grams': 125 },
-      { 'name': 'Manzana', 'grams': 144 },
-      { 'name': 'Banano', 'grams': 84 },
-      { 'name': 'Kiwi', 'grams': 123 },
-    ]
+    gramsTarget: 150,
+    rows: mapFriuts()
   });
-
 
   return (
     <ThemeProvider theme={lightTheme}>
 
 
       {/* Se debe remplazar todo lo de acá por el enrutador */}
-      <Typography variant='h2' component='h2' sx={{ mb: 2 }}>Current theme: Light'</Typography>
-      <Box>
-        <Button color='primary'>Primary outline</Button>
-        <Button variant='contained' color='secondary'>Primary outline</Button>
-
-        <Button color='info'>Primary outline</Button>
-
-        <Box>
-          <Button onClick={() => { }}>Change Theme</Button>
-        </Box>
-
-      </Box>
-      {/* <Box>
+      <Typography variant='h2' component='h2' sx={{ mb: 2 }}>Current theme: Light</Typography>
+      <Box sx={{height: 500, backgroundColor: 'primary' }}>
         <DataGrid
-          rows={rows}
+          rows={datos.rows}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          checkboxSelection
+          pageSize={10}
+          rowsPerPageOptions={[10]}
         />
-      </Box> */}
+      </Box>
     </ThemeProvider>
   )
 }
