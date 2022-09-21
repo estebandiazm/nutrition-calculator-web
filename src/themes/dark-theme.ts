@@ -78,7 +78,6 @@ export const darkTheme = createTheme({
           borderRadius: '10px',
         }
       }
-    }
-
+    },
   }
 });
