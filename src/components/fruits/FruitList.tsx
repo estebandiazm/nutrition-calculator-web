@@ -12,7 +12,7 @@ const columns: GridColDef[] = [
       align: 'center',
       renderCell: (({row}: any) => {
         return (
-          <Typography sx={{color: 'green'}}>{row.col2}</Typography>
+          <Typography sx={{color: 'red'}}>{row.col2}</Typography>
         )
       })
     },
