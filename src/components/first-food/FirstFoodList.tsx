@@ -1,10 +1,10 @@
 import { Box, InputAdornment, TextField, Typography } from "@mui/material"
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid"
 import { useState } from "react";
-import { CalculateFruits } from '../../adapters/CalculateFruits';
+import { CalculateFirstFood } from '../../adapters/CalculateFirstFood';
 
 const columns: GridColDef[] = [
-    { field: 'col1', headerName: 'Fruta', flex:1 },
+    { field: 'col1', headerName: 'Alimento', flex:1},
     { 
       field: 'col2',
       headerName: 'Gramos',
@@ -18,13 +18,13 @@ const columns: GridColDef[] = [
   ];
   
   const mapFruits = (gramsTarget: number): GridRowsProp => {
-    return CalculateFruits(gramsTarget).map((fruit, index) => {
+    return CalculateFirstFood(gramsTarget).map((fruit, index) => {
       // console.log(fruit)
       return { id: index, col1: fruit.name, col2: fruit.totalGrams }
     })
   }
 
-const FruitList = () => {
+const FirstFood = () => {
     const [data, setData] = useState({
         gramsTarget: 0,
         rows: mapFruits(0)
@@ -32,7 +32,7 @@ const FruitList = () => {
 
     return (
         <Box>
-          <Typography variant='h2' component='h2' sx={{ mb: 2 }}>Calculadora Nutricional</Typography>
+            <Typography variant='h2' component='h2' sx={{ mb: 2 }}>Comida 1</Typography>
             <TextField
                 id="gramsTarget"
                 label="Gramos"
@@ -59,4 +59,4 @@ const FruitList = () => {
     )
 }
 
-export default FruitList
+export default FirstFood

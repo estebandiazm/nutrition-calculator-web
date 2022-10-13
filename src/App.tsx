@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { darkTheme, lightTheme } from './themes'
 
 import FruitList from './components/fruits/FruitList';
+import FirstFood from './components/first-food/FirstFoodList';
 
 
 
@@ -14,10 +15,13 @@ const App = () => {
   return (
     <ThemeProvider theme={lightTheme}>
       {/* Se debe remplazar todo lo de acá por el enrutador */}
-      <Typography variant='h2' component='h2' sx={{ mb: 2 }}>Calculadora Nutricional</Typography>
+      <Typography variant='h1' component='h1' sx={{ mb: 2 }}>Calculadora Nutricional</Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={4}>
-          <FruitList/>
+          <FruitList />
+        </Grid>
+        <Grid item xs={12} sm={12} md={4}>
+          <FirstFood />
         </Grid>
       </Grid>
     </ThemeProvider>
