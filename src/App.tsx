@@ -5,6 +5,7 @@ import { darkTheme, lightTheme } from './themes'
 
 import FruitList from './components/fruits/FruitList';
 import FirstFood from './components/first-food/FirstFoodList';
+import SecondFood from './components/second-food/SecondFoodList';
 
 
 
@@ -22,6 +23,9 @@ const App = () => {
         </Grid>
         <Grid item xs={12} sm={12} md={4}>
           <FirstFood />
+        </Grid>
+        <Grid item xs={12} sm={12} md={4}>
+          <SecondFood />
         </Grid>
       </Grid>
     </ThemeProvider>

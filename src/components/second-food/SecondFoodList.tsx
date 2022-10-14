@@ -4,14 +4,23 @@ import { useState } from "react";
 import { CalculateFoodSimple } from "../../adapters/CalculateFood";
 import { Food } from "../../model/Fruit";
 
-
-const foodOne: Food[] = [
-  { 'name': 'Avena', 'grams': 90 },
-  { 'name': 'Arroz', 'grams': 192 },
-  { 'name': 'Tocineta', 'grams': 45 },
-  { 'name': 'Granola', 'grams': 77 },
-  { 'name': 'Arepa Masmai', 'grams': 2 },
-  { 'name': 'froot loops + 250ml', 'grams': 55 },
+const foods: Food[] = [
+  { 'name': 'Carne Res', 'grams': 300 },
+  { 'name': 'Lomo cerdo', 'grams': 290 },
+  { 'name': 'Pollo', 'grams': 253 },
+  { 'name': 'Tilapia', 'grams': 310 },
+  { 'name': 'Camarones', 'grams': 320 },
+  { 'name': 'Pechuga Pavo', 'grams': 275 },
+  { 'name': 'Pasta', 'grams':	210},
+  { 'name': 'Arroz', 'grams': 200 },
+  { 'name': 'Papa', 'grams':	275},
+  { 'name': 'Yuca', 'grams':	163},
+  { 'name': 'Quinoa', 'grams':	260},
+  { 'name': 'Frijoles', 'grams':	172},
+  { 'name': 'Lenteja', 'grams':	228},
+  { 'name': 'Batata', 'grams':	216},
+  { 'name': 'Maduro (cocido) dieta flex', 'grams': 	190},
+  { 'name': 'Garbanzos', 'grams':	160},
 ]
 
 const columns: GridColDef[] = [
@@ -29,12 +38,12 @@ const columns: GridColDef[] = [
 ];
 
 const mapFruits = (gramsTarget: number): GridRowsProp => {
-  return CalculateFoodSimple(gramsTarget, foodOne).map((fruit, index) => {
+  return CalculateFoodSimple(gramsTarget, foods).map((fruit, index) => {
     return { id: index, col1: fruit.name, col2: fruit.totalGrams }
   })
 }
 
-const FirstFood = () => {
+const SecondFood = () => {
   const [data, setData] = useState({
     gramsTarget: 0,
     rows: mapFruits(0)
@@ -42,7 +51,7 @@ const FirstFood = () => {
 
   return (
     <Box>
-      <Typography variant='h2' component='h2' sx={{ mb: 2 }}>Comida 1</Typography>
+      <Typography variant='h2' component='h2' sx={{ mb: 2 }}>Comida 2</Typography>
       <TextField
         id="gramsTarget"
         label="Gramos"
@@ -69,4 +78,4 @@ const FirstFood = () => {
   )
 }
 
-export default FirstFood
+export default SecondFood
