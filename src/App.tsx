@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     path: "/viewer",
     element: <Viewer/>
   }
-])
+], {basename:"/nutrition-calculator-web"} )
 
 // TODO: Move to a reusable component
 const App = () => {
