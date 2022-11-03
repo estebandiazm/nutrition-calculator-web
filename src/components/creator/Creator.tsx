@@ -27,6 +27,7 @@ const Creator = () => {
         <Grid item xs={12} sm={12} md={4}>
           <SecondFood />
         </Grid>
+        <Button variant="contained">Guardar</Button>
       </Grid>
     </ThemeProvider>
   )

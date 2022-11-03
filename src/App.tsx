@@ -1,21 +1,23 @@
 
 import Creator from './components/creator/Creator';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createHashRouter, RouterProvider } from 'react-router-dom';
 import React from 'react';
 import Viewer from './components/viewer/viewer';
 
 
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
-    path: "/",
-    element: <Creator />
-  },
-  {
-    path: "/viewer",
-    element: <Viewer/>
+    path: "",
+    element: <Creator />,
+    children: [
+      {
+        path: "viewer",
+        element: <Viewer />
+      }
+    ],
   }
-], {basename:"/nutrition-calculator-web"} )
+]);
 
 // TODO: Move to a reusable component
 const App = () => {
