@@ -6,8 +6,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const Viewer = () => {
   return (
-    <div>
-        <Typography variant='h5'>Nombre: XXXX XXXXX XXXXX</Typography>
+    <>
+      <Typography variant='h5'>Nombre: XXXX XXXXX XXXXX</Typography>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -47,7 +47,7 @@ const Viewer = () => {
           <Typography>Comida 3</Typography>
         </AccordionSummary>
       </Accordion>
-    </div>
+    </>
   );
 }
 
