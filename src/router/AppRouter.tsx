@@ -11,7 +11,9 @@ const router = createBrowserRouter([
     path: "viewer",
     element: <Viewer />
   }
-]);
+], {
+  basename: "/nutrition-calculator-web"
+});
 
 export const AppRouter = () => {
   return (
