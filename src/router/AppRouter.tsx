@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import { createBrowserRouter, createHashRouter, RouterProvider } from "react-router-dom"
 import Creator from "../components/creator/Creator"
 import Viewer from "../components/viewer/viewer"
 
@@ -8,7 +8,7 @@ const router = createBrowserRouter([
     element: <Creator />,
   },
   {
-    path: "viewer",
+    path: "nutrition-calculator-web/viewer",
     element: <Viewer />
   }
 ], {
