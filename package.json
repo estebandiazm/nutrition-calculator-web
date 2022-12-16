@@ -5,10 +5,11 @@
   "type": "module",
   "homepage": "https://github.com/estebandiazm/nutrition-calculator-web",
   "scripts": {
+    "start": "vite --port $PORT",
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "serve": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.10.4",
