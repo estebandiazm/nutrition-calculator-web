@@ -2,16 +2,16 @@ import { Box, InputAdornment, TextField, Typography } from "@mui/material"
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid"
 import { useState } from "react";
 import { CalculateFoodSimple } from "../../adapters/CalculateFood";
-import { Food } from "../../model/Fruit";
+import { Food } from "../../model/Food";
 
 
 const foodOne: Food[] = [
-  { 'name': 'Avena', 'grams': 90 },
-  { 'name': 'Arroz', 'grams': 192 },
-  { 'name': 'Tocineta', 'grams': 45 },
-  { 'name': 'Granola', 'grams': 77 },
-  { 'name': 'Arepa Masmai', 'grams': 2 },
-  { 'name': 'froot loops + 250ml', 'grams': 55 },
+  { 'name': 'Avena', 'grams': 90, 'category': 'BASE' },
+  { 'name': 'Arroz', 'grams': 192, 'category': 'COMPLEMENT' },
+  { 'name': 'Tocineta', 'grams': 45, 'category': 'COMPLEMENT' },
+  { 'name': 'Granola', 'grams': 77, 'category': 'COMPLEMENT' },
+  { 'name': 'Arepa Masmai', 'grams': 2, 'category': 'COMPLEMENT' },
+  { 'name': 'froot loops + 250ml', 'grams': 55, 'category': 'COMPLEMENT' },
 ]
 
 const columns: GridColDef[] = [

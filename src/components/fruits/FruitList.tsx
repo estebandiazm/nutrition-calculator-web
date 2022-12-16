@@ -2,18 +2,18 @@ import { Box, InputAdornment, TextField, Typography } from "@mui/material"
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid"
 import { useState } from "react";
 import { CalculateFoodSimple } from '../../adapters/CalculateFood';
-import { Food } from "../../model/Fruit";
+import { Food } from "../../model/Food";
 
 
 const fruits: Food[] = [
-  { 'name': 'Pina', 'grams': 150 },
-  { 'name': 'papaya', 'grams': 175 },
-  { 'name': 'Melon', 'grams': 207 },
-  { 'name': 'Pera', 'grams': 130 },
-  { 'name': 'Mango', 'grams': 125 },
-  { 'name': 'Manzana', 'grams': 144 },
-  { 'name': 'Banano', 'grams': 84 },
-  { 'name': 'Kiwi', 'grams': 123 },
+  { 'name': 'Pina', 'grams': 150, 'category': 'FRUIT' },
+  { 'name': 'papaya', 'grams': 175, 'category': 'FRUIT' },
+  { 'name': 'Melon', 'grams': 207, 'category': 'FRUIT' },
+  { 'name': 'Pera', 'grams': 130, 'category': 'FRUIT' },
+  { 'name': 'Mango', 'grams': 125, 'category': 'FRUIT' },
+  { 'name': 'Manzana', 'grams': 144, 'category': 'FRUIT' },
+  { 'name': 'Banano', 'grams': 84, 'category': 'FRUIT' },
+  { 'name': 'Kiwi', 'grams': 123, 'category': 'FRUIT' },
 ]
 
 const columns: GridColDef[] = [

@@ -2,25 +2,25 @@ import { Box, InputAdornment, TextField, Typography } from "@mui/material"
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid"
 import { useState } from "react";
 import { CalculateFoodSimple } from "../../adapters/CalculateFood";
-import { Food } from "../../model/Fruit";
+import { Food } from "../../model/Food";
 
 const foods: Food[] = [
-  { 'name': 'Carne Res', 'grams': 300 },
-  { 'name': 'Lomo cerdo', 'grams': 290 },
-  { 'name': 'Pollo', 'grams': 253 },
-  { 'name': 'Tilapia', 'grams': 310 },
-  { 'name': 'Camarones', 'grams': 320 },
-  { 'name': 'Pechuga Pavo', 'grams': 275 },
-  { 'name': 'Pasta', 'grams':	210},
-  { 'name': 'Arroz', 'grams': 200 },
-  { 'name': 'Papa', 'grams':	275},
-  { 'name': 'Yuca', 'grams':	163},
-  { 'name': 'Quinoa', 'grams':	260},
-  { 'name': 'Frijoles', 'grams':	172},
-  { 'name': 'Lenteja', 'grams':	228},
-  { 'name': 'Batata', 'grams':	216},
-  { 'name': 'Maduro (cocido) dieta flex', 'grams': 	190},
-  { 'name': 'Garbanzos', 'grams':	160},
+  { 'name': 'Carne Res', 'grams': 300, 'category':'BASE' },
+  { 'name': 'Lomo cerdo', 'grams': 290, 'category':'BASE' },
+  { 'name': 'Pollo', 'grams': 253, 'category':'BASE' },
+  { 'name': 'Tilapia', 'grams': 310 , 'category':'BASE'},
+  { 'name': 'Camarones', 'grams': 320, 'category':'BASE' },
+  { 'name': 'Pechuga Pavo', 'grams': 275, 'category':'BASE' },
+  { 'name': 'Pasta', 'grams':	210, 'category':'COMPLEMENT'},
+  { 'name': 'Arroz', 'grams': 200 , 'category':'COMPLEMENT'},
+  { 'name': 'Papa', 'grams':	275, 'category':'COMPLEMENT'},
+  { 'name': 'Yuca', 'grams':	163, 'category':'COMPLEMENT'},
+  { 'name': 'Quinoa', 'grams':	260, 'category':'COMPLEMENT'},
+  { 'name': 'Frijoles', 'grams':	172, 'category':'COMPLEMENT'},
+  { 'name': 'Lenteja', 'grams':	228, 'category':'COMPLEMENT'},
+  { 'name': 'Batata', 'grams':	216, 'category':'COMPLEMENT'},
+  { 'name': 'Maduro (cocido) dieta flex', 'grams': 	190, 'category':'COMPLEMENT'},
+  { 'name': 'Garbanzos', 'grams':	160, 'category':'COMPLEMENT'},
 ]
 
 const columns: GridColDef[] = [

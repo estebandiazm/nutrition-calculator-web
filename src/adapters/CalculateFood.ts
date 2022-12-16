@@ -1,4 +1,4 @@
-import { Food } from "../model/Fruit";
+import { Food } from "../model/Food";
 
 const calculateIndex = (gramsTarget: number, fruitBaseGrams: number) => {
     return (gramsTarget * 90) / fruitBaseGrams;
