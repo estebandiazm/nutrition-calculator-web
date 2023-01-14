@@ -3,11 +3,13 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Food } from '../../model/Food';
+import FoodTable from '../food-table/FoodTable';
+import { useNavigate } from 'react-router-dom';
 
 const foodOne: Food[] = [
-  { 'name': 'Avena', 'grams': 90, 'category': 'BASE', 'totalGrams': 90},
+  { 'name': 'Avena', 'grams': 90, 'category': 'BASE', 'totalGrams': 90 },
   { 'name': 'Arroz', 'grams': 192, 'category': 'COMPLEMENT', 'totalGrams': 90 },
   { 'name': 'Tocineta', 'grams': 45, 'category': 'COMPLEMENT', 'totalGrams': 90 },
   { 'name': 'Granola', 'grams': 77, 'category': 'COMPLEMENT', 'totalGrams': 90 },
@@ -15,9 +17,14 @@ const foodOne: Food[] = [
   { 'name': 'froot loops + 250ml', 'grams': 55, 'category': 'COMPLEMENT', 'totalGrams': 90 },
 ]
 const Viewer = () => {
+  const navigate = useNavigate();
+
+  const saveHandler = () => {
+    navigate('/');
+  }
   return (
     <div>
-        <Typography variant='h5'>Nombre: Juan Esteban Diaz Montejo</Typography>
+      <Typography variant='h5'>Nombre: Juan Esteban Diaz Montejo</Typography>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -27,24 +34,7 @@ const Viewer = () => {
           <Typography>Comida 1</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Comida</TableCell>
-                  <TableCell>Gramos</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                 {foodOne.map((food)=>  (
-                  <TableRow>
-                    <TableCell>{food.name}</TableCell>
-                    <TableCell>{food.totalGrams}</TableCell>
-                  </TableRow>
-                 ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <FoodTable list={foodOne}></FoodTable>
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -56,10 +46,7 @@ const Viewer = () => {
           <Typography>Comida 2</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
+          <FoodTable  list={foodOne}></FoodTable>
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -70,7 +57,11 @@ const Viewer = () => {
         >
           <Typography>Comida 3</Typography>
         </AccordionSummary>
+        <AccordionDetails>
+          <FoodTable  list={foodOne}></FoodTable>
+        </AccordionDetails>
       </Accordion>
+      <Button variant="contained" onClick={saveHandler}>Regresar</Button>
     </div>
   );
 }

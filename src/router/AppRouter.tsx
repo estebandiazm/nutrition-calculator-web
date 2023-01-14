@@ -1,6 +1,6 @@
 import { createBrowserRouter, createHashRouter, RouterProvider } from "react-router-dom"
 import Creator from "../components/creator/Creator"
-import Viewer from "../components/viewer/viewer"
+import Viewer from "../components/viewer/Viewer"
 
 const router = createBrowserRouter([
   {

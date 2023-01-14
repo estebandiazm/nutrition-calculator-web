@@ -2,7 +2,7 @@
 import Creator from './components/creator/Creator';
 import { createBrowserRouter, createHashRouter, Link, RouterProvider } from 'react-router-dom';
 import React from 'react';
-import Viewer from './components/viewer/viewer';
+import Viewer from './components/viewer/Viewer';
 import { createBrowserHistory } from 'history';
 
 

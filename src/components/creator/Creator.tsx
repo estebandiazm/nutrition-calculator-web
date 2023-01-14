@@ -16,7 +16,7 @@ const Creator = () => {
 
   const saveHandler = () => {
     navigate('/viewer');
-} 
+  }
 
   return (
     <ThemeProvider theme={lightTheme}>
