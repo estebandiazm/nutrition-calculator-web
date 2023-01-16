@@ -30,7 +30,7 @@ const Creator = () => {
           <FirstFood />
         </Grid>
         <Grid item xs={12} sm={12} md={4}>
-          <SecondFood />ß
+          <SecondFood />
         </Grid>
         <Button variant="contained" onClick={saveHandler}>Guardar</Button>
       </Grid>

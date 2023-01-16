@@ -2,7 +2,11 @@ import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from
 import { Food } from "../../model/Food";
 
 
-const FoodTable = (props: any) => {
+interface FoodTableProps {
+    list: Food[]
+}
+
+const FoodTable = (props: FoodTableProps) => {
     return (<TableContainer>
         <Table>
             <TableHead>
