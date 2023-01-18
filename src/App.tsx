@@ -4,6 +4,7 @@ import { createBrowserRouter, createHashRouter, Link, RouterProvider } from 'rea
 import React from 'react';
 import Viewer from './components/viewer/Viewer';
 import { createBrowserHistory } from 'history';
+import ClientProvider, { ClientContext } from './context/ClientContext';
 
 
 
@@ -18,12 +19,13 @@ const router = createBrowserRouter([
   }
 ]);
 
-// TODO: Move to a reusable component
 const App = () => {
 
   return (
     <React.StrictMode>
-      <RouterProvider router={router} />
+      <ClientProvider>
+        <RouterProvider router={router} />
+      </ClientProvider>
     </React.StrictMode>
   )
 }

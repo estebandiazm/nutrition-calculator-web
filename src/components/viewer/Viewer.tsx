@@ -7,7 +7,10 @@ import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRo
 import { Food } from '../../model/Food';
 import FoodTable from '../food-table/FoodTable';
 import { useNavigate } from 'react-router-dom';
-
+import { createContext, useState } from 'react';
+import { useContext } from 'react';
+import { ClientContext } from '../../context/ClientContext';
+import { ClientContextType } from '../../model/ClientContextType';
 const foodOne: Food[] = [
   { 'name': 'Avena', 'grams': 90, 'category': 'BASE', 'totalGrams': 90 },
   { 'name': 'Arroz', 'grams': 192, 'category': 'COMPLEMENT', 'totalGrams': 90 },
@@ -18,13 +21,16 @@ const foodOne: Food[] = [
 ]
 const Viewer = () => {
   const navigate = useNavigate();
+  const {client} = useContext(ClientContext) as ClientContextType
+
+  const [data, setData] = useState({ name: '' })
 
   const saveHandler = () => {
     navigate('/');
   }
   return (
     <div>
-      <Typography variant='h5'>Nombre: Juan Esteban Diaz Montejo</Typography>
+      <Typography variant='h5'>Nombre: {client.name}</Typography>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -46,7 +52,7 @@ const Viewer = () => {
           <Typography>Comida 2</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <FoodTable  list={foodOne}></FoodTable>
+          <FoodTable list={foodOne}></FoodTable>
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -58,7 +64,7 @@ const Viewer = () => {
           <Typography>Comida 3</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <FoodTable  list={foodOne}></FoodTable>
+          <FoodTable list={foodOne}></FoodTable>
         </AccordionDetails>
       </Accordion>
       <Button variant="contained" onClick={saveHandler}>Regresar</Button>
