@@ -3,16 +3,7 @@ import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid"
 import { useState } from "react";
 import { CalculateFoodSimple } from "../../adapters/CalculateFood";
 import { Food } from "../../model/Food";
-
-
-const foodOne: Food[] = [
-  { 'name': 'Avena', 'grams': 90, 'category': 'BASE' },
-  { 'name': 'Arroz', 'grams': 192, 'category': 'COMPLEMENT' },
-  { 'name': 'Tocineta', 'grams': 45, 'category': 'COMPLEMENT' },
-  { 'name': 'Granola', 'grams': 77, 'category': 'COMPLEMENT' },
-  { 'name': 'Arepa Masmai', 'grams': 2, 'category': 'COMPLEMENT' },
-  { 'name': 'froot loops + 250ml', 'grams': 55, 'category': 'COMPLEMENT' },
-]
+import { firstMeal } from "../../adapters/GetFood";
 
 const columns: GridColDef[] = [
   { field: 'col1', headerName: 'Alimento', flex: 1 },
@@ -29,7 +20,7 @@ const columns: GridColDef[] = [
 ];
 
 const mapFruits = (gramsTarget: number): GridRowsProp => {
-  return CalculateFoodSimple(gramsTarget, foodOne).map((fruit, index) => {
+  return CalculateFoodSimple(gramsTarget, firstMeal).map((fruit, index) => {
     return { id: index, col1: fruit.name, col2: fruit.totalGrams }
   })
 }

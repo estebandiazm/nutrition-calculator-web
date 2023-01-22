@@ -2,19 +2,8 @@ import { Box, InputAdornment, TextField, Typography } from "@mui/material"
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid"
 import { useState } from "react";
 import { CalculateFoodSimple } from '../../adapters/CalculateFood';
-import { Food } from "../../model/Food";
+import { fruits } from "../../adapters/GetFood";
 
-
-const fruits: Food[] = [
-  { 'name': 'Pina', 'grams': 150, 'category': 'FRUIT' },
-  { 'name': 'papaya', 'grams': 175, 'category': 'FRUIT' },
-  { 'name': 'Melon', 'grams': 207, 'category': 'FRUIT' },
-  { 'name': 'Pera', 'grams': 130, 'category': 'FRUIT' },
-  { 'name': 'Mango', 'grams': 125, 'category': 'FRUIT' },
-  { 'name': 'Manzana', 'grams': 144, 'category': 'FRUIT' },
-  { 'name': 'Banano', 'grams': 84, 'category': 'FRUIT' },
-  { 'name': 'Kiwi', 'grams': 123, 'category': 'FRUIT' },
-]
 
 const columns: GridColDef[] = [
   { field: 'col1', headerName: 'Fruta', flex: 1 },
@@ -45,7 +34,7 @@ const FruitList = () => {
 
   return (
     <Box>
-      <Typography variant='h2' component='h2' sx={{ mb: 2 }}>Calculadora Nutricional</Typography>
+      <Typography variant='h2' component='h2' sx={{ mb: 2 }}>Frutas</Typography>
       <TextField
         id="gramsTarget"
         label="Gramos"
