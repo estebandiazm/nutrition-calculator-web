@@ -20,7 +20,7 @@ const firstMeal: Food[] = [
     { 'name': 'froot loops + 250ml', 'grams': 55, 'category': 'COMPLEMENT' },
 ]
 
-const secondMeall: Food[] = [
+const secondMeal: Food[] = [
     { 'name': 'Carne Res', 'grams': 300, 'category': 'BASE' },
     { 'name': 'Lomo cerdo', 'grams': 290, 'category': 'BASE' },
     { 'name': 'Pollo', 'grams': 253, 'category': 'BASE' },
@@ -39,4 +39,4 @@ const secondMeall: Food[] = [
     { 'name': 'Garbanzos', 'grams': 160, 'category': 'COMPLEMENT' },
 ]
 
-export {fruits, firstMeal, secondMeall}
+export {fruits, firstMeal, secondMeal}
