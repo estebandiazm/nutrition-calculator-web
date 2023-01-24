@@ -17,23 +17,33 @@ const Creator = () => {
 
   const [data, setData] = useState({
     name: '',
-    fruits: {}
+    fruits: [] as Food[],
+    firstMeal: [] as Food[],
+    secondMeal: [] as Food[],
   })
 
   const saveHandler = () => {
-    saveClient({ name: data.name, plan: {
-      fruits: fruits
-    } })
+    saveClient({
+      name: data.name, plan: {
+        fruits: fruits,
+        firstMeal: firstMeal,
+        secondMeal: secondMeal
+      }
+    })
     navigate('/viewer');
   }
 
   const updateFruitHandler = (foods: Food[]) => {
-     setData({...data, fruits: foods})
+    setData({ ...data, fruits: foods })
+  }
+  const updateFirstMealHandler = (foods: Food[]) => {
+    setData({ ...data, firstMeal: foods })
   }
 
-  const updateHandler = (foods: Food[]) => {
+  const updateSecondMealHandler = (foods: Food[]) => {
+    setData({ ...data, secondMeal: foods })
+  }
 
- }
   const storeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setData({ ...data, name: event.target.value, })
   }
@@ -48,10 +58,10 @@ const Creator = () => {
           <FoodList title='Frutas' foods={fruits} handler={updateFruitHandler} />
         </Grid>
         <Grid item xs={12} sm={12} md={4}>
-          <FoodList title='Primera Comida' foods={firstMeal} handler={updateHandler} />
+          <FoodList title='Primera Comida' foods={firstMeal} handler={updateFirstMealHandler} />
         </Grid>
         <Grid item xs={12} sm={12} md={4}>
-          <FoodList title='Segunda Comida' foods={secondMeal} handler={updateHandler} />
+          <FoodList title='Segunda Comida' foods={secondMeal} handler={updateSecondMealHandler} />
         </Grid>
         <Button variant="contained" onClick={saveHandler}>Guardar</Button>
       </Grid>

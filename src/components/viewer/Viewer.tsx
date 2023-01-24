@@ -30,7 +30,7 @@ const Viewer = () => {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Comida 1</Typography>
+          <Typography>Frutas</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <FoodTable list={client.plan?.fruits!}></FoodTable>
@@ -42,10 +42,10 @@ const Viewer = () => {
           aria-controls="panel2a-content"
           id="panel2a-header"
         >
-          <Typography>Comida 2</Typography>
+          <Typography>Comida 1</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <FoodTable list={[] as Food[]}></FoodTable>
+          <FoodTable list={client.plan?.firstMeal!}></FoodTable>
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -54,10 +54,10 @@ const Viewer = () => {
           aria-controls="panel3a-content"
           id="panel3a-header"
         >
-          <Typography>Comida 3</Typography>
+          <Typography>Comida 2</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <FoodTable list={[] as Food[]}></FoodTable>
+          <FoodTable list={client.plan?.secondMeal!}></FoodTable>
         </AccordionDetails>
       </Accordion>
       <Button variant="contained" onClick={saveHandler}>Regresar</Button>
