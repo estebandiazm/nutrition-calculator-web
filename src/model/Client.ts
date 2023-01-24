@@ -1,3 +1,6 @@
+import { Plan } from "./Plan";
+
 export interface Client {
-    name: string;
+    name: string,
+    plan?: Plan
 }

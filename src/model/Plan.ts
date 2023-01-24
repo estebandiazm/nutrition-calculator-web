@@ -1,7 +1,7 @@
 import { Food } from "./Food";
 
 export interface Plan {
-    breakfast: Food[],
-    firstMeal: Food[],
-    secondMeall: Food[]
+    fruits?: Food[],
+    firstMeal?: Food[],
+    secondMeal?: Food[]
 }

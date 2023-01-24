@@ -11,17 +11,10 @@ import { createContext, useState } from 'react';
 import { useContext } from 'react';
 import { ClientContext } from '../../context/ClientContext';
 import { ClientContextType } from '../../model/ClientContextType';
-const foodOne: Food[] = [
-  { 'name': 'Avena', 'grams': 90, 'category': 'BASE', 'totalGrams': 90 },
-  { 'name': 'Arroz', 'grams': 192, 'category': 'COMPLEMENT', 'totalGrams': 90 },
-  { 'name': 'Tocineta', 'grams': 45, 'category': 'COMPLEMENT', 'totalGrams': 90 },
-  { 'name': 'Granola', 'grams': 77, 'category': 'COMPLEMENT', 'totalGrams': 90 },
-  { 'name': 'Arepa Masmai', 'grams': 2, 'category': 'COMPLEMENT', 'totalGrams': 90 },
-  { 'name': 'froot loops + 250ml', 'grams': 55, 'category': 'COMPLEMENT', 'totalGrams': 90 },
-]
+
 const Viewer = () => {
   const navigate = useNavigate();
-  const {client} = useContext(ClientContext) as ClientContextType
+  const { client } = useContext(ClientContext) as ClientContextType
 
   const [data, setData] = useState({ name: '' })
 
@@ -40,7 +33,7 @@ const Viewer = () => {
           <Typography>Comida 1</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <FoodTable list={foodOne}></FoodTable>
+          <FoodTable list={client.plan?.fruits!}></FoodTable>
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -52,7 +45,7 @@ const Viewer = () => {
           <Typography>Comida 2</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <FoodTable list={foodOne}></FoodTable>
+          <FoodTable list={[] as Food[]}></FoodTable>
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -64,7 +57,7 @@ const Viewer = () => {
           <Typography>Comida 3</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <FoodTable list={foodOne}></FoodTable>
+          <FoodTable list={[] as Food[]}></FoodTable>
         </AccordionDetails>
       </Accordion>
       <Button variant="contained" onClick={saveHandler}>Regresar</Button>

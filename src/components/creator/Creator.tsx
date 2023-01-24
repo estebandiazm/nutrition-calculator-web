@@ -7,6 +7,7 @@ import { ClientContext } from '../../context/ClientContext';
 import { ClientContextType } from '../../model/ClientContextType';
 import { fruits, firstMeal, secondMeal } from '../../adapters/GetFood';
 import FoodList from '../food-list/FoodList';
+import { Food } from '../../model/Food';
 
 const Creator = () => {
 
@@ -15,17 +16,26 @@ const Creator = () => {
   const { saveClient } = useContext(ClientContext) as ClientContextType
 
   const [data, setData] = useState({
-    name: ''
+    name: '',
+    fruits: {}
   })
 
   const saveHandler = () => {
-
-    saveClient({ name: data.name })
+    saveClient({ name: data.name, plan: {
+      fruits: fruits
+    } })
     navigate('/viewer');
   }
 
+  const updateFruitHandler = (foods: Food[]) => {
+     setData({...data, fruits: foods})
+  }
+
+  const updateHandler = (foods: Food[]) => {
+
+ }
   const storeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setData({ name: event.target.value })
+    setData({ ...data, name: event.target.value, })
   }
 
   return (
@@ -35,13 +45,13 @@ const Creator = () => {
       <TextField id="full-name" label="Nombre" variant="filled" sx={{ mb: 2 }} onChange={storeName} />
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={4}>
-          <FoodList title='Frutas' foods={fruits} />
+          <FoodList title='Frutas' foods={fruits} handler={updateFruitHandler} />
         </Grid>
         <Grid item xs={12} sm={12} md={4}>
-          <FoodList title='Primera Comida' foods={firstMeal} />
+          <FoodList title='Primera Comida' foods={firstMeal} handler={updateHandler} />
         </Grid>
         <Grid item xs={12} sm={12} md={4}>
-          <FoodList title='Segunda Comida' foods={secondMeal} />
+          <FoodList title='Segunda Comida' foods={secondMeal} handler={updateHandler} />
         </Grid>
         <Button variant="contained" onClick={saveHandler}>Guardar</Button>
       </Grid>
