@@ -3,7 +3,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Button, ThemeProvider } from '@mui/material';
+import { Button, Grid, ThemeProvider } from '@mui/material';
 import FoodTable from '../food-table/FoodTable';
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
@@ -31,7 +31,7 @@ const Viewer = () => {
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
-            <Typography>Frutas</Typography>
+            <Typography variant='h2'>Frutas</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <FoodTable list={client.plan?.fruits!}></FoodTable>
@@ -43,10 +43,31 @@ const Viewer = () => {
             aria-controls="panel2a-content"
             id="panel2a-header"
           >
-            <Typography>Comida 1</Typography>
+            <Typography variant='h2'>Comida 1</Typography>
           </AccordionSummary>
-                     <AccordionDetails>
+          <AccordionDetails>
             <FoodTable list={client.plan?.firstMeal!}></FoodTable>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel3a-content"
+            id="panel3a-header"
+          >
+            <Typography variant='h2'>Comida 2</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12} md={6}>
+                <Typography variant="h6">Proteina</Typography>
+                <FoodTable list={client.plan?.secondMeal!.filter(food => food.category === 'BASE')!}></FoodTable>
+              </Grid>
+              <Grid item xs={12} sm={12} md={6}>
+                <Typography variant="h6">Carbohidratos</Typography>
+                <FoodTable list={client.plan?.secondMeal!.filter(food => food.category === 'COMPLEMENT')!}></FoodTable>
+              </Grid>
+            </Grid>
           </AccordionDetails>
         </Accordion>
         <Accordion sx={{ mb: 2 }}>
@@ -55,10 +76,19 @@ const Viewer = () => {
             aria-controls="panel3a-content"
             id="panel3a-header"
           >
-            <Typography>Comida 2</Typography>
+            <Typography variant='h2'>Comida 3</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <FoodTable list={client.plan?.secondMeal!}></FoodTable>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={12} md={6}>
+                <Typography variant="h6" >Proteina</Typography>
+                <FoodTable list={client.plan?.secondMeal!.filter(food => food.category === 'BASE')!}></FoodTable>
+              </Grid>
+              <Grid item xs={12} sm={12} md={6}>
+                <Typography variant="h6">Carbohidratos</Typography>
+                <FoodTable list={client.plan?.secondMeal!.filter(food => food.category === 'COMPLEMENT')!}></FoodTable>
+              </Grid>
+            </Grid>
           </AccordionDetails>
         </Accordion>
         <Button variant="contained" onClick={saveHandler} sx={{ width: '100%' }}>Regresar</Button>

@@ -55,14 +55,17 @@ const Creator = () => {
         <Grid item xs={12} sm={12} md={12}>
           <TextField id="full-name" label="Nombre" sx={{ mb: 2, width: '100%' }} variant="filled" onChange={storeName} />
         </Grid>
-        <Grid item xs={12} sm={12} md={4}>
+        <Grid item xs={12} sm={12} md={3}>
           <FoodList title='Frutas' foods={fruits} handler={updateFruitHandler} />
         </Grid>
-        <Grid item xs={12} sm={12} md={4}>
+        <Grid item xs={12} sm={12} md={3}>
           <FoodList title='Primera Comida' foods={firstMeal} handler={updateFirstMealHandler} />
         </Grid>
-        <Grid item xs={12} sm={12} md={4}>
-          <FoodList title='Segunda Comida' foods={secondMeal} handler={updateSecondMealHandler} />
+        <Grid item xs={12} sm={12} md={3}>
+          <FoodList title='Proteinas' foods={secondMeal.filter(food => food.category === 'BASE')} handler={updateSecondMealHandler} />
+        </Grid>
+        <Grid item xs={12} sm={12} md={3}>
+          <FoodList title='Carbohidratos' foods={secondMeal.filter(food => food.category === 'COMPLEMENT')} handler={updateSecondMealHandler} />
         </Grid>
         <Grid item xs={12} sm={12} md={12}>
           <Button variant="contained" onClick={saveHandler} sx={{width:'100%', height:'3em'}}>Guardar</Button>
@@ -73,7 +76,3 @@ const Creator = () => {
 }
 
 export default Creator
-function setData(arg0: { name: any; }) {
-  throw new Error('Function not implemented.');
-}
-
