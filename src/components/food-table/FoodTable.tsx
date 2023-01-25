@@ -8,7 +8,7 @@ interface FoodTableProps {
 
 const FoodTable = (props: FoodTableProps) => {
     return (<TableContainer>
-        <Table>
+        <Table size="small">
             <TableHead>
                 <TableRow>
                     <TableCell>Comida</TableCell>

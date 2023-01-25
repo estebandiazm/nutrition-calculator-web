@@ -50,10 +50,11 @@ const Creator = () => {
 
   return (
     <ThemeProvider theme={lightTheme}>
-      {/* Se debe remplazar todo lo de acá por el enrutador */}
       <Typography variant='h1' component='h1' sx={{ mb: 2 }}>Calculadora Nutricional</Typography>
-      <TextField id="full-name" label="Nombre" variant="filled" sx={{ mb: 2 }} onChange={storeName} />
       <Grid container spacing={2}>
+        <Grid item xs={12} sm={12} md={12}>
+          <TextField id="full-name" label="Nombre" sx={{ mb: 2, width: '100%' }} variant="filled" onChange={storeName} />
+        </Grid>
         <Grid item xs={12} sm={12} md={4}>
           <FoodList title='Frutas' foods={fruits} handler={updateFruitHandler} />
         </Grid>
@@ -63,9 +64,11 @@ const Creator = () => {
         <Grid item xs={12} sm={12} md={4}>
           <FoodList title='Segunda Comida' foods={secondMeal} handler={updateSecondMealHandler} />
         </Grid>
-        <Button variant="contained" onClick={saveHandler}>Guardar</Button>
+        <Grid item xs={12} sm={12} md={12}>
+          <Button variant="contained" onClick={saveHandler} sx={{width:'100%', height:'3em'}}>Guardar</Button>
+        </Grid>
       </Grid>
-    </ThemeProvider>
+    </ThemeProvider >
   )
 }
 

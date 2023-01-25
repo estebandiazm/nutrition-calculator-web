@@ -56,6 +56,7 @@ const FoodList = (props: Props) => {
                 id="gramsTarget"
                 label="Gramos"
                 type="number"
+                sx={{ mb: 2, width: '100%' }}
                 variant="outlined"
                 InputProps={{
                     endAdornment: <InputAdornment position="start">gr</InputAdornment>,
