@@ -1,4 +1,4 @@
-import { createBrowserRouter, createHashRouter, RouterProvider } from "react-router-dom"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import Creator from "../components/creator/Creator"
 import Viewer from "../components/viewer/Viewer"
 
@@ -8,12 +8,10 @@ const router = createBrowserRouter([
     element: <Creator />,
   },
   {
-    path: "nutrition-calculator-web/viewer",
+    path: "/viewer",
     element: <Viewer />
   }
-], {
-  basename: "/nutrition-calculator-web"
-});
+]);
 
 export const AppRouter = () => {
   return (

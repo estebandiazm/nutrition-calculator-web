@@ -4,7 +4,6 @@ import { useState } from "react";
 import { CalculateFoodSimple } from "../../adapters/CalculateFood";
 import { Food } from "../../model/Food";
 
-
 const columns: GridColDef[] = [
     { field: 'col1', headerName: 'Alimento', flex: 1 },
     {

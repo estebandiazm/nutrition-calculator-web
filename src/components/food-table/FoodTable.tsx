@@ -17,7 +17,7 @@ const FoodTable = (props: FoodTableProps) => {
             </TableHead>
             <TableBody>
                 {props.list.map((food: Food) => (
-                    <TableRow>
+                    <TableRow key={food.name}>
                         <TableCell>{food.name}</TableCell>
                         <TableCell>{food.totalGrams}</TableCell>
                     </TableRow>
