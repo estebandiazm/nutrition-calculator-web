@@ -1,13 +1,13 @@
-import { Button, Grid, TextField, ThemeProvider, Typography } from '@mui/material'
-import { lightTheme } from '../../themes'
-import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
-import { useContext } from 'react';
-import { ClientContext } from '../../context/ClientContext';
-import { ClientContextType } from '../../model/ClientContextType';
-import { fruits, firstMeal, secondMeal } from '../../adapters/GetFood';
+import {Button, Grid, TextField, ThemeProvider, Typography} from '@mui/material'
+import {lightTheme} from '../../themes'
+import {useNavigate} from 'react-router-dom';
+import React, {useContext, useState} from 'react';
+import {ClientContext} from '../../context/ClientContext';
+import {ClientContextType} from '../../model/ClientContextType';
+import {firstMeal, fruits, secondMeal} from '../../adapters/GetFood';
 import FoodList from '../food-list/FoodList';
-import { Food } from '../../model/Food';
+import {Food} from '../../model/Food';
+import {Face} from "@mui/icons-material";
 
 const Creator = () => {
 
@@ -53,7 +53,10 @@ const Creator = () => {
       <Typography variant='h1' component='h1' sx={{ mb: 2 }}>Calculadora Nutricional</Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={12} md={12}>
-          <TextField id="full-name" label="Nombre" sx={{ mb: 2, width: '100%' }} variant="filled" onChange={storeName} />
+          <TextField id="full-name" label="Nombre" sx={{mb: 2, width: '75%', mr: 2}} variant="filled"
+                     onChange={storeName} InputProps={{endAdornment: <Face/>}}/>
+          <TextField id="body-weight" label="Peso" sx={{mb: 2, width: '20%'}} variant="filled" onChange={storeName}
+                     InputProps={{endAdornment: <Face/>}}/>
         </Grid>
         <Grid item xs={12} sm={12} md={3}>
           <FoodList title='Frutas' foods={fruits} handler={updateFruitHandler} />

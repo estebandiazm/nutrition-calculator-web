@@ -3,7 +3,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Button, Grid, ThemeProvider } from '@mui/material';
+import {Avatar, Button, Grid, Stack, ThemeProvider} from '@mui/material';
 import FoodTable from '../food-table/FoodTable';
 import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
@@ -24,7 +24,12 @@ const Viewer = () => {
   return (
     <ThemeProvider theme={lightTheme}>
       <React.Fragment>
-        <Typography variant='h5' sx={{ m: 2 }}>Nombre: {client.name}</Typography>
+        <Stack direction="row" spacing={2} alignItems="center" sx={{ m: 2 }}>
+          <Avatar sx={{ bgcolor: 'primary.main' }}>
+            {client.name ? client.name.charAt(0).toUpperCase() : 'U'}
+          </Avatar>
+          <Typography variant='h5'>Nombre: {client.name}</Typography>
+        </Stack>
         <Accordion>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
