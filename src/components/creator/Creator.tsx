@@ -59,8 +59,8 @@ const Creator = () => {
 
   return (
     <ThemeProvider theme={lightTheme}>
-      <Menu/>
-      <Grid container spacing={2}>
+      <Menu />
+      <Grid container spacing={2} sx={{ m: 2 }}>
         <Grid size={{ xs: 12, sm: 12, md: 10 }}>
           <Box
             sx={{

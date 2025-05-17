@@ -19,11 +19,11 @@ ul {
 body {
   background: #fefefe;
   overscroll-behavior: none;
+  margin: 0;
 }
 
 #app {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
   overflow-x: hidden;
-  padding-bottom: 10px;
-  margin: 0;
+  padding: 10px;
 }
