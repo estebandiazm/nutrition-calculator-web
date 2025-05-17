@@ -16,6 +16,7 @@ import { firstMeal, fruits, secondMeal } from "../../adapters/GetFood";
 import FoodList from "../food-list/FoodList";
 import { Food } from "../../model/Food";
 import { AccountCircle, MonitorWeightRounded } from "@mui/icons-material";
+import Menu from "../menu/Menu";
 
 const Creator = () => {
   const navigate = useNavigate();
@@ -58,9 +59,7 @@ const Creator = () => {
 
   return (
     <ThemeProvider theme={lightTheme}>
-      <Typography variant="h1" component="h1" sx={{ mb: 2 }}>
-        Calculadora Nutricional
-      </Typography>
+      <Menu/>
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, sm: 12, md: 10 }}>
           <Box
