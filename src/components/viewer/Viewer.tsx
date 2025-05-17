@@ -64,11 +64,11 @@ const Viewer = () => {
           </AccordionSummary>
           <AccordionDetails>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={6}>
+              <Grid size={{xs:12, sm:12, md:6}}>
                 <Typography variant="h6">Proteina</Typography>
                 <FoodTable list={client.plan?.secondMeal!.filter(food => food.category === 'BASE')!}></FoodTable>
               </Grid>
-              <Grid item xs={12} sm={12} md={6}>
+              <Grid size={{xs:12, sm:12, md:6}}>
                 <Typography variant="h6">Carbohidratos</Typography>
                 <FoodTable list={client.plan?.secondMeal!.filter(food => food.category === 'COMPLEMENT')!}></FoodTable>
               </Grid>
@@ -85,11 +85,11 @@ const Viewer = () => {
           </AccordionSummary>
           <AccordionDetails>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={12} md={6}>
+              <Grid size={{xs:12, sm:12, md:6}}>
                 <Typography variant="h6" >Proteina</Typography>
                 <FoodTable list={client.plan?.secondMeal!.filter(food => food.category === 'BASE')!}></FoodTable>
               </Grid>
-              <Grid item xs={12} sm={12} md={6}>
+              <Grid size={{xs:12, sm:12, md:6}}>
                 <Typography variant="h6">Carbohidratos</Typography>
                 <FoodTable list={client.plan?.secondMeal!.filter(food => food.category === 'COMPLEMENT')!}></FoodTable>
               </Grid>

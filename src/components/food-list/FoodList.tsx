@@ -66,8 +66,7 @@ const FoodList = (props: Props) => {
                 <DataGrid
                     rows={data.rows}
                     columns={columns}
-                    pageSize={10}
-                    rowsPerPageOptions={[10]}
+                    autoPageSize={true}
                 />
             </Box>
         </Box>
