@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Box,
   Button,
@@ -5,10 +7,8 @@ import {
   InputAdornment,
   TextField,
   ThemeProvider,
-  Typography,
 } from "@mui/material";
 import { lightTheme } from "../../themes";
-import { useNavigate } from "react-router-dom";
 import React, { useContext, useState } from "react";
 import { ClientContext } from "../../context/ClientContext";
 import { ClientContextType } from "../../model/ClientContextType";
@@ -17,9 +17,10 @@ import FoodList from "../food-list/FoodList";
 import { Food } from "../../model/Food";
 import { AccountCircle, MonitorWeightRounded } from "@mui/icons-material";
 import Menu from "../menu/Menu";
+import { useRouter } from "next/navigation";
 
 const Creator = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const { saveClient } = useContext(ClientContext) as ClientContextType;
 
@@ -39,7 +40,7 @@ const Creator = () => {
         secondMeal: secondMeal,
       },
     });
-    navigate("/viewer");
+    router.push("/viewer");
   };
 
   const updateFruitHandler = (foods: Food[]) => {

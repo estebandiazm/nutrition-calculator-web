@@ -1,26 +1,58 @@
-import { createContext, ReactNode, useState } from "react";
+"use client";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import { Client } from "../model/Client";
 import { ClientContextType } from "../model/ClientContextType";
-import { Plan } from "../model/Plan";
 
-
-export const ClientContext = createContext<ClientContextType | null>(null)
+export const ClientContext = createContext<ClientContextType | null>(null);
 
 interface ClientContextProps {
-    children?: ReactNode
+  children?: ReactNode;
 }
+
 const ClientProvider: React.FC<ClientContextProps> = ({ children }) => {
-    const [client, setClient] = useState({
-        name: '',
-        plan: {} as Plan | undefined
-    })
 
-    const saveClient = (client: Client) => {
-        setClient({ ...client, name: client.name, plan: client.plan })
-        console.log(client)
+  const [client, setClient] = useState<Client | null>(null);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("client");
+      console.log("Client stored:", stored);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        setClient(parsed);
+      } else {
+        setClient({
+          name: "",
+          plan: {
+            fruits: [],
+            firstMeal: [],
+            secondMeal: [],
+          },
+        });
+      }
+    } catch (err) {
+      console.warn("Error leyendo localStorage", err);
     }
+  }, []);
 
-    return <ClientContext.Provider value={{ client, saveClient }}>{children}</ClientContext.Provider>
-}
+  useEffect(() => {
+    if (client) {
+      localStorage.setItem("client", JSON.stringify(client));
+    }
+  }, [client]);
 
-export default ClientProvider
+  const saveClient = (clientToSave: Client) => {
+    setClient({ ...clientToSave });
+    console.log("Client saved:", client);
+  };
+
+  if (!client) return null;
+
+  return (
+    <ClientContext.Provider value={{ client, saveClient }}>
+      {children}
+    </ClientContext.Provider>
+  );
+};
+
+export default ClientProvider;

@@ -19,7 +19,6 @@ const columns: GridColDef[] = [
 ];
 
 const mapFruits = (gramsTarget: number, foods: Food[]): GridRowsProp => {
-    console.log(foods)
     return foods.map((fruit, index) => {
         return { id: index, col1: fruit.name, col2: fruit.totalGrams }
     })
