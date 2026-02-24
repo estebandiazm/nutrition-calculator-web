@@ -1,7 +1,7 @@
 "use client";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { Client } from "../model/Client";
-import { ClientContextType } from "../model/ClientContextType";
+import { Client } from "../domain/types/Client";
+import { ClientContextType } from "./ClientContextType";
 
 export const ClientContext = createContext<ClientContextType | null>(null);
 
@@ -24,9 +24,9 @@ const ClientProvider: React.FC<ClientContextProps> = ({ children }) => {
         setClient({
           name: "",
           plan: {
-            fruits: [],
-            firstMeal: [],
-            secondMeal: [],
+            clientId: "",
+            clientName: "",
+            meals: []
           },
         });
       }
@@ -43,7 +43,8 @@ const ClientProvider: React.FC<ClientContextProps> = ({ children }) => {
 
   const saveClient = (clientToSave: Client) => {
     setClient({ ...clientToSave });
-    console.log("Client saved:", client);
+    localStorage.setItem("client", JSON.stringify(clientToSave));
+    console.log("Client saved:", clientToSave);
   };
 
   if (!client) return null;

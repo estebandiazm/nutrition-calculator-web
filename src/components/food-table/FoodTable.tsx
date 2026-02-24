@@ -1,5 +1,5 @@
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
-import { Food } from "../../model/Food";
+import { Food } from "../../domain/types/Food";
 
 
 interface FoodTableProps {
