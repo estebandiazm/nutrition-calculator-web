@@ -1,8 +1,8 @@
 import { Box, InputAdornment, TextField, Typography } from "@mui/material"
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid"
 import { useState } from "react";
-import { CalculateFoodSimple } from "../../adapters/CalculateFood";
-import { Food } from "../../model/Food";
+import { DietEngine } from "../../domain/services/DietEngine";
+import { Food } from "../../domain/types/Food";
 
 const columns: GridColDef[] = [
     { field: 'col1', headerName: 'Alimento', flex: 1 },
@@ -19,7 +19,6 @@ const columns: GridColDef[] = [
 ];
 
 const mapFruits = (gramsTarget: number, foods: Food[]): GridRowsProp => {
-    console.log(foods)
     return foods.map((fruit, index) => {
         return { id: index, col1: fruit.name, col2: fruit.totalGrams }
     })
@@ -40,12 +39,26 @@ const FoodList = (props: Props) => {
     });
 
     const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const foodCalculated = CalculateFoodSimple(parseInt(event.target.value), foods)
-        props.handler(foodCalculated)
+        const targetValue = parseInt(event.target.value);
+        if (isNaN(targetValue) || targetValue <= 0) return;
+
+        // DietEngine calculates FoodOptions (with grams) rather than mutating Food objects with 'totalGrams'
+        const foodCalculatedOptions = DietEngine.calculateBlockOptions(targetValue, foods);
+        
+        // Temporarily map FoodOptions back to legacy Food[] expected by the upstream handler 
+        const mappedFoods: Food[] = foodCalculatedOptions.map((opt, i) => ({
+             name: opt.foodName,
+             grams: foods[i].grams,
+             totalGrams: opt.grams,
+             category: foods[i].category
+        }));
+
+        props.handler(mappedFoods);
+        
         setData({
             ...data,
-            gramsTarget: parseInt(event.target.value),
-            rows: mapFruits(parseInt(event.target.value), foodCalculated)
+            gramsTarget: targetValue,
+            rows: mapFruits(targetValue, mappedFoods)
         })
     }
     return (

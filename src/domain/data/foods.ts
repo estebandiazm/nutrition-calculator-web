@@ -1,6 +1,6 @@
-import { Food } from "../model/Food";
+import { Food } from "../types/Food";
 
-const fruits: Food[] = [
+export const fruits: Food[] = [
     { 'name': 'Pina', 'grams': 150, 'category': 'FRUIT' },
     { 'name': 'papaya', 'grams': 175, 'category': 'FRUIT' },
     { 'name': 'Melon', 'grams': 207, 'category': 'FRUIT' },
@@ -9,18 +9,18 @@ const fruits: Food[] = [
     { 'name': 'Manzana', 'grams': 144, 'category': 'FRUIT' },
     { 'name': 'Banano', 'grams': 84, 'category': 'FRUIT' },
     { 'name': 'Kiwi', 'grams': 123, 'category': 'FRUIT' },
-]
+];
 
-const firstMeal: Food[] = [
+export const firstMealFoods: Food[] = [
     { 'name': 'Avena', 'grams': 90, 'category': 'BASE' },
     { 'name': 'Arroz', 'grams': 192, 'category': 'COMPLEMENT' },
     { 'name': 'Tocineta', 'grams': 45, 'category': 'COMPLEMENT' },
     { 'name': 'Granola', 'grams': 77, 'category': 'COMPLEMENT' },
     { 'name': 'Arepa Masmai', 'grams': 2, 'category': 'COMPLEMENT' },
     { 'name': 'froot loops + 250ml', 'grams': 55, 'category': 'COMPLEMENT' },
-]
+];
 
-const secondMeal: Food[] = [
+export const secondMealFoods: Food[] = [
     { 'name': 'Carne Res', 'grams': 300, 'category': 'BASE' },
     { 'name': 'Lomo cerdo', 'grams': 290, 'category': 'BASE' },
     { 'name': 'Pollo', 'grams': 253, 'category': 'BASE' },
@@ -37,6 +37,4 @@ const secondMeal: Food[] = [
     { 'name': 'Batata', 'grams': 216, 'category': 'COMPLEMENT' },
     { 'name': 'Maduro (cocido) dieta flex', 'grams': 190, 'category': 'COMPLEMENT' },
     { 'name': 'Garbanzos', 'grams': 160, 'category': 'COMPLEMENT' },
-]
-
-export {fruits, firstMeal, secondMeal}
+];

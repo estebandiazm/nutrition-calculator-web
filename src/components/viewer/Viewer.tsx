@@ -1,106 +1,93 @@
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {Avatar, Button, Grid, Stack, ThemeProvider} from '@mui/material';
-import FoodTable from '../food-table/FoodTable';
-import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
-import { useContext } from 'react';
-import { ClientContext } from '../../context/ClientContext';
-import { ClientContextType } from '../../model/ClientContextType';
-import { lightTheme } from '../../themes';
+'use client'
+
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Avatar, Button, Grid, Stack, ThemeProvider, Chip } from "@mui/material";
+import FoodTable from "../food-table/FoodTable";
+import React, { useContext, useEffect, useState } from "react";
+import { ClientContext } from "../../context/ClientContext";
+import { ClientContextType } from "../../context/ClientContextType";
+import { lightTheme } from "../../themes";
+import { useRouter } from "next/navigation";
 
 const Viewer = () => {
-  const navigate = useNavigate();
-  const { client } = useContext(ClientContext) as ClientContextType
+  const router = useRouter();
+  const { client } = useContext(ClientContext) as ClientContextType;
 
-  const [data, setData] = useState({ name: '' })
+  let [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+    console.log(client)
+  }, [client]);
+
+  if (!isLoaded) {
+    return <Typography sx={{ m: 4 }}>Cargando cliente...</Typography>;
+  }
+
+  console.log(client)
+  if (!client.name) {
+    return <Typography sx={{ m: 4 }}>Cargando cliente...</Typography>;
+  }
 
   const saveHandler = () => {
-    navigate('/');
-  }
+    router.push("/");
+  };
   return (
     <ThemeProvider theme={lightTheme}>
       <React.Fragment>
         <Stack direction="row" spacing={2} alignItems="center" sx={{ m: 2 }}>
-          <Avatar sx={{ bgcolor: 'primary.main' }}>
-            {client.name ? client.name.charAt(0).toUpperCase() : 'U'}
+          <Avatar sx={{ bgcolor: "primary.main" }}>
+            {client.name ? client.name.charAt(0).toUpperCase() : "U"}
           </Avatar>
-          <Typography variant='h5'>Nombre: {client.name}</Typography>
+          <Typography variant="h5">Nombre: {client.name}</Typography>
         </Stack>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1a-content"
-            id="panel1a-header"
-          >
-            <Typography variant='h2'>Frutas</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <FoodTable list={client.plan?.fruits!}></FoodTable>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2a-content"
-            id="panel2a-header"
-          >
-            <Typography variant='h2'>Comida 1</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <FoodTable list={client.plan?.firstMeal!}></FoodTable>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel3a-content"
-            id="panel3a-header"
-          >
-            <Typography variant='h2'>Comida 2</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Grid container spacing={2}>
-              <Grid size={{xs:12, sm:12, md:6}}>
-                <Typography variant="h6">Proteina</Typography>
-                <FoodTable list={client.plan?.secondMeal!.filter(food => food.category === 'BASE')!}></FoodTable>
+        {client.plan?.meals.map((meal: any, index: number) => (
+          <Accordion key={index} sx={{ mb: index === client.plan!.meals.length - 1 ? 2 : 0 }}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls={`panel${index}-content`}
+              id={`panel${index}-header`}
+            >
+              <Typography variant="h2">{meal.mealName}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Grid container spacing={2}>
+                {meal.blocks.map((block: any, bIndex: number) => (
+                  <Grid size={{ xs: 12, sm: 12, md: Math.max(12 / meal.blocks.length, 6) }} key={bIndex}>
+                    <Stack direction="row" spacing={1} sx={{ mb: 2, mt: 1 }}>
+                      <Chip label={block.blockType} color="primary" variant="outlined" size="small" />
+                    </Stack>
+                    
+                    {/* The FoodTable component currently expects `Food[]`, we will adapt it mapped options */}
+                    <FoodTable
+                      list={block.options.map((opt: any) => ({
+                        name: opt.foodName,
+                        totalGrams: opt.grams,
+                        category: block.blockType as any,
+                        grams: opt.grams
+                      }))}
+                    ></FoodTable>
+                  </Grid>
+                ))}
               </Grid>
-              <Grid size={{xs:12, sm:12, md:6}}>
-                <Typography variant="h6">Carbohidratos</Typography>
-                <FoodTable list={client.plan?.secondMeal!.filter(food => food.category === 'COMPLEMENT')!}></FoodTable>
-              </Grid>
-            </Grid>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion sx={{ mb: 2 }}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel3a-content"
-            id="panel3a-header"
-          >
-            <Typography variant='h2'>Comida 3</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Grid container spacing={2}>
-              <Grid size={{xs:12, sm:12, md:6}}>
-                <Typography variant="h6" >Proteina</Typography>
-                <FoodTable list={client.plan?.secondMeal!.filter(food => food.category === 'BASE')!}></FoodTable>
-              </Grid>
-              <Grid size={{xs:12, sm:12, md:6}}>
-                <Typography variant="h6">Carbohidratos</Typography>
-                <FoodTable list={client.plan?.secondMeal!.filter(food => food.category === 'COMPLEMENT')!}></FoodTable>
-              </Grid>
-            </Grid>
-          </AccordionDetails>
-        </Accordion>
-        <Button variant="contained" onClick={saveHandler} sx={{ width: '100%' }}>Regresar</Button>
+            </AccordionDetails>
+          </Accordion>
+        ))}
+
+        <Button
+          variant="contained"
+          onClick={saveHandler}
+          sx={{ width: "100%" }}
+        >
+          Regresar
+        </Button>
       </React.Fragment>
     </ThemeProvider>
-
   );
-}
+};
 
 export default Viewer
