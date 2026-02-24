@@ -62,8 +62,24 @@ const FoodList = (props: Props) => {
         })
     }
     return (
-        <Box>
-            <Typography variant='h2' component='h2' sx={{ mb: 2 }}>{props.title}</Typography>
+        <Box sx={{ 
+            border: "1px solid rgba(59, 130, 246, 0.3)", 
+            borderRadius: "16px", 
+            p: 2, 
+            mb: 2, 
+            backgroundColor: "rgba(255, 255, 255, 0.6)", 
+            backdropFilter: "blur(10px)",
+            boxShadow: "0 4px 20px rgba(31, 38, 135, 0.05)",
+            height: "100%"
+        }}>
+            <Typography variant='h2' component='h2' sx={{ 
+                mb: 3, 
+                fontWeight: 700, 
+                color: "#1E3A8A", 
+                borderBottom: "3px solid #0EA5E9",
+                display: "inline-block",
+                pb: 0.5 
+            }}>{props.title}</Typography>
             <TextField
                 id="gramsTarget"
                 label="Gramos"

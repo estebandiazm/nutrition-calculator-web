@@ -5,7 +5,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Avatar, Button, Grid, Stack, ThemeProvider, Chip } from "@mui/material";
+import { Avatar, Button, Grid, Stack, ThemeProvider, Chip, Box } from "@mui/material";
 import FoodTable from "../food-table/FoodTable";
 import React, { useContext, useEffect, useState } from "react";
 import { ClientContext } from "../../context/ClientContext";
@@ -38,15 +38,15 @@ const Viewer = () => {
   };
   return (
     <ThemeProvider theme={lightTheme}>
-      <React.Fragment>
-        <Stack direction="row" spacing={2} alignItems="center" sx={{ m: 2 }}>
+      <Box sx={{ m: 2 }}>
+        <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
           <Avatar sx={{ bgcolor: "primary.main" }}>
             {client.name ? client.name.charAt(0).toUpperCase() : "U"}
           </Avatar>
           <Typography variant="h5">Nombre: {client.name}</Typography>
         </Stack>
         {client.plan?.meals.map((meal: any, index: number) => (
-          <Accordion key={index} sx={{ mb: index === client.plan!.meals.length - 1 ? 2 : 0 }}>
+          <Accordion key={index} sx={{ mb: 2 }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls={`panel${index}-content`}
@@ -81,11 +81,11 @@ const Viewer = () => {
         <Button
           variant="contained"
           onClick={saveHandler}
-          sx={{ width: "100%" }}
+          sx={{ width: "100%", mt: 2 }}
         >
           Regresar
         </Button>
-      </React.Fragment>
+      </Box>
     </ThemeProvider>
   );
 };
