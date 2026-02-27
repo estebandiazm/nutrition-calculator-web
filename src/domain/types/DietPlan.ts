@@ -32,6 +32,8 @@ export type SnackOption = z.infer<typeof SnackOptionSchema>;
 export const DietPlanSchema = z.object({
   clientId: z.string(),
   clientName: z.string(),
+  label: z.string().optional(),
+  days: z.string().optional(),
   recommendations: z.string().optional(),
   meals: z.array(MealSchema),
   snacks: z.array(SnackOptionSchema).optional(),

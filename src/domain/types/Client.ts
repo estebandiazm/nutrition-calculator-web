@@ -2,5 +2,6 @@ import { DietPlan } from "./DietPlan";
 
 export interface Client {
     name: string;
-    plan?: DietPlan;
+    targetWeight?: number;
+    plans: DietPlan[];
 }

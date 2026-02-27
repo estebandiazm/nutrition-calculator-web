@@ -1,160 +1,221 @@
-'use client'
+'use client';
 
-import {
-  Box,
-  Button,
-  Grid,
-  InputAdornment,
-  TextField,
-  ThemeProvider,
-} from "@mui/material";
-import { lightTheme } from "../../themes";
-import React, { useContext, useState } from "react";
-import { ClientContext } from "../../context/ClientContext";
-import { ClientContextType } from "../../context/ClientContextType";
-import { FoodDatabase } from "../../domain/services/FoodDatabase";
-import { DietEngine } from "../../domain/services/DietEngine";
-import FoodList from "../food-list/FoodList";
-import { Food } from "../../domain/types/Food";
-import { AccountCircle, MonitorWeightRounded } from "@mui/icons-material";
-import Menu from "../menu/Menu";
-import { useRouter } from "next/navigation";
+import React, { useContext, useState } from 'react';
+import { Box, Button, TextField, Typography, ThemeProvider } from '@mui/material';
+import { AccountCircle, MonitorWeightRounded, AddCircleOutline, SaveOutlined } from '@mui/icons-material';
+import { ClientContext } from '../../context/ClientContext';
+import { ClientContextType } from '../../context/ClientContextType';
+import { DietEngine } from '../../domain/services/DietEngine';
+import { FoodDatabase } from '../../domain/services/FoodDatabase';
+import { useRouter } from 'next/navigation';
+import { darkTheme } from '../../themes';
+import Menu from '../menu/Menu';
+import PlanCard, { PlanDraft } from './PlanCard';
+
+// ─── helpers ────────────────────────────────────────────────────────────────
+
+const createDefaultPlan = (): PlanDraft => ({
+  id: crypto.randomUUID(),
+  label: '',
+  days: '',
+  proteins: 20,
+  carbs: 20,
+  fruits: 0,
+  fats: 0,
+  foods: [],
+});
+
+// ─── styles ─────────────────────────────────────────────────────────────────
+
+const rootBg = {
+  minHeight: '100vh',
+  background: 'linear-gradient(135deg, #0a1628 0%, #0d2157 50%, #0a1628 100%)',
+  py: 3,
+  px: { xs: 2, sm: 3, md: 6 },
+};
+
+const pillInput = {
+  '& .MuiOutlinedInput-root': {
+    borderRadius: '50px',
+    background: 'rgba(255,255,255,0.08)',
+    color: '#fff',
+    '& fieldset': { borderColor: 'rgba(255,255,255,0.25)' },
+    '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.5)' },
+    '&.Mui-focused fieldset': { borderColor: '#7C9FFF' },
+  },
+  '& .MuiInputBase-input': { color: '#fff' },
+  '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.6)' },
+  '& input[type=number]::-webkit-inner-spin-button': { display: 'none' },
+};
+
+// ─── component ──────────────────────────────────────────────────────────────
 
 const Creator = () => {
   const router = useRouter();
-
   const { saveClient } = useContext(ClientContext) as ClientContextType;
 
-  const [data, setData] = useState({
-    name: "",
-    fruits: [] as Food[],
-    firstMeal: [] as Food[],
-    secondMealBase: [] as Food[],
-    secondMealComplement: [] as Food[],
-  });
+  const [clientName, setClientName] = useState('');
+  const [targetWeight, setTargetWeight] = useState<number | ''>('');
+  const [plans, setPlans] = useState<PlanDraft[]>([createDefaultPlan()]);
 
-  const saveHandler = () => {
-    // Basic defaults to avoid errors. Real implementation needs proper target calculation forms.
-    const plan = DietEngine.generatePlan(
-      data.name,
-      data.fruits.length > 0 ? data.fruits : FoodDatabase.getFruits(),
-      250, 
-      data.firstMeal.length > 0 ? data.firstMeal : FoodDatabase.getFirstMealFoods(),
-      250, 
-      data.secondMealBase.length > 0 ? data.secondMealBase : FoodDatabase.getSecondMealFoodsByCategory('BASE'),
-      200, 
-      data.secondMealComplement.length > 0 ? data.secondMealComplement : FoodDatabase.getSecondMealFoodsByCategory('COMPLEMENT'),
-      200, 
-      data.secondMealBase.length > 0 ? data.secondMealBase : FoodDatabase.getSecondMealFoodsByCategory('BASE'),
-      200, 
-      data.secondMealComplement.length > 0 ? data.secondMealComplement : FoodDatabase.getSecondMealFoodsByCategory('COMPLEMENT'),
-      200
-    );
+  // Update a single plan by index
+  const handlePlanUpdate = (index: number, updatedPlan: PlanDraft) => {
+    setPlans((prev) => prev.map((p, i) => (i === index ? updatedPlan : p)));
+  };
+
+  // Add a new empty plan card
+  const handleAddPlan = () => {
+    setPlans((prev) => [...prev, createDefaultPlan()]);
+  };
+
+  // Save ALL plans at once → generate each DietPlan, persist, then navigate
+  const handleSaveAll = () => {
+    const fruits = FoodDatabase.getFruits();
+    const firstMeal = FoodDatabase.getFirstMealFoods();
+    const base = FoodDatabase.getSecondMealFoodsByCategory('BASE');
+    const complement = FoodDatabase.getSecondMealFoodsByCategory('COMPLEMENT');
+
+    const dietPlans = plans.map((draft, index) => {
+      const generated = DietEngine.generatePlan(
+        clientName || 'Cliente',
+        fruits, draft.fruits,
+        firstMeal, draft.proteins,
+        base, draft.carbs,
+        complement, draft.fats,
+        base, draft.carbs,
+        complement, draft.fats,
+      );
+
+      // Title follows "Plan {days}" if days is set, else "Plan {n}"
+      const label = draft.days.trim()
+        ? `Plan ${draft.days.trim()}`
+        : `Plan ${index + 1}`;
+
+      return {
+        ...generated,
+        label,
+        days: draft.days,
+      };
+    });
 
     saveClient({
-      name: data.name,
-      plan: plan,
+      name: clientName,
+      targetWeight: targetWeight !== '' ? targetWeight : undefined,
+      plans: dietPlans,
     });
-    router.push("/viewer");
-  };
 
-  const updateFruitHandler = (foods: Food[]) => {
-    setData({ ...data, fruits: foods });
-  };
-  const updateFirstMealHandler = (foods: Food[]) => {
-    setData({ ...data, firstMeal: foods });
-  };
-
-  const updateSecondMealBaseHandler = (foods: Food[]) => {
-    setData({ ...data, secondMealBase: foods });
-  };
-  
-  const updateSecondMealComplementHandler = (foods: Food[]) => {
-    setData({ ...data, secondMealComplement: foods });
-  };
-
-  const storeName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setData({ ...data, name: event.target.value });
+    router.push('/viewer');
   };
 
   return (
-    <ThemeProvider theme={lightTheme}>
-      <Menu />
-      <Grid container spacing={2} sx={{ m: 2 }}>
-        <Grid size={{ xs: 12, sm: 12, md: 10 }}>
-          <Box
+    <ThemeProvider theme={darkTheme}>
+      <Box sx={rootBg}>
+        <Menu />
+
+        {/* ── Client header ── */}
+        <Box sx={{ maxWidth: 600, mx: 'auto', mb: 4 }}>
+          <TextField
+            fullWidth
+            label="Client"
+            value={clientName}
+            onChange={(e) => setClientName(e.target.value)}
+            variant="outlined"
+            size="small"
+            sx={{ ...pillInput, mb: 2 }}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <AccountCircle sx={{ color: 'rgba(255,255,255,0.5)', mr: 1 }} />
+                ),
+              },
+            }}
+          />
+          <TextField
+            fullWidth
+            label="Target Weight"
+            type="number"
+            value={targetWeight}
+            onChange={(e) =>
+              setTargetWeight(e.target.value === '' ? '' : Number(e.target.value))
+            }
+            variant="outlined"
+            size="small"
+            sx={pillInput}
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <MonitorWeightRounded sx={{ color: 'rgba(255,255,255,0.5)', mr: 1 }} />
+                ),
+                endAdornment: (
+                  <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem', mr: 1 }}>
+                    kg
+                  </Typography>
+                ),
+              },
+            }}
+          />
+        </Box>
+
+        {/* ── Plan cards ── */}
+        <Box sx={{ maxWidth: 600, mx: 'auto' }}>
+          {plans.map((plan, index) => (
+            <PlanCard
+              key={plan.id}
+              plan={plan}
+              index={index}
+              onUpdate={handlePlanUpdate}
+            />
+          ))}
+
+          {/* ── Add Another Plan ── */}
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={handleAddPlan}
+            startIcon={<AddCircleOutline />}
             sx={{
-              display: "flex",
-              alignItems: "flex-end",
+              borderColor: 'rgba(255,255,255,0.3)',
+              color: 'rgba(255,255,255,0.8)',
+              borderRadius: '50px',
+              textTransform: 'none',
+              fontWeight: 600,
+              py: 1.5,
+              mb: 2,
+              '&:hover': {
+                borderColor: '#7C9FFF',
+                color: '#7C9FFF',
+                background: 'rgba(124,159,255,0.08)',
+              },
             }}
           >
-            <AccountCircle sx={{ color: "action.active", mr: 1, my: 0.5 }} />
-            <TextField
-              id="full-name"
-              label="Nombre"
-              variant="standard"
-              onChange={storeName}
-              sx={{ width: "100%" }}
-            />
-          </Box>
-        </Grid>
-        <Grid size={{ xs: 12, sm: 2, md: 2 }}>
-          <Box sx={{ width: "100%", display: "flex", alignItems: "flex-end" }}>
-            <MonitorWeightRounded
-              sx={{ color: "action.active", mr: 1, my: 0.5 }}
-            />
-            <TextField
-              id="body-weight"
-              label="Peso"
-              variant="standard"
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">Kg</InputAdornment>
-                  ),
-                },
-              }}
-            />
-          </Box>
-        </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 3 }}>
-          <FoodList
-            title="Frutas"
-            foods={FoodDatabase.getFruits()}
-            handler={updateFruitHandler}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 3 }}>
-          <FoodList
-            title="Primera Comida"
-            foods={FoodDatabase.getFirstMealFoods()}
-            handler={updateFirstMealHandler}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 3 }}>
-          <FoodList
-            title="Proteinas"
-            foods={FoodDatabase.getSecondMealFoodsByCategory("BASE")}
-            handler={updateSecondMealBaseHandler}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 3 }}>
-          <FoodList
-            title="Carbohidratos"
-            foods={FoodDatabase.getSecondMealFoodsByCategory("COMPLEMENT")}
-            handler={updateSecondMealComplementHandler}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 12, md: 12 }}>
-          <Button
-            variant="contained"
-            onClick={saveHandler}
-            sx={{ width: "100%", height: "3em" }}
-          >
-            Guardar
+            Add Another Plan
           </Button>
-        </Grid>
-      </Grid>
+
+          {/* ── Save All Plans ── */}
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={handleSaveAll}
+            startIcon={<SaveOutlined />}
+            disableElevation
+            sx={{
+              background: 'linear-gradient(135deg, #E91E8C, #9C27B0)',
+              color: '#fff',
+              borderRadius: '50px',
+              textTransform: 'none',
+              fontWeight: 700,
+              fontSize: '1rem',
+              py: 1.8,
+              mb: 4,
+              '&:hover': {
+                background: 'linear-gradient(135deg, #C2185B, #7B1FA2)',
+              },
+            }}
+          >
+            Guardar Planes
+          </Button>
+        </Box>
+      </Box>
     </ThemeProvider>
   );
 };

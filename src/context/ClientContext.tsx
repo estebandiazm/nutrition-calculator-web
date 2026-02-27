@@ -16,22 +16,20 @@ const ClientProvider: React.FC<ClientContextProps> = ({ children }) => {
   useEffect(() => {
     try {
       const stored = localStorage.getItem("client");
-      console.log("Client stored:", stored);
       if (stored) {
         const parsed = JSON.parse(stored);
+        // Migrate old data shape (plan → plans)
+        if (parsed.plan && !parsed.plans) {
+          parsed.plans = [parsed.plan];
+          delete parsed.plan;
+        }
         setClient(parsed);
       } else {
-        setClient({
-          name: "",
-          plan: {
-            clientId: "",
-            clientName: "",
-            meals: []
-          },
-        });
+        setClient({ name: "", plans: [] });
       }
     } catch (err) {
       console.warn("Error leyendo localStorage", err);
+      setClient({ name: "", plans: [] });
     }
   }, []);
 
