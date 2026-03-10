@@ -2,7 +2,7 @@
 
 import React, { useContext, useState } from 'react';
 import { Box, Button, TextField, Typography, ThemeProvider } from '@mui/material';
-import { AccountCircle, MonitorWeightRounded, AddCircleOutline, SaveOutlined } from '@mui/icons-material';
+import { AccountCircle, MonitorWeightRounded, AddCircleOutline, SaveOutlined, CloudUploadOutlined } from '@mui/icons-material';
 import { ClientContext } from '../../context/ClientContext';
 import { ClientContextType } from '../../context/ClientContextType';
 import { DietEngine } from '../../domain/services/DietEngine';
@@ -11,6 +11,8 @@ import { useRouter } from 'next/navigation';
 import { darkTheme } from '../../themes';
 import Menu from '../menu/Menu';
 import PlanCard, { PlanDraft } from './PlanCard';
+import SavePlanModal from './SavePlanModal';
+import { DietPlan } from '../../domain/types/DietPlan';
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
@@ -57,6 +59,8 @@ const Creator = () => {
   const [clientName, setClientName] = useState('');
   const [targetWeight, setTargetWeight] = useState<number | ''>('');
   const [plans, setPlans] = useState<PlanDraft[]>([createDefaultPlan()]);
+  const [saveModalOpen, setSaveModalOpen] = useState(false);
+  const [generatedPlans, setGeneratedPlans] = useState<DietPlan[]>([]);
 
   // Update a single plan by index
   const handlePlanUpdate = (index: number, updatedPlan: PlanDraft) => {
@@ -105,6 +109,39 @@ const Creator = () => {
     });
 
     router.push('/viewer');
+  };
+
+  // Generate plans and open the modal so the user can choose a client to persist to
+  const handleSaveToDB = () => {
+    const fruits = FoodDatabase.getFruits();
+    const firstMeal = FoodDatabase.getFirstMealFoods();
+    const base = FoodDatabase.getSecondMealFoodsByCategory('BASE');
+    const complement = FoodDatabase.getSecondMealFoodsByCategory('COMPLEMENT');
+
+    const dietPlans: DietPlan[] = plans.map((draft, index) => {
+      const generated = DietEngine.generatePlan(
+        clientName || 'Cliente',
+        fruits, draft.fruits,
+        firstMeal, draft.proteins,
+        base, draft.carbs,
+        complement, draft.fats,
+        base, draft.carbs,
+        complement, draft.fats,
+      );
+
+      const label = draft.days.trim()
+        ? `Plan ${draft.days.trim()}`
+        : `Plan ${index + 1}`;
+
+      return {
+        ...generated,
+        label,
+        days: draft.days,
+      };
+    });
+
+    setGeneratedPlans(dietPlans);
+    setSaveModalOpen(true);
   };
 
   return (
@@ -214,7 +251,37 @@ const Creator = () => {
           >
             Guardar Planes
           </Button>
+
+          {/* ── Save to Database ── */}
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={handleSaveToDB}
+            startIcon={<CloudUploadOutlined />}
+            sx={{
+              borderColor: 'rgba(124,159,255,0.4)',
+              color: '#7C9FFF',
+              borderRadius: '50px',
+              textTransform: 'none',
+              fontWeight: 600,
+              fontSize: '0.95rem',
+              py: 1.5,
+              mb: 4,
+              '&:hover': {
+                borderColor: '#7C9FFF',
+                background: 'rgba(124,159,255,0.08)',
+              },
+            }}
+          >
+            Guardar en Base de Datos
+          </Button>
         </Box>
+
+        <SavePlanModal
+          open={saveModalOpen}
+          onClose={() => setSaveModalOpen(false)}
+          plans={generatedPlans}
+        />
       </Box>
     </ThemeProvider>
   );
