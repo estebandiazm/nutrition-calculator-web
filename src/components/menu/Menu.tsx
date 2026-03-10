@@ -1,4 +1,6 @@
-import { AppBar, Toolbar, Typography, Box } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box, Button } from "@mui/material";
+import { PeopleAlt } from "@mui/icons-material";
+import Link from "next/link";
 import React from "react";
 
 const Menu = () => {
@@ -16,20 +18,35 @@ const Menu = () => {
       >
         <Toolbar>
           <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
-            <Typography
-              variant="h5"
-              component="div"
+            <Link href="/" style={{ textDecoration: "none" }}>
+              <Typography
+                variant="h5"
+                component="div"
+                sx={{
+                  fontWeight: 800,
+                  letterSpacing: "-0.5px",
+                  background: "linear-gradient(90deg, #7C9FFF 0%, #E91E8C 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                Calculadora Nutricional
+              </Typography>
+            </Link>
+          </Box>
+          <Link href="/clients" passHref style={{ textDecoration: "none" }}>
+            <Button
+              startIcon={<PeopleAlt />}
               sx={{
-                fontWeight: 800,
-                letterSpacing: "-0.5px",
-                background: "linear-gradient(90deg, #7C9FFF 0%, #E91E8C 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+                color: "rgba(255,255,255,0.7)",
+                textTransform: "none",
+                fontWeight: 600,
+                "&:hover": { color: "#7C9FFF" },
               }}
             >
-              Calculadora Nutricional
-            </Typography>
-          </Box>
+              Clientes
+            </Button>
+          </Link>
         </Toolbar>
       </AppBar>
       {/* Spacer to prevent content from hiding under the fixed AppBar */}
