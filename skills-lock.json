@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "skills": {
+    "clean-code": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "computedHash": "af77b8995f255140f1643de753007baf87b734e8b87175489524aadc3559c42a"
+    },
+    "nextjs-best-practices": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "computedHash": "8f5b6b588c638139854181f80a241c16575810a3bd45b0983e55078b6aed347a"
+    },
+    "pr-creator": {
+      "source": "google-gemini/gemini-cli",
+      "sourceType": "github",
+      "computedHash": "fcf4cb453f7108048631bf089ffcc426f2c00601fd97d7784b805de24eb4aa4d"
+    }
+  }
+}
