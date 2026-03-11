@@ -14,7 +14,12 @@ import { lightTheme } from "../../themes";
 import { useRouter } from "next/navigation";
 import { DietPlan } from "../../domain/types/DietPlan";
 
-const Viewer = () => {
+interface ViewerProps {
+  overridePlans?: DietPlan[];
+  overrideClientName?: string;
+}
+
+const Viewer = ({ overridePlans, overrideClientName }: ViewerProps = {}) => {
   const router = useRouter();
   const { client } = useContext(ClientContext) as ClientContextType;
 
@@ -29,25 +34,26 @@ const Viewer = () => {
     return <Typography sx={{ m: 4 }}>Cargando cliente...</Typography>;
   }
 
-  if (!client.name) {
+  const clientName = overrideClientName ?? client.name;
+  const plans: DietPlan[] = overridePlans ?? client.plans ?? [];
+
+  if (!clientName && !overridePlans) {
     return <Typography sx={{ m: 4 }}>Cargando cliente...</Typography>;
   }
 
   const saveHandler = () => {
-    router.push("/");
+    router.back();
   };
-
-  const plans: DietPlan[] = client.plans ?? [];
 
   return (
     <ThemeProvider theme={lightTheme}>
       <Box sx={{ m: 2 }}>
         <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
           <Avatar sx={{ bgcolor: "primary.main" }}>
-            {client.name ? client.name.charAt(0).toUpperCase() : "U"}
+            {clientName ? clientName.charAt(0).toUpperCase() : "U"}
           </Avatar>
-          <Typography variant="h5">Nombre: {client.name}</Typography>
-          {client.targetWeight && (
+          <Typography variant="h5">Nombre: {clientName}</Typography>
+          {!overridePlans && client.targetWeight && (
             <Typography variant="body2" color="text.secondary">
               Peso objetivo: {client.targetWeight} kg
             </Typography>

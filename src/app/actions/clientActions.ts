@@ -19,6 +19,7 @@ function toClient(doc: ClientDocument): Client & { id: string } {
     id: String(plain._id),
     name: plain.name,
     targetWeight: plain.targetWeight,
+    nutritionistId: String(plain.nutritionistId),
     plans: (plain.plans ?? []).map(sanitisePlan),
   };
 }
@@ -26,19 +27,20 @@ function toClient(doc: ClientDocument): Client & { id: string } {
 /** Strip Mongo internals from an embedded plan object. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function sanitisePlan(plan: any): DietPlan {
-  const { _id, __v, ...rest } = plan;
+  const { _id, __v, updatedAt, ...rest } = plan;
   return rest as DietPlan;
 }
 
 // ─── Client CRUD ────────────────────────────────────────────────────────────
 
 export async function createClient(
-  data: Pick<Client, 'name'> & Partial<Pick<Client, 'targetWeight'>>
+  data: Pick<Client, 'name' | 'nutritionistId'> & Partial<Pick<Client, 'targetWeight'>>
 ): Promise<Client & { id: string }> {
   await dbConnect();
   const doc = await ClientModel.create({
     name: data.name,
     targetWeight: data.targetWeight,
+    nutritionistId: data.nutritionistId,
     plans: [],
   });
   return toClient(doc);
@@ -53,6 +55,7 @@ export async function getClients(): Promise<(Client & { id: string })[]> {
       id: String(plain._id),
       name: plain.name,
       targetWeight: plain.targetWeight,
+      nutritionistId: String(plain.nutritionistId),
       plans: (plain.plans ?? []).map(sanitisePlan),
     };
   });
@@ -65,6 +68,14 @@ export async function getClientById(
   const doc = await ClientModel.findById(id);
   if (!doc) return null;
   return toClient(doc);
+}
+
+export async function getClientsByNutritionist(
+  nutritionistId: string
+): Promise<(Client & { id: string })[]> {
+  await dbConnect();
+  const docs = await ClientModel.find({ nutritionistId }).sort({ updatedAt: -1 });
+  return docs.map((doc: ClientDocument) => toClient(doc));
 }
 
 export async function updateClient(

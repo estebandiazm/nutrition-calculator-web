@@ -27,6 +27,7 @@ interface SavePlanModalProps {
   open: boolean;
   onClose: () => void;
   plans: DietPlan[];
+  nutritionistId: string;
 }
 
 // ─── styles ─────────────────────────────────────────────────────────────────
@@ -53,7 +54,7 @@ const pillInput = {
 
 // ─── component ──────────────────────────────────────────────────────────────
 
-export default function SavePlanModal({ open, onClose, plans }: SavePlanModalProps) {
+export default function SavePlanModal({ open, onClose, plans, nutritionistId }: SavePlanModalProps) {
   const [clients, setClients] = useState<ClientWithId[]>([]);
   const [selectedClient, setSelectedClient] = useState<ClientWithId | null>(null);
   const [newClientName, setNewClientName] = useState('');
@@ -101,7 +102,10 @@ export default function SavePlanModal({ open, onClose, plans }: SavePlanModalPro
           setLoading(false);
           return;
         }
-        const created = await createClient({ name: newClientName.trim() });
+        const created = await createClient({
+          name: newClientName.trim(),
+          nutritionistId,
+        });
         targetClientId = created.id;
       } else {
         targetClientId = selectedClient.id;

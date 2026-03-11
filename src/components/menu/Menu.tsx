@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Typography, Box, Button } from "@mui/material";
-import { PeopleAlt } from "@mui/icons-material";
+import { NoteAdd } from "@mui/icons-material";
 import Link from "next/link";
 import React from "react";
 
@@ -34,9 +34,9 @@ const Menu = () => {
               </Typography>
             </Link>
           </Box>
-          <Link href="/clients" passHref style={{ textDecoration: "none" }}>
+          <Link href="/creator" passHref style={{ textDecoration: "none" }}>
             <Button
-              startIcon={<PeopleAlt />}
+              startIcon={<NoteAdd />}
               sx={{
                 color: "rgba(255,255,255,0.7)",
                 textTransform: "none",
@@ -44,7 +44,7 @@ const Menu = () => {
                 "&:hover": { color: "#7C9FFF" },
               }}
             >
-              Clientes
+              Crear Plan
             </Button>
           </Link>
         </Toolbar>
