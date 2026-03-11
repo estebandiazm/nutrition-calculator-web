@@ -27,8 +27,6 @@ const SnackOptionSchema = new Schema({
 }, { _id: false });
 
 const DietPlanSchema = new Schema({
-  clientId: { type: String }, // Can be optional since it's embedded, but good for reference
-  clientName: { type: String },
   label: { type: String },
   days: { type: String },
   recommendations: { type: String },
@@ -39,8 +37,9 @@ const DietPlanSchema = new Schema({
 // --- Main Client Schema ---
 
 // We extend the domain type to include mongoose Document properties
-export interface ClientDocument extends Omit<IClient, 'plans'>, Document {
+export interface ClientDocument extends Omit<IClient, 'plans' | 'nutritionistId'>, Document {
   plans: DietPlan[];
+  nutritionistId: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -48,6 +47,7 @@ export interface ClientDocument extends Omit<IClient, 'plans'>, Document {
 const ClientSchema = new Schema<ClientDocument>({
   name: { type: String, required: true },
   targetWeight: { type: Number },
+  nutritionistId: { type: Schema.Types.ObjectId, ref: 'Nutritionist', required: true },
   plans: [DietPlanSchema] 
 }, { 
   timestamps: true,

@@ -14,7 +14,7 @@ import {
   Divider,
   IconButton,
 } from '@mui/material';
-import { ArrowBack, Person, FitnessCenter, Restaurant } from '@mui/icons-material';
+import { ArrowBack, Person, FitnessCenter, Restaurant, Visibility } from '@mui/icons-material';
 import { darkTheme } from '../../../themes';
 import Menu from '../../../components/menu/Menu';
 import { getClientById } from '../../actions/clientActions';
@@ -76,7 +76,7 @@ export default function ClientDetailPage() {
           {/* ── Back button ── */}
           <Button
             startIcon={<ArrowBack />}
-            onClick={() => router.push('/clients')}
+            onClick={() => router.push('/')}
             sx={{
               color: 'rgba(255,255,255,0.6)',
               textTransform: 'none',
@@ -98,7 +98,7 @@ export default function ClientDetailPage() {
               <Typography sx={{ color: '#ff5252', mb: 2 }}>{error}</Typography>
               <Button
                 variant="outlined"
-                onClick={() => router.push('/clients')}
+                onClick={() => router.push('/')}
                 sx={{
                   borderColor: 'rgba(255,255,255,0.3)',
                   color: 'rgba(255,255,255,0.7)',
@@ -246,6 +246,27 @@ export default function ClientDetailPage() {
                         {plan.snacks.length} snack{plan.snacks.length !== 1 ? 's' : ''}
                       </Typography>
                     )}
+
+                    <Button
+                      startIcon={<Visibility />}
+                      onClick={() => router.push(`/viewer?clientId=${client.id}&planIndex=${index}`)}
+                      size="small"
+                      sx={{
+                        mt: 2,
+                        color: '#7C9FFF',
+                        textTransform: 'none',
+                        fontWeight: 600,
+                        border: '1px solid rgba(124,159,255,0.25)',
+                        borderRadius: '50px',
+                        px: 2,
+                        '&:hover': {
+                          background: 'rgba(124,159,255,0.12)',
+                          borderColor: '#7C9FFF',
+                        },
+                      }}
+                    >
+                      Ver Plan
+                    </Button>
                   </CardContent>
                 </Card>
               ))}
