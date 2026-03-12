@@ -12,85 +12,85 @@
 </h1>
 
 <p align="center">
-  <strong>Plataforma de gestión de planes nutricionales</strong><br/>
-  Crea, calcula y administra planes alimenticios personalizados para tus pacientes.
+  <strong>Nutritional Plan Management Platform</strong><br/>
+  Create, calculate, and manage personalized nutritional plans for your patients.
 </p>
 
 <p align="center">
-  <a href="#-inicio-rápido">Inicio Rápido</a> •
-  <a href="#-características">Características</a> •
-  <a href="#-arquitectura">Arquitectura</a> •
-  <a href="#-modelo-de-dominio">Dominio</a> •
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-features">Features</a> •
+  <a href="#-architecture">Architecture</a> •
+  <a href="#-domain-model">Domain</a> •
   <a href="#-tech-stack">Tech Stack</a> •
   <a href="#-roadmap">Roadmap</a>
 </p>
 
 ---
 
-## ⚡ Inicio Rápido
+## ⚡ Quick Start
 
 ```bash
-# 1. Clonar el repositorio
+# 1. Clone the repository
 git clone https://github.com/estebandiazm/nutrition-calculator-web.git
 cd nutrition-calculator-web
 
-# 2. Instalar dependencias
+# 2. Install dependencies
 npm install
 
-# 3. Configurar variables de entorno
+# 3. Configure environment variables
 cp .env.example .env.local
-# Editar .env.local con tu connection string de MongoDB Atlas
+# Edit .env.local with your MongoDB Atlas connection string
 
-# 4. Iniciar en modo desarrollo
+# 4. Start in development mode
 npm run dev
 ```
 
-Abre [http://localhost:3000](http://localhost:3000) y comienza a crear planes nutricionales.
+Open [http://localhost:3000](http://localhost:3000) and start creating nutritional plans.
 
-### Variables de Entorno
+### Environment Variables
 
-| Variable       | Descripción                          | Ejemplo                                                                     |
+| Variable       | Description                          | Example                                                                     |
 | -------------- | ------------------------------------ | --------------------------------------------------------------------------- |
-| `MONGODB_URI`  | Connection string de MongoDB Atlas   | `mongodb+srv://user:pass@cluster.mongodb.net/nutriplan?retryWrites=true&w=majority` |
+| `MONGODB_URI`  | MongoDB Atlas connection string      | `mongodb+srv://user:pass@cluster.mongodb.net/nutriplan?retryWrites=true&w=majority` |
 
 ---
 
-## ✨ Características
+## ✨ Features
 
 <table>
 <tr>
 <td width="50%">
 
-### 📋 Gestión de Clientes
-- Dashboard con listado de pacientes
-- Perfiles con peso objetivo y planes asociados
-- Historial de planes por cliente
+### 📋 Client Management
+- Dashboard with patient list
+- Profiles with target weight and associated plans
+- Plan history per client
 
 </td>
 <td width="50%">
 
-### 🧮 Motor de Cálculo (DietEngine)
-- Cálculo proporcional automático de porciones
-- Equivalencias entre alimentos del mismo bloque
-- Soporte para bases, acompañamientos, grasas y frutas
+### 🧮 Calculation Engine (DietEngine)
+- Automatic proportional calculation of portions
+- Equivalencies between foods in the same block
+- Support for bases, side dishes, fats, and fruits
 
 </td>
 </tr>
 <tr>
 <td width="50%">
 
-### 🍽️ Creador de Planes
-- Composición de comidas con bloques tipados
-- Sección de snacks con opciones numeradas
-- Recomendaciones generales por plan
+### 🍽️ Plan Creator
+- Meal composition with typed blocks
+- Snacks section with numbered options
+- General recommendations per plan
 
 </td>
 <td width="50%">
 
-### 👁️ Visor de Planes
-- Vista limpia y optimizada para el paciente
-- Diseño glassmorphism con tema oscuro premium
-- Responsivo para consultas desde el móvil
+### 👁️ Plan Viewer
+- Clean and patient-optimized view
+- Glassmorphism design with a premium dark theme
+- Responsive for mobile inquiries
 
 </td>
 </tr>
@@ -98,17 +98,17 @@ Abre [http://localhost:3000](http://localhost:3000) y comienza a crear planes nu
 
 ---
 
-## 🏗️ Arquitectura
+## 🏗️ Architecture
 
-El proyecto sigue una arquitectura **Feature-First Monolith** con Next.js App Router, con separación clara entre dominio puro, infraestructura e interfaz.
+The project follows a **Feature-First Monolith** architecture with Next.js App Router, boasting a clear separation between pure domain, infrastructure, and interface.
 
 ```
 src/
 ├── app/                    # Routes & Server Actions (Next.js App Router)
 │   ├── actions/            # Server Actions (clientActions, nutritionistActions)
-│   ├── clients/[id]/       # Detalle de cliente
-│   ├── creator/            # Creador de planes
-│   └── viewer/             # Visor de planes
+│   ├── clients/[id]/       # Client details
+│   ├── creator/            # Plan creator
+│   └── viewer/             # Plan viewer
 │
 ├── components/             # UI Components (feature-scoped)
 │   ├── creator/            # Creator, PlanCard, SavePlanModal
@@ -137,7 +137,7 @@ src/
 └── themes/                 # MUI Theme (dark & light)
 ```
 
-### Regla de Dependencias
+### Dependency Rule
 
 ```mermaid
 graph TD
@@ -156,13 +156,13 @@ graph TD
     style D fill:#5c4a1a,stroke:#fbbf24,color:#ffffff
 ```
 
-> **Regla de oro:** `domain/` es puro — nunca importa de `app/`, `components/`, ni `lib/`. Debe funcionar sin Next.js, sin MongoDB, sin nada externo.
+> **Golden Rule:** `domain/` is pure — it never imports from `app/`, `components/`, or `lib/`. It must work without Next.js, without MongoDB, and without anything external.
 
 ---
 
-## 🧬 Modelo de Dominio
+## 🧬 Domain Model
 
-El modelo refleja la estructura real de un plan nutricional profesional:
+The model reflects the real structure of a professional nutritional plan:
 
 ```mermaid
 erDiagram
@@ -187,7 +187,7 @@ erDiagram
         string mealName
     }
     MEAL_BLOCK {
-        enum blockType "BASE | ACOMPAÑAMIENTO | GRASA | FRUTA"
+        enum blockType "BASE | SIDE_DISH | FAT | FRUIT"
     }
     FOOD_OPTION {
         string foodName
@@ -200,80 +200,80 @@ erDiagram
     }
 ```
 
-### Bloques de Comida
+### Meal Blocks
 
-Cada comida se compone de bloques tipados que reflejan el sistema de equivalencias nutricionales:
+Each meal is composed of typed blocks reflecting the nutritional equivalency system:
 
-| Tipo                | Propósito                                  | Ejemplo                          |
+| Type                | Purpose                                    | Example                          |
 | ------------------- | ------------------------------------------ | -------------------------------- |
-| `BASE`              | Fuente principal de macros                 | Arroz, pollo, papa               |
-| `ACOMPAÑAMIENTO`    | Complemento del plato                      | Ensalada, vegetales cocidos      |
-| `GRASA`             | Fuente de grasas saludables                | Aguacate, aceite de oliva        |
-| `FRUTA`             | Porción de fruta con equivalencias         | Banano, manzana, uvas            |
+| `BASE`              | Primary source of macronutrients           | Rice, chicken, potato            |
+| `SIDE_DISH`         | Complement to the meal                     | Salad, cooked vegetables         |
+| `FAT`               | Source of healthy fats                     | Avocado, olive oil               |
+| `FRUIT`             | Fruit portion with equivalencies           | Banana, apple, grapes            |
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Capa             | Tecnología                  | Rol                                                  |
+| Layer            | Technology                  | Role                                                 |
 | ---------------- | --------------------------- | ---------------------------------------------------- |
-| **Framework**    | Next.js 15 (App Router)     | Full-stack: SSR, Server Actions, routing              |
-| **UI**           | React 19 + MUI 7            | Server Components + Component Library                 |
-| **Lenguaje**     | TypeScript (strict)         | Type safety en toda la codebase                       |
-| **Validación**   | Zod 4                       | Schemas de entidades + contratos de datos             |
-| **Base de Datos**| MongoDB Atlas + Mongoose    | Persistencia en la nube con ODM                       |
-| **CI/CD**        | GitHub Actions              | Build & deploy automáticos                            |
+| **Framework**    | Next.js 15 (App Router)     | Full-stack: SSR, Server Actions, routing             |
+| **UI**           | React 19 + MUI 7            | Server Components + Component Library                |
+| **Language**     | TypeScript (strict)         | Type safety across the entire codebase               |
+| **Validation**   | Zod 4                       | Entity schemas + data contracts                      |
+| **Database**     | MongoDB Atlas + Mongoose    | Cloud persistence with ODM                           |
+| **CI/CD**        | GitHub Actions              | Automated build & deploy                             |
 
 ---
 
-## 📜 Scripts Disponibles
+## 📜 Available Scripts
 
 ```bash
-npm run dev       # Servidor de desarrollo (http://localhost:3000)
-npm run build     # Build de producción
-npm run start     # Servidor de producción
-npm run lint      # Linting con ESLint
+npm run dev       # Development server (http://localhost:3000)
+npm run build     # Production build
+npm run start     # Production server
+npm run lint      # Linting with ESLint
 ```
 
 ---
 
 ## 🗺️ Roadmap
 
-NutriPlan evoluciona en fases progresivas:
+NutriPlan evolves in progressive phases:
 
 ```mermaid
 timeline
-    title Evolución de NutriPlan
-    MVP (actual) : Calculadora personal
-                 : 1 nutricionista, 1 cliente
-                 : Motor de cálculo DietEngine
-    V1           : Multi-cliente
-                 : Gestión de N clientes
-                 : Tracking de progreso
-                 : Historial de planes
-    V2           : SaaS Multi-nutricionista
-                 : Plataforma multi-tenant
-                 : Auth + onboarding
-                 : Generación de planes con AI
-    V3           : Gyms + Nutrición
-                 : Gestión de horarios
-                 : Programas de entrenamiento
-                 : Integración CrossFit
+    title NutriPlan Evolution
+    MVP (current) : Personal calculator
+                  : 1 nutritionist, 1 client
+                  : DietEngine calculation engine
+    V1            : Multi-client
+                  : Management of N clients
+                  : Progress tracking
+                  : Plan history
+    V2            : SaaS Multi-nutritionist
+                  : Multi-tenant platform
+                  : Auth + onboarding
+                  : AI plan generation
+    V3            : Gyms + Nutrition
+                  : Schedule management
+                  : Training programs
+                  : CrossFit integration
 ```
 
 ---
 
-## 🤝 Desarrollo
+## 🤝 Development
 
-El proyecto sigue principios **AI-native** — optimizado para desarrollo asistido por IA:
+The project follows **AI-native** principles — optimized for AI-assisted development:
 
-- 📐 **Clean Code** — Funciones pequeñas, nombres descriptivos, sin side effects
-- 🧪 **Domain-first** — Lógica de negocio pura y testeable en `domain/`
-- 📋 **OpenSpec** — Gestión de cambios con specs formales (`openspec/`)
-- 🔀 **Git flow** — 1 cambio = 1 branch = 1 PR con walkthrough
+- 📐 **Clean Code** — Small functions, descriptive names, no side effects
+- 🧪 **Domain-first** — Pure and testable business logic in `domain/`
+- 📋 **OpenSpec** — Change management with formal specs (`openspec/`)
+- 🔀 **Git flow** — 1 change = 1 branch = 1 PR with walkthrough
 
 ---
 
 <p align="center">
-  <sub>Hecho con 💚 para nutricionistas que quieren digitalizar sus planes.</sub>
+  <sub>Made with 💚 for nutritionists who want to digitize their plans.</sub>
 </p>
