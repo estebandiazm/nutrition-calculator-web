@@ -1,24 +1,24 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Client Invitation Flow', () => {
-  // This test focuses just on the UI rendering since it's a protected route that normally requires login
-  // We can bypass or mock authentication if necessary, but here we just test that the form renders
-  // when navigating directly (assuming middleware allows it or we mock the session).
-  // For a basic E2E in this PR, we mock the rendering of the form fields to ensure the UI is intact.
+  // This test focuses just on the UI rendering since it's a protected route that normally requires login.
+  // We test that the middleware protection works by verifying the redirect to /login,
+  // or that the form renders correctly if somehow authenticated.
 
   test('should render the invite client form correctly', async ({ page }) => {
     // Navigate to the invite client page directly.
-    // If middleware redirects to /login because we aren't authenticated, the test will catch it.
-    const response = await page.goto('/clients/new');
+    // Middleware will redirect to /login for unauthenticated sessions.
+    await page.goto('/clients/new');
 
-    // Check if we were redirected to login (which is expected behavior for a protected route)
+    // Check if we were redirected to login (expected behavior for a protected route)
     if (page.url().includes('/login')) {
       console.log('Redirected to login as expected for protected route');
-      await expect(page.getByRole('heading', { name: 'Nutritionist Login' })).toBeVisible();
-      return; // End test early as the middleware protection worked
+      // Verify the refactored login page heading (after UI redesign)
+      await expect(page.getByRole('heading', { name: 'NutriPlan' })).toBeVisible();
+      return; // Middleware protection confirmed ✓
     }
 
-    // IF we somehow bypassed the middleware (e.g. testing in a mocked environment)
+    // If authenticated (e.g. in a mocked environment), the form should render
     await expect(page.getByRole('heading', { name: 'Invite New Client' })).toBeVisible();
     await expect(page.getByLabel('Full Name')).toBeVisible();
     await expect(page.getByLabel('Email Address')).toBeVisible();

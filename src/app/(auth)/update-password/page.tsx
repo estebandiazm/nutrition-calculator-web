@@ -1,9 +1,11 @@
+import styles from './update-password.module.css';
 import { updatePassword } from './actions';
 import { createClient } from '@/infrastructure/adapters/supabase/server';
 import { redirect } from 'next/navigation';
+import { Alert } from '@/components/ui/Alert';
 
 export default async function UpdatePasswordPage(props: {
-  searchParams: Promise<{ error?: string, success?: string }>;
+  searchParams: Promise<{ error?: string; success?: string }>;
 }) {
   const searchParams = await props.searchParams;
   const supabase = await createClient();
@@ -14,61 +16,80 @@ export default async function UpdatePasswordPage(props: {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 bg-gray-50">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-2xl font-bold text-center mb-6">Welcome to NutriPlan</h1>
-        <p className="text-gray-600 text-center mb-6">
-          Please set your new password to complete your account setup.
-        </p>
-        
+    <div className={styles.page}>
+      <div className={styles.card}>
+        {/* Header */}
+        <div className={styles.header}>
+          <div className={styles.lockIcon}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--auth-accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          </div>
+          <h1 className={styles.title}>Set your password</h1>
+          <p className={styles.subtitle}>
+            Choose a secure password to complete your account setup.
+          </p>
+        </div>
+
+        {/* Alerts */}
         {searchParams.error && (
-          <div className="bg-red-50 text-red-500 p-3 rounded mb-4 text-sm">
-            {searchParams.error}
+          <div className={styles.alertWrap}>
+            <Alert type="error" message={searchParams.error} />
           </div>
         )}
-
         {searchParams.success && (
-          <div className="bg-green-50 text-green-600 p-3 rounded mb-4 text-sm">
-            {searchParams.success}
+          <div className={styles.alertWrap}>
+            <Alert type="success" message={searchParams.success} />
           </div>
         )}
 
-        <form className="space-y-4">
+        {/* Form */}
+        <form className={styles.form}>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="password">
+            <label className={styles.fieldLabel} htmlFor="password">
               New Password
             </label>
             <input
               id="password"
               name="password"
               type="password"
+              placeholder="Min. 6 characters"
               required
               minLength={6}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoComplete="new-password"
+              className={styles.input}
             />
+            <span className={styles.hint}>Use at least 6 characters</span>
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="confirmPassword">
+            <label className={styles.fieldLabel} htmlFor="confirmPassword">
               Confirm Password
             </label>
             <input
               id="confirmPassword"
               name="confirmPassword"
               type="password"
+              placeholder="Repeat your password"
               required
               minLength={6}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoComplete="new-password"
+              className={styles.input}
             />
           </div>
 
-          <button
-            formAction={updatePassword}
-            className="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
-          >
+          <button formAction={updatePassword} className={styles.btnPrimary}>
             Save Password
           </button>
         </form>
+
+        <a href="/login" className={styles.backLink}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7" />
+          </svg>
+          Back to Login
+        </a>
       </div>
     </div>
   );

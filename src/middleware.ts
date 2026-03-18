@@ -25,22 +25,28 @@ export async function middleware(request: NextRequest) {
   const role = user?.user_metadata?.role
 
   // RBAC Routing Logic
-  const isLoginPage = request.nextUrl.pathname.startsWith('/login');
-  const isAuthCallback = request.nextUrl.pathname.startsWith('/auth/callback');
-  const isUpdatePasswordPage = request.nextUrl.pathname.startsWith('/update-password');
-  
+  const { pathname } = request.nextUrl;
+  const isRoot = pathname === '/';
+  const isLoginPage = pathname.startsWith('/login');
+  const isAuthCallback = pathname.startsWith('/auth/callback');
+  const isUpdatePasswordPage = pathname.startsWith('/update-password');
+
+  // Root redirect: always send "/" to the correct destination
+  if (isRoot) {
+    if (!user) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
+    return NextResponse.redirect(new URL(role === 'nutritionist' ? '/clients' : '/my-plan', request.url));
+  }
+
   if (!user && !isLoginPage && !isAuthCallback) {
     // Unauthenticated users trying to access protected routes
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
   if (user && isLoginPage) {
-    // Authenticated users trying to access login
-    if (role === 'nutritionist') {
-      return NextResponse.redirect(new URL('/clients', request.url))
-    } else {
-      return NextResponse.redirect(new URL('/my-plan', request.url))
-    }
+    // Authenticated users trying to access login — redirect to their home
+    return NextResponse.redirect(new URL(role === 'nutritionist' ? '/clients' : '/my-plan', request.url))
   }
 
   // If they are on the update-password page, let them stay there

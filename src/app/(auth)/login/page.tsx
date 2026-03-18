@@ -1,55 +1,56 @@
-import { login } from './actions';
+import styles from './login.module.css';
+import { Alert } from '@/components/ui/Alert';
+import { LoginForm } from './_LoginForm';
+
+/** Translate raw error codes from the auth callback into user-friendly messages. */
+function resolveErrorMessage(error: string): string {
+  const errorMessages: Record<string, string> = {
+    expired_link: 'Your magic link has expired or is invalid. Please request a new one.',
+  };
+  return errorMessages[error] ?? error;
+}
 
 export default async function LoginPage(props: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; message?: string }>;
 }) {
   const searchParams = await props.searchParams;
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4 bg-gray-50">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-2xl font-bold text-center mb-6">Nutritionist Login</h1>
-        
+    <div className={styles.page}>
+      <div className={styles.card}>
+        {/* Brand header */}
+        <div className={styles.brandHeader}>
+          <div className={styles.logoIcon}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z" />
+              <path d="M2 17l10 5 10-5" />
+              <path d="M2 12l10 5 10-5" />
+            </svg>
+          </div>
+          <h1 className={styles.brandTitle}>NutriPlan</h1>
+          <p className={styles.brandSubtitle}>Sign in to your account</p>
+        </div>
+
+        {/* Alerts */}
         {searchParams.error && (
-          <div className="bg-red-50 text-red-500 p-3 rounded mb-4 text-sm">
-            {searchParams.error}
+          <div className={styles.alertWrap}>
+            <Alert type="error" message={resolveErrorMessage(searchParams.error)} />
+          </div>
+        )}
+        {searchParams.message && (
+          <div className={styles.alertWrap}>
+            <Alert type="success" message={searchParams.message} />
           </div>
         )}
 
-        <form className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">
-              Email address
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="password">
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+        {/* Login form with tab switcher */}
+        <LoginForm />
 
-          <button
-            formAction={login}
-            className="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
-          >
-            Sign In
-          </button>
-        </form>
+        {/* Footer */}
+        <p className={styles.footer}>
+          Don&apos;t have an account?{' '}
+          <span className={styles.footerAccent}>Contact your nutritionist.</span>
+        </p>
       </div>
     </div>
   );
