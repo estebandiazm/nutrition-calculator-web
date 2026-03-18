@@ -208,7 +208,7 @@ A `DietPlan` contains 1-2 `Diet` (day-of-week variants):
 |------------|-------|------|----------------|
 | **MUI 7** | UI Components | — | Tailwind + shadcn/ui |
 | **localStorage** | Persistence | `PlanRepository` | Supabase, PlanetScale |
-| **No auth** | Authentication | `AuthProvider` | Auth.js, Clerk, Supabase Auth |
+| **Supabase** | Authentication | `AuthProvider` | Auth.js, Clerk |
 | **No AI** | Generation | `AIProvider` | Vercel AI SDK, OpenAI |
 
 ### 4.3 Infrastructure
@@ -217,7 +217,7 @@ A `DietPlan` contains 1-2 `Diet` (day-of-week variants):
 |--------|----------|-------|
 | **Hosting** | To be decided | Vercel is the natural option for Next.js |
 | **DB** | To be decided | Evaluate costs: Supabase vs PlanetScale vs Neon |
-| **Auth** | Basic login (no open onboarding) | Existing clients of the nutritionist by invitation |
+| **Auth** | Supabase Auth | Unified login at `/login`, explicit invite process via Supabase Admin API, and Middleware RBAC. |
 
 ---
 
@@ -351,7 +351,7 @@ The PR serves as the **walkthrough and traceability record** for each change. No
 | Decision | Context | When to Decide |
 |----------|---------|----------------|
 | DB Provider (Supabase vs PlanetScale vs Neon) | Evaluate costs and features for expected volume | Before V1 (multi-client) |
-| Auth Provider (Auth.js vs Clerk vs Supabase Auth) | Basic login by invitation, no open onboarding | Before V1 |
+| Auth Provider | **Decided:** Supabase Auth is now implemented using the `AuthProvider` port. | ✅ Resolved |
 | UI Library (keep MUI vs migrate to Tailwind + shadcn/ui) | Tailwind is more AI-friendly and flexible; MUI already works | During full Next.js migration |
 | Hosting (Vercel vs alternatives) | Vercel is natural for Next.js but evaluate costs | Before V1 |
 | AI Provider (OpenAI vs Anthropic vs other) | For plan draft generation | V2 or when the nutritionist confirms the workflow |
