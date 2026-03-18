@@ -25,9 +25,11 @@ export async function middleware(request: NextRequest) {
   const role = user?.user_metadata?.role
 
   // RBAC Routing Logic
-  const isLoginPage = request.nextUrl.pathname.startsWith('/login')
+  const isLoginPage = request.nextUrl.pathname.startsWith('/login');
+  const isAuthCallback = request.nextUrl.pathname.startsWith('/auth/callback');
+  const isUpdatePasswordPage = request.nextUrl.pathname.startsWith('/update-password');
   
-  if (!user && !isLoginPage) {
+  if (!user && !isLoginPage && !isAuthCallback) {
     // Unauthenticated users trying to access protected routes
     return NextResponse.redirect(new URL('/login', request.url))
   }
@@ -39,6 +41,11 @@ export async function middleware(request: NextRequest) {
     } else {
       return NextResponse.redirect(new URL('/my-plan', request.url))
     }
+  }
+
+  // If they are on the update-password page, let them stay there
+  if (user && isUpdatePasswordPage) {
+    return response;
   }
 
   // Prevent clients from accessing dashboard
