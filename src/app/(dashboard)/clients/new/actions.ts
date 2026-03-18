@@ -3,8 +3,9 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-import { createClient } from '@/infrastructure/adapters/supabase/server';
+import { createClient as createSupabaseClient } from '@/infrastructure/adapters/supabase/server';
 import { authProvider } from '@/lib/registry';
+import { createClient as createDbClient } from '@/app/actions/clientActions';
 
 export async function inviteClient(formData: FormData) {
   const email = formData.get('email') as string;
@@ -21,9 +22,18 @@ export async function inviteClient(formData: FormData) {
      redirect('/clients/new?error=Failed to invite user via Auth Provider');
   }
 
-  // 2. Here we would theoretically save the new Client entity to our DB repository
-  // const newClient = { name, authId: authUser.id, nutritionistId: currentSession.user.id, ... }
-  // await clientRepository.save(newClient)
+  // 2. Save the new Client entity to our DB repository
+  const defaultNutritionistId = process.env.NEXT_PUBLIC_DEFAULT_NUTRITIONIST_ID;
+  if (!defaultNutritionistId) {
+    console.error('Missing NEXT_PUBLIC_DEFAULT_NUTRITIONIST_ID');
+    redirect('/clients/new?error=System configuration error');
+  }
+
+  await createDbClient({
+    name,
+    authId: authUser.id,
+    nutritionistId: defaultNutritionistId,
+  });
 
   // 3. Success
   revalidatePath('/clients');

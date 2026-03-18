@@ -20,6 +20,7 @@ function toClient(doc: ClientDocument): Client & { id: string } {
     name: plain.name,
     targetWeight: plain.targetWeight,
     nutritionistId: String(plain.nutritionistId),
+    authId: plain.authId,
     plans: (plain.plans ?? []).map(sanitisePlan),
   };
 }
@@ -34,13 +35,14 @@ function sanitisePlan(plan: any): DietPlan {
 // ─── Client CRUD ────────────────────────────────────────────────────────────
 
 export async function createClient(
-  data: Pick<Client, 'name' | 'nutritionistId'> & Partial<Pick<Client, 'targetWeight'>>
+  data: Pick<Client, 'name' | 'nutritionistId'> & Partial<Pick<Client, 'targetWeight' | 'authId'>>
 ): Promise<Client & { id: string }> {
   await dbConnect();
   const doc = await ClientModel.create({
     name: data.name,
     targetWeight: data.targetWeight,
     nutritionistId: data.nutritionistId,
+    authId: data.authId,
     plans: [],
   });
   return toClient(doc);
@@ -66,6 +68,15 @@ export async function getClientById(
 ): Promise<(Client & { id: string }) | null> {
   await dbConnect();
   const doc = await ClientModel.findById(id);
+  if (!doc) return null;
+  return toClient(doc);
+}
+
+export async function getClientByAuthId(
+  authId: string
+): Promise<(Client & { id: string }) | null> {
+  await dbConnect();
+  const doc = await ClientModel.findOne({ authId });
   if (!doc) return null;
   return toClient(doc);
 }
