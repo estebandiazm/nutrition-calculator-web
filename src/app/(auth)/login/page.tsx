@@ -1,14 +1,14 @@
 import { login } from './actions';
 
-export default function LoginPage({
-  searchParams,
-}: {
-  searchParams: { error?: string };
+export default async function LoginPage(props: {
+  searchParams: Promise<{ error?: string }>;
 }) {
+  const searchParams = await props.searchParams;
+
   return (
     <div className="flex min-h-screen items-center justify-center p-4 bg-gray-50">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-2xl font-bold text-center mb-6">NutriPlan Login</h1>
+        <h1 className="text-2xl font-bold text-center mb-6">Nutritionist Login</h1>
         
         {searchParams.error && (
           <div className="bg-red-50 text-red-500 p-3 rounded mb-4 text-sm">
@@ -19,7 +19,7 @@ export default function LoginPage({
         <form className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">
-              Email
+              Email address
             </label>
             <input
               id="email"
