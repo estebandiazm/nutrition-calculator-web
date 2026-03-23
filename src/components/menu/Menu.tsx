@@ -2,6 +2,7 @@ import { AppBar, Toolbar, Typography, Box, Button } from "@mui/material";
 import { NoteAdd } from "@mui/icons-material";
 import Link from "next/link";
 import React from "react";
+import { LogoutButton } from "@/components/ui/LogoutButton";
 
 const Menu = () => {
   return (
@@ -41,12 +42,14 @@ const Menu = () => {
                 color: "rgba(255,255,255,0.7)",
                 textTransform: "none",
                 fontWeight: 600,
+                mr: 1,
                 "&:hover": { color: "#7C9FFF" },
               }}
             >
               Crear Plan
             </Button>
           </Link>
+          <LogoutButton />
         </Toolbar>
       </AppBar>
       {/* Spacer to prevent content from hiding under the fixed AppBar */}

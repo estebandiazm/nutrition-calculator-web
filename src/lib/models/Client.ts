@@ -36,10 +36,10 @@ const DietPlanSchema = new Schema({
 
 // --- Main Client Schema ---
 
-// We extend the domain type to include mongoose Document properties
-export interface ClientDocument extends Omit<IClient, 'plans' | 'nutritionistId'>, Document {
+export interface ClientDocument extends Omit<IClient, 'plans' | 'nutritionistId' | 'authId'>, Document {
   plans: DietPlan[];
   nutritionistId: mongoose.Types.ObjectId;
+  authId?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -48,6 +48,7 @@ const ClientSchema = new Schema<ClientDocument>({
   name: { type: String, required: true },
   targetWeight: { type: Number },
   nutritionistId: { type: Schema.Types.ObjectId, ref: 'Nutritionist', required: true },
+  authId: { type: String, sparse: true, index: true },
   plans: [DietPlanSchema] 
 }, { 
   timestamps: true,

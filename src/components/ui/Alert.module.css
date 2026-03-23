@@ -1,0 +1,26 @@
+.alert {
+  padding: 0.875rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+  line-height: 1.4;
+}
+
+.error {
+  background-color: var(--auth-error-bg);
+  color: var(--auth-error);
+  border-color: var(--auth-error-bg);
+}
+
+.success {
+  background-color: var(--auth-success-bg);
+  color: var(--auth-success);
+  border-color: var(--auth-success-bg);
+}
+
+.info {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #93c5fd;
+  border-color: rgba(59, 130, 246, 0.1);
+}

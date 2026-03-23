@@ -1,12 +1,36 @@
+:root {
+  /* Global Application Colors */
+  --bg-primary: #f8fafc;
+  --bg-gradient: radial-gradient(circle at top left, #e0e7ff 0%, #f0f4f8 50%, #f8fafc 100%);
+  --text-primary: #1e293b;
+  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-hover: #94a3b8;
+
+  /* Stitch Auth Theme Tokens */
+  --auth-bg: #0D0D0D;
+  --auth-surface: #1A1A1A;
+  --auth-surface-hover: #262626;
+  --auth-accent: #13ec5b;
+  --auth-accent-hover: #0ed951;
+  --auth-text-primary: #FFFFFF;
+  --auth-text-secondary: #B3B3B3;
+  --auth-text-muted: #808080;
+  --auth-border: #333333;
+  --auth-error: #ef4444;
+  --auth-error-bg: rgba(239, 68, 68, 0.1);
+  --auth-success: #13ec5b;
+  --auth-success-bg: rgba(19, 236, 91, 0.1);
+}
+
 body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background: radial-gradient(circle at top left, #e0e7ff 0%, #f0f4f8 50%, #f8fafc 100%);
+  background: var(--bg-gradient);
   background-attachment: fixed;
   min-height: 100vh;
-  font-family: "Inter", "Geist", "Roboto", "Helvetica", "Arial", sans-serif;
-  color: #1e293b;
+  font-family: "Manrope", "Inter", "Geist", "Roboto", "Helvetica", "Arial", sans-serif;
+  color: var(--text-primary);
 }
 
 /* Base scrollbar styling for modern feel */
@@ -18,9 +42,9 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: var(--scrollbar-thumb);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: var(--scrollbar-hover);
 }
