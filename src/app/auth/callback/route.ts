@@ -7,9 +7,17 @@ export async function GET(request: Request) {
   const code = searchParams.get('code');
   const token_hash = searchParams.get('token_hash');
   const type = searchParams.get('type') as EmailOtpType | null;
-  
+
   // if "next" is in param, use it as the redirect URL
-  const next = searchParams.get('next') ?? '/update-password';
+  let next = searchParams.get('next');
+
+  if (!next) {
+    if (type === 'recovery' || type === 'invite') {
+      next = `/update-password?type=${type}`;
+    } else {
+      next = '/'; // Default to root/dashboard for magiclink or regular login
+    }
+  }
 
   const supabase = await createClient();
 

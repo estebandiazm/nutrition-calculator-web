@@ -21,3 +21,9 @@ The application layout and components MUST utilize a modern, cohesive blue-toned
 - **THEN** the buttons MUST use a gradient fill (magenta-to-purple: `#E91E8C → #9C27B0`) with white text
 - **AND** the buttons MUST have rounded corners (pill shape) consistent with the glassmorphic card aesthetic
 
+### Requirement: Global Typography
+The system SHALL use the `Manrope` font family as the primary and default typeface across the entire application.
+
+#### Scenario: User visits any page
+- **WHEN** user navigates to any route (authorized or unauthorized)
+- **THEN** the application renders text using the `Manrope` font

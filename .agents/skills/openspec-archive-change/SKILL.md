@@ -15,6 +15,13 @@ Archive a completed change in the experimental workflow.
 
 **Steps**
 
+0. **Check Git branch**
+   Before starting the archive or sync process, verify you are not on `main` or `master`.
+   Run `git branch --show-current`.
+   If the current branch is `main` or `master`, you MUST automatically create and switch to a new branch for this change:
+   `git checkout -b change/<name>`
+   Do this before creating PRs or syncing specs.
+
 1. **If no change name provided, prompt for selection**
 
    Run `openspec list --json` to get available changes. Use the **AskUserQuestion tool** to let the user select.
