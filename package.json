@@ -1,9 +1,9 @@
 {
-  "name": "nutrition-calculator-web",
+  "name": "fitmetrik-web",
   "private": true,
   "version": "0.0.1",
   "type": "module",
-  "homepage": "https://github.com/estebandiazm/nutrition-calculator-web",
+  "homepage": "https://github.com/estebandiazm/fitmetrik-web",
   "scripts": {
     "start": "next start",
     "dev": "next dev",

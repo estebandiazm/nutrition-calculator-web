@@ -10,6 +10,10 @@ import "./globals.css";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" suppressHydrationWarning className="font-manrope">
+      <head>
+        <title>FitMetrik</title>
+        <meta name="description" content="Plataforma de gestión para nutricionistas y clientes" />
+      </head>
       <body suppressHydrationWarning>
         <ClientProvider>
           {children}

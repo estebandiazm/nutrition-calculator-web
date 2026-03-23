@@ -23,7 +23,7 @@ export default function MagicLinkEmail({ actionUrl }: MagicLinkEmailProps) {
     <Html lang="es">
       <Tailwind config={{ presets: [pixelBasedPreset] }}>
         <Head />
-        <Preview>Tu enlace mágico de acceso a NutriPlan</Preview>
+        <Preview>Tu enlace mágico de acceso a FitMetrik</Preview>
         <Body className="bg-[#0a0f1e] font-sans m-0 py-10">
           <Container className="max-w-xl mx-auto p-8 border border-solid border-[#1e293b] rounded-2xl bg-[#0f172a]">
             
@@ -31,7 +31,7 @@ export default function MagicLinkEmail({ actionUrl }: MagicLinkEmailProps) {
               Bienvenido de nuevo
             </Heading>
             <Text className="text-base text-[#94a3b8] mb-8 mt-0">
-              NutriPlan Platform
+              FitMetrik
             </Text>
             
             <Text className="text-base text-[#e2e8f0] mb-6">
@@ -43,7 +43,7 @@ export default function MagicLinkEmail({ actionUrl }: MagicLinkEmailProps) {
                 href={actionUrl}
                 className="bg-[#ec4899] text-white px-8 py-3.5 rounded-xl block text-center no-underline box-border font-semibold w-full"
               >
-                Entrar a NutriPlan
+                Entrar a FitMetrik
               </Button>
             </Section>
 
@@ -58,7 +58,7 @@ export default function MagicLinkEmail({ actionUrl }: MagicLinkEmailProps) {
             <Text className="text-xs text-[#64748b] text-center m-0">
               Si no solicitaste este enlace, puedes ignorar este correo de forma segura.
               <br />
-              © {new Date().getFullYear()} NutriPlan Platform.
+              © {new Date().getFullYear()} FitMetrik.
             </Text>
           </Container>
         </Body>

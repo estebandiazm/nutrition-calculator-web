@@ -118,7 +118,7 @@ export default async function UpdatePasswordPage(props: {
         </div>
 
         <div className={styles.pageFooter}>
-          <p>© {new Date().getFullYear()} NutriPlan Platform. Secure Area.</p>
+          <p>© {new Date().getFullYear()} FitMetrik. Secure Area.</p>
         </div>
       </div>
     </div>

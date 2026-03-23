@@ -23,7 +23,7 @@ export default function ResetPasswordEmail({ actionUrl }: ResetPasswordEmailProp
     <Html lang="es">
       <Tailwind config={{ presets: [pixelBasedPreset] }}>
         <Head />
-        <Preview>Restablece tu contraseña de NutriPlan</Preview>
+        <Preview>Restablece tu contraseña de FitMetrik</Preview>
         <Body className="bg-[#0a0f1e] font-sans m-0 py-10">
           <Container className="max-w-xl mx-auto p-8 border border-solid border-[#1e293b] rounded-2xl bg-[#0f172a]">
             
@@ -31,7 +31,7 @@ export default function ResetPasswordEmail({ actionUrl }: ResetPasswordEmailProp
               Restablecer Contraseña
             </Heading>
             <Text className="text-base text-[#94a3b8] mb-8 mt-0">
-              NutriPlan Platform
+              FitMetrik
             </Text>
             
             <Text className="text-base text-[#e2e8f0] mb-6">
@@ -58,7 +58,7 @@ export default function ResetPasswordEmail({ actionUrl }: ResetPasswordEmailProp
             <Text className="text-xs text-[#64748b] text-center m-0">
               Si no solicitaste un cambio de contraseña, tu cuenta sigue estando segura y puedes ignorar este correo.
               <br />
-              © {new Date().getFullYear()} NutriPlan Platform.
+              © {new Date().getFullYear()} FitMetrik.
             </Text>
           </Container>
         </Body>

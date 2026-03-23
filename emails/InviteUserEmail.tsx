@@ -23,19 +23,19 @@ export default function InviteUserEmail({ actionUrl }: InviteUserEmailProps) {
     <Html lang="es">
       <Tailwind config={{ presets: [pixelBasedPreset] }}>
         <Head />
-        <Preview>Tu nutricionista te ha invitado a NutriPlan</Preview>
+        <Preview>Tu nutricionista te ha invitado a FitMetrik</Preview>
         <Body className="bg-[#0a0f1e] font-sans m-0 py-10">
           <Container className="max-w-xl mx-auto p-8 border border-solid border-[#1e293b] rounded-2xl bg-[#0f172a]">
             
             <Heading className="text-2xl font-bold text-white tracking-tight mb-2 mt-0">
-              ¡Bienvenido a NutriPlan!
+              ¡Bienvenido a FitMetrik!
             </Heading>
             <Text className="text-base text-[#94a3b8] mb-8 mt-0">
               Comienza tu transformación hoy
             </Text>
             
             <Text className="text-base text-[#e2e8f0] mb-6">
-              Tu nutricionista te ha creado una cuenta personal en NutriPlan para llevar el seguimiento de tu progreso y tener tus planes siempre a mano.
+              Tu nutricionista te ha creado una cuenta personal en FitMetrik para llevar el seguimiento de tu progreso y tener tus planes siempre a mano.
             </Text>
 
             <Text className="text-base text-[#e2e8f0] mb-6">
@@ -62,7 +62,7 @@ export default function InviteUserEmail({ actionUrl }: InviteUserEmailProps) {
             <Text className="text-xs text-[#64748b] text-center m-0">
               Si crees que esto es un error, puedes ignorar este correo.
               <br />
-              © {new Date().getFullYear()} NutriPlan Platform.
+              © {new Date().getFullYear()} FitMetrik.
             </Text>
           </Container>
         </Body>

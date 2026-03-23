@@ -64,7 +64,7 @@ export default async function LoginPage(props: {
 
         {/* Global Footer (Stitch Design) */}
         <footer className={styles.pageFooter}>
-          © {new Date().getFullYear()} NutriPlan Pro. All rights reserved.
+          © {new Date().getFullYear()} FitMetrik. All rights reserved.
         </footer>
       </main>
     </div>

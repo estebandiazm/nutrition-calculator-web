@@ -8,7 +8,7 @@
 </p>
 
 <h1 align="center">
-  🥗 NutriPlan
+  🥗 FitMetrik
 </h1>
 
 <p align="center">
@@ -31,8 +31,8 @@
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/estebandiazm/nutrition-calculator-web.git
-cd nutrition-calculator-web
+git clone https://github.com/estebandiazm/fitmetrik-web.git
+cd fitmetrik-web
 
 # 2. Install dependencies
 npm install
@@ -51,7 +51,7 @@ Open [http://localhost:3000](http://localhost:3000) and start creating nutrition
 
 | Variable       | Description                          | Example                                                                     |
 | -------------- | ------------------------------------ | --------------------------------------------------------------------------- |
-| `MONGODB_URI`  | MongoDB Atlas connection string      | `mongodb+srv://user:pass@cluster.mongodb.net/nutriplan?retryWrites=true&w=majority` |
+| `MONGODB_URI`  | MongoDB Atlas connection string      | `mongodb+srv://user:pass@cluster.mongodb.net/fitmetrik?retryWrites=true&w=majority` |
 
 ---
 
@@ -239,11 +239,11 @@ npm run lint      # Linting with ESLint
 
 ## 🗺️ Roadmap
 
-NutriPlan evolves in progressive phases:
+FitMetrik evolves in progressive phases:
 
 ```mermaid
 timeline
-    title NutriPlan Evolution
+    title FitMetrik Evolution
     MVP (current) : Personal calculator
                   : 1 nutritionist, 1 client
                   : DietEngine calculation engine

@@ -8,7 +8,7 @@ test.describe('Authentication Flows', () => {
 
     // 2. Verify URL and page heading (brand title after UI refactor)
     await expect(page).toHaveURL(/.*\/login/);
-    await expect(page.getByRole('heading', { name: 'NutriPlan' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'FitMetrik' })).toBeVisible();
 
     // 3. Verify the subtitle
     await expect(page.getByText('Sign in to your account')).toBeVisible();

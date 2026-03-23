@@ -14,7 +14,7 @@ test.describe('Client Invitation Flow', () => {
     if (page.url().includes('/login')) {
       console.log('Redirected to login as expected for protected route');
       // Verify the refactored login page heading (after UI redesign)
-      await expect(page.getByRole('heading', { name: 'NutriPlan' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'FitMetrik' })).toBeVisible();
       return; // Middleware protection confirmed ✓
     }
 

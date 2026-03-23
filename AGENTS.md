@@ -1,4 +1,4 @@
-# AGENTS.md — NutriPlan Platform
+# AGENTS.md — FitMetrik
 
 > Architecture decisions and guidelines for AI-native development.
 > Complementary to OpenSpec (which manages functional specs and changes).
@@ -8,7 +8,7 @@
 
 ## 1. Product Vision
 
-**NutriPlan** is a nutritional plan management platform that evolves in phases:
+**FitMetrik** is a nutritional plan management platform that evolves in phases:
 
 | Phase | Scope | Status |
 |-------|-------|--------|
