@@ -355,3 +355,13 @@ The PR serves as the **walkthrough and traceability record** for each change. No
 | UI Library (keep MUI vs migrate to Tailwind + shadcn/ui) | Tailwind is more AI-friendly and flexible; MUI already works | During full Next.js migration |
 | Hosting (Vercel vs alternatives) | Vercel is natural for Next.js but evaluate costs | Before V1 |
 | AI Provider (OpenAI vs Anthropic vs other) | For plan draft generation | V2 or when the nutritionist confirms the workflow |
+
+---
+
+## 10. Design & UI Implementation (Stitch)
+
+When a design URL from Stitch is provided in a requirement or OpenSpec (e.g., `https://stitch.withgoogle.com/projects/...`):
+
+1. **Mandatory MCP Usage**: The AI MUST use the `mcp_StitchMCP_get_screen` tool to fetch the actual layout details, HTML Code, and dimensions of the specific node.
+2. **Never Hallucinate Designs**: Do not rely solely on text descriptions or high-level goals. You must extract and adapt the exact structure provided by the Stitch MCP response.
+3. **Integration**: Adapt the fetched semantic structure into the project's Next.js component structure as faithfully as possible to match the provided Premium Design.
