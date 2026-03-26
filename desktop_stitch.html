@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NutritionPro - My Diet Plans</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec4899",
+                        "accent-pink": "#ec4899",
+                        "accent-purple": "#8b5cf6",
+                        "background-dark": "#0a0f1e",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "3xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.1); opacity: 0.6; }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 8s ease-in-out infinite;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .btn-neon-gradient {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-neon-gradient:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+        }
+        .neon-glow-pink {
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+        }
+        .neon-glow-purple {
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+        }
+        .neon-glow-blue {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+    </style>
+</head>
+<body class="font-display bg-[#0a0f1e] text-slate-100 min-h-screen">
+<!-- Background Elements -->
+<div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
+<div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-900/30 rounded-full blur-[120px] animate-pulse-slow"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-900/20 rounded-full blur-[120px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+</div>
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 w-full glass-card border-b border-white/10 px-6 py-4 lg:px-20">
+<div class="max-w-[1440px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-10 bg-gradient-to-tr from-pink-500 to-violet-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+<span class="material-symbols-outlined" style="">nutrition</span>
+</div>
+<h2 class="text-xl font-black tracking-tight text-white uppercase italic" style="">Nutrition<span class="text-accent-pink" style="">Pro</span></h2>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-sm font-semibold text-white/90 hover:text-accent-pink transition-colors" href="#" style="">Dashboard</a>
+<a class="text-sm font-semibold text-accent-pink border-b-2 border-accent-pink pb-1" href="#" style="">My Plans</a>
+<a class="text-sm font-semibold text-white/90 hover:text-accent-pink transition-colors" href="#" style="">Recipes</a>
+<a class="text-sm font-semibold text-white/90 hover:text-accent-pink transition-colors" href="#" style=""><br/><br/></a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 text-white/70 hover:text-white transition-colors" style="">
+<span class="material-symbols-outlined" style="">notifications</span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-white/10">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold text-white" style="">Alex Rivera</p>
+<p class="text-xs text-accent-purple font-medium" style="">Premium Client</p>
+</div>
+<div class="size-10 rounded-full border-2 border-accent-pink p-0.5">
+<img class="w-full h-full rounded-full object-cover" data-alt="Client profile picture smiling man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLGK2Uxkg82D9Ie59FqCxm06CNQMKfIbj8V5u0xrHZRMVvKHFt8tofixLFidkzdJV5ZvQLxvg57V7jPgFNyuBl2i7huvdIep-atgjZAJB_gGj4OgyoKywK6BPqKkMP7ndHIoqX9JNwzGQZlZyv6puIpBWIwgrWhepLcBbt2gu2heZHQ2jjR2Od5Hmf71U27o6AdpC6NbtrciSCKRB2mqZKcmm-_EKq1qBiGDvc_r5EroIzdUey7UU5i8HQDKkHWKKTUpYvWy55o3c" style=""/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-[1440px] mx-auto w-full p-6 lg:p-10 flex flex-col gap-8">
+<!-- Page Header & Plan Switcher -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+<div>
+<h1 class="text-4xl font-black text-white tracking-tight" style="">Planes Activos</h1>
+<p class="text-slate-400 mt-2" style="">Personalized nutrition strategy updated 2 days ago</p>
+</div>
+<div class="glass-card p-1 rounded-2xl flex gap-1 border-white/10">
+<button class="px-6 py-2.5 rounded-xl text-sm font-bold btn-neon-gradient text-white shadow-lg" style="">
+                    Plan General (6 Days)
+                </button>
+<button class="px-6 py-2.5 rounded-xl text-sm font-bold text-slate-400 hover:text-white transition-all" style="">
+                    Plan Especial (1 Day)
+                </button>
+</div>
+</div>
+<!-- Dashboard Content -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+<!-- Left Column: Daily Summary -->
+<div class="xl:col-span-3 flex flex-col gap-6">
+<div class="glass-card rounded-3xl p-6 relative overflow-hidden border-white/10">
+<div class="absolute -top-10 -right-10 size-32 bg-accent-purple/10 blur-3xl"></div>
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-4" style="">Macro Distribution</h3>
+<div class="space-y-5">
+<div>
+<div class="flex justify-between text-[10px] font-bold mb-1.5 tracking-wider uppercase text-slate-400">
+<span class="" style="">Protein</span>
+<span class="text-white" style="">180g / 200g</span>
+</div>
+<div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
+<div class="bg-accent-pink h-full neon-glow-pink" style="width: 90%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[10px] font-bold mb-1.5 tracking-wider uppercase text-slate-400">
+<span class="" style="">Carbs</span>
+<span class="text-white" style="">250g / 300g</span>
+</div>
+<div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
+<div class="bg-accent-purple h-full neon-glow-purple" style="width: 83%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[10px] font-bold mb-1.5 tracking-wider uppercase text-slate-400">
+<span class="" style="">Fats</span>
+<span class="text-white" style="">65g / 75g</span>
+</div>
+<div class="w-full bg-white/5 h-2 rounded-full overflow-hidden">
+<div class="bg-white/40 h-full" style="width: 86%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-3xl p-6 border-white/10">
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-4" style="">Steps Counter</h3>
+<div class="flex items-center gap-4">
+<div class="size-14 rounded-2xl bg-accent-pink/10 border border-accent-pink/20 flex items-center justify-center text-accent-pink shadow-inner">
+<span class="material-symbols-outlined text-3xl" style="">directions_run</span>
+</div>
+<div>
+<p class="text-2xl font-bold text-white" style="">8,420</p>
+<p class="text-xs text-slate-500 font-medium" style="">Goal: 10,000</p>
+</div>
+</div>
+<div class="w-full bg-white/5 h-1.5 rounded-full mt-4 overflow-hidden">
+<div class="bg-accent-pink h-full neon-glow-pink" style="width: 84.2%"></div>
+</div>
+</div>
+<div class="glass-card rounded-3xl p-6 border-white/10">
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-4" style="">Hydration Goal</h3>
+<div class="flex items-center gap-4">
+<div class="size-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shadow-inner">
+<span class="material-symbols-outlined text-3xl" style="">water_drop</span>
+</div>
+<div>
+<p class="text-2xl font-bold text-white" style="">3.5L</p>
+<p class="text-xs text-slate-500 font-medium" style="">Daily Target</p>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-3xl p-6 border-white/10 border-l-4 border-l-accent-purple">
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-4" style="">Snacks per Day</h3>
+<div class="flex items-center gap-4">
+<div class="size-14 rounded-2xl bg-accent-purple/10 border border-accent-purple/20 flex items-center justify-center text-accent-purple shadow-inner">
+<span class="material-symbols-outlined text-3xl" style="">restaurant_menu</span>
+</div>
+<div>
+<p class="text-2xl font-bold text-white" style="">1</p>
+<p class="text-xs text-slate-500 font-medium" style=""></p>
+</div>
+</div>
+</div>
+</div>
+<!-- Middle Column: Meal Cards -->
+<div class="xl:col-span-9 grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Comida 1 -->
+<div class="glass-card rounded-3xl overflow-hidden hover:border-accent-pink/50 transition-all group border-white/10">
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="text-accent-pink font-black text-lg tracking-tight" style="">MEAL 1</h4>
+<p class="text-slate-400 text-sm" style="">Breakfast Protocol</p>
+</div>
+<span class="material-symbols-outlined text-slate-500 group-hover:text-accent-pink transition-colors" style="">restaurant</span>
+</div>
+<!-- Search Input -->
+<div class="relative mb-6">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-accent-pink/50 focus:border-accent-pink/50 backdrop-blur-md" placeholder="Buscar alimento..." type="text"/>
+</div>
+<ul class="space-y-3 mb-6">
+<li class="flex justify-between items-center py-2 border-b border-white/5" style="">
+<span class="text-white font-medium" style="">Huevos Enteros</span>
+<span class="text-accent-purple font-bold" style="">150g (3 uds)</span>
+</li>
+<li class="flex justify-between items-center py-2 border-b border-white/5" style="">
+<span class="text-white font-medium" style="">Claras de Huevo</span>
+<span class="text-accent-purple font-bold" style="">150g</span>
+</li>
+<li class="flex justify-between items-center py-2 border-b border-white/5" style="">
+<span class="text-white font-medium" style="">Avena en Hojuelas</span>
+<span class="text-accent-purple font-bold" style="">60g</span>
+</li>
+<li class="flex justify-between items-center py-2" style="">
+<span class="text-white font-medium" style="">Arándanos</span>
+<span class="text-accent-purple font-bold" style="">50g</span>
+</li>
+</ul>
+<div class="flex items-center gap-4 pt-4 border-t border-white/10">
+<div class="flex flex-col"><span class="text-[9px] text-slate-500 font-bold uppercase" style="">P</span><span class="text-xs font-bold text-white" style="">35g</span></div>
+<div class="flex flex-col"><span class="text-[9px] text-slate-500 font-bold uppercase" style="">C</span><span class="text-xs font-bold text-white" style="">45g</span></div>
+<div class="flex flex-col"><span class="text-[9px] text-slate-500 font-bold uppercase" style="">F</span><span class="text-xs font-bold text-white" style="">18g</span></div>
+</div>
+</div>
+</div>
+<!-- Comida 2 -->
+<div class="glass-card rounded-3xl overflow-hidden hover:border-accent-purple/50 transition-all group border-white/10">
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="text-accent-purple font-black text-lg tracking-tight" style="">MEAL 2</h4>
+<p class="text-slate-400 text-sm" style="">Lunch Strategy</p>
+</div>
+<span class="material-symbols-outlined text-slate-500 group-hover:text-accent-purple transition-colors" style="">lunch_dining</span>
+</div>
+<!-- Search Input -->
+<div class="relative mb-6">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-accent-purple/50 focus:border-accent-purple/50 backdrop-blur-md" placeholder="Buscar alimento..." type="text"/>
+</div>
+<ul class="space-y-3 mb-6">
+<li class="flex justify-between items-center py-2 border-b border-white/5" style="">
+<span class="text-white font-medium" style="">Pechuga de Pollo</span>
+<span class="text-accent-pink font-bold" style="">180g</span>
+</li>
+<li class="flex justify-between items-center py-2 border-b border-white/5" style="">
+<span class="text-white font-medium" style="">Arroz Jazmín (cocido)</span>
+<span class="text-accent-pink font-bold" style="">150g</span>
+</li>
+<li class="flex justify-between items-center py-2 border-b border-white/5" style="">
+<span class="text-white font-medium" style="">Brócoli al Vapor</span>
+<span class="text-accent-pink font-bold" style="">100g</span>
+</li>
+<li class="flex justify-between items-center py-2" style="">
+<span class="text-white font-medium" style="">Aceite de Oliva</span>
+<span class="text-accent-pink font-bold" style="">10g</span>
+</li>
+</ul>
+<div class="flex items-center gap-4 pt-4 border-t border-white/10">
+<div class="flex flex-col"><span class="text-[9px] text-slate-500 font-bold uppercase" style="">P</span><span class="text-xs font-bold text-white" style="">42g</span></div>
+<div class="flex flex-col"><span class="text-[9px] text-slate-500 font-bold uppercase" style="">C</span><span class="text-xs font-bold text-white" style="">52g</span></div>
+<div class="flex flex-col"><span class="text-[9px] text-slate-500 font-bold uppercase" style="">F</span><span class="text-xs font-bold text-white" style="">15g</span></div>
+</div>
+</div>
+</div>
+<!-- Snacks -->
+<div class="glass-card rounded-3xl overflow-hidden border-dashed border-white/20 transition-all group">
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="text-slate-400 font-black text-lg tracking-tight" style="">SNACKS</h4>
+<p class="text-slate-500 text-sm" style="">Post-Workout Support</p>
+</div>
+<span class="material-symbols-outlined text-slate-600" style="">apple</span>
+</div>
+<!-- Search Input -->
+<div class="relative mb-6">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-white/30 backdrop-blur-md" placeholder="Buscar alimento..." type="text"/>
+</div>
+<ul class="space-y-3 mb-6">
+<li class="flex justify-between items-center py-2 border-b border-white/5" style="">
+<span class="text-white font-medium" style="">Yogur Griego 0%</span>
+<span class="text-white/70 font-bold" style="">200g</span>
+</li>
+<li class="flex justify-between items-center py-2 border-b border-white/5" style="">
+<span class="text-white font-medium" style="">Nueces de Brasil</span>
+<span class="text-white/70 font-bold" style="">15g</span>
+</li>
+<li class="flex justify-between items-center py-2" style="">
+<span class="text-white font-medium" style="">Manzana Verde</span>
+<span class="text-white/70 font-bold" style="">150g (1 ud)</span>
+</li>
+</ul>
+<div class="flex items-center gap-4 pt-4 border-t border-white/10 opacity-60">
+<div class="flex flex-col"><span class="text-[9px] text-slate-500 font-bold uppercase" style="">P</span><span class="text-xs font-bold text-white" style="">22g</span></div>
+<div class="flex flex-col"><span class="text-[9px] text-slate-500 font-bold uppercase" style="">C</span><span class="text-xs font-bold text-white" style="">28g</span></div>
+<div class="flex flex-col"><span class="text-[9px] text-slate-500 font-bold uppercase" style="">F</span><span class="text-xs font-bold text-white" style="">12g</span></div>
+</div>
+</div>
+</div>
+<!-- Suplementos -->
+<div class="glass-card rounded-3xl overflow-hidden border-white/10 relative group">
+<div class="absolute inset-0 bg-gradient-to-br from-accent-pink/5 to-accent-purple/5 pointer-events-none"></div>
+<div class="p-6 relative z-10">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="text-white font-black text-lg tracking-tight" style="">SUPLEMENTOS</h4>
+<p class="text-slate-400 text-sm" style="">Optimal Performance</p>
+</div>
+<span class="material-symbols-outlined text-accent-pink" style="">pill</span>
+</div>
+<!-- Search Input -->
+<div class="relative mb-6">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-accent-pink/50 focus:border-accent-pink/50 backdrop-blur-md" placeholder="Buscar alimento..." type="text"/>
+</div>
+<ul class="space-y-3">
+<li class="flex items-center gap-3 py-2" style="">
+<div class="size-2 rounded-full bg-accent-pink shadow-[0_0_8px_rgba(236,72,153,0.8)]"></div>
+<span class="text-white font-medium" style="">Whey Isolate (Post-WO)</span>
+<span class="ml-auto text-slate-500 font-bold text-sm" style="">30g</span>
+</li>
+<li class="flex items-center gap-3 py-2" style="">
+<div class="size-2 rounded-full bg-accent-purple shadow-[0_0_8px_rgba(139,92,246,0.8)]"></div>
+<span class="text-white font-medium" style="">Creatina Monohidrato</span>
+<span class="ml-auto text-slate-500 font-bold text-sm" style="">5g</span>
+</li>
+<li class="flex items-center gap-3 py-2" style="">
+<div class="size-2 rounded-full bg-white/40"></div>
+<span class="text-white font-medium" style="">Multivitamínico</span>
+<span class="ml-auto text-slate-500 font-bold text-sm" style="">1 cap</span>
+</li>
+<li class="flex items-center gap-3 py-2" style="">
+<div class="size-2 rounded-full bg-white/20"></div>
+<span class="text-white font-medium" style="">Omega 3</span>
+<span class="ml-auto text-slate-500 font-bold text-sm" style="">2 caps</span>
+</li>
+</ul>
+<button class="w-full mt-6 py-3 rounded-xl border border-white/10 bg-white/5 text-[11px] font-black uppercase tracking-[0.15em] text-white hover:bg-white/10 transition-colors" style="">
+                            Mark as Taken
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Section with Log -->
+<div class="mt-8 flex flex-col md:flex-row gap-6">
+<div class="flex-1 glass-card rounded-3xl p-6 flex items-center justify-between border-white/10">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-2xl bg-accent-pink/10 border border-accent-pink/20 flex items-center justify-center text-accent-pink">
+<span class="material-symbols-outlined" style="">history_edu</span>
+</div>
+<div>
+<h4 class="text-white font-bold" style="">Compliance History</h4>
+<p class="text-xs text-slate-500 font-medium" style="">98% adherence in the last 7 days</p>
+</div>
+</div>
+<button class="bg-white/5 hover:bg-white/10 border border-white/10 px-5 py-2 rounded-xl text-sm font-bold text-white transition-colors" style="">
+                    View Log
+                </button>
+</div>
+<div class="flex-1 glass-card rounded-3xl p-6 flex items-center justify-between border-l-4 border-l-accent-purple border-white/10">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-2xl bg-accent-purple/10 border border-accent-purple/20 flex items-center justify-center text-accent-purple">
+<span class="material-symbols-outlined" style="">chat_bubble</span>
+</div>
+<div>
+<h4 class="text-white font-bold" style="">Nutritionist Support</h4>
+<p class="text-xs text-slate-500 font-medium" style="">Response time: &lt; 2 hours</p>
+</div>
+</div>
+<button class="btn-neon-gradient px-6 py-2 rounded-xl text-sm font-bold text-white shadow-lg" style="">
+                    Chat Now
+                </button>
+</div>
+</div>
+</main>
+<!-- Fixed Action Button (Mobile) -->
+<div class="fixed bottom-8 right-8 lg:hidden z-50">
+<button class="size-16 rounded-full btn-neon-gradient text-white shadow-2xl flex items-center justify-center" style="">
+<span class="material-symbols-outlined text-3xl font-bold" style="">add</span>
+</button>
+</div>
+</div>
+</body></html>
