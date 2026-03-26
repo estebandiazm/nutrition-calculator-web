@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FitMetrik | Client Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;700;800&amp;family=Inter:wght@300;400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-dim": "#0a0e1a",
+              "surface-variant": "#202537",
+              "tertiary-container": "#9d50ff",
+              "background": "#0a0e1a",
+              "surface-container-lowest": "#000000",
+              "error": "#ff716c",
+              "surface-bright": "#252b3f",
+              "on-primary-fixed": "#000000",
+              "secondary-container": "#006970",
+              "surface-container-high": "#1a1f2f",
+              "secondary": "#00eefc",
+              "on-error": "#490006",
+              "on-secondary-fixed": "#003f43",
+              "on-primary-fixed-variant": "#5c0031",
+              "surface": "#0a0e1a",
+              "on-tertiary-fixed-variant": "#51009c",
+              "primary-fixed": "#ff6ea9",
+              "surface-container": "#141928",
+              "on-tertiary": "#2f0060",
+              "tertiary-fixed-dim": "#bd8cff",
+              "secondary-fixed-dim": "#00deec",
+              "inverse-primary": "#ba0068",
+              "on-secondary": "#005359",
+              "surface-tint": "#ff88b4",
+              "outline": "#717584",
+              "error-container": "#9f0519",
+              "secondary-dim": "#00deec",
+              "primary-fixed-dim": "#ff4f9d",
+              "tertiary-dim": "#9547f7",
+              "on-background": "#e2e4f6",
+              "on-tertiary-fixed": "#24004c",
+              "on-primary-container": "#4b0027",
+              "on-surface": "#e2e4f6",
+              "on-tertiary-container": "#000000",
+              "secondary-fixed": "#00eefc",
+              "inverse-on-surface": "#515463",
+              "inverse-surface": "#faf8ff",
+              "surface-container-highest": "#202537",
+              "tertiary-fixed": "#c79eff",
+              "on-secondary-fixed-variant": "#005e64",
+              "on-error-container": "#ffa8a3",
+              "primary-dim": "#e1007f",
+              "tertiary": "#b884ff",
+              "on-secondary-container": "#e3fdff",
+              "primary": "#ff88b4",
+              "on-primary": "#610033"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(32, 37, 55, 0.4);
+            backdrop-filter: blur(20px);
+            border-top: 0.5px solid rgba(226, 228, 246, 0.1);
+            border-left: 0.5px solid rgba(226, 228, 246, 0.1);
+        }
+        .neon-glow-primary {
+            box-shadow: 0 0 20px rgba(255, 136, 180, 0.15);
+        }
+        .neon-glow-secondary {
+            box-shadow: 0 0 20px rgba(0, 238, 252, 0.15);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+          min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-surface-dim text-on-surface font-body selection:bg-primary/30 min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-[#0a0e1a]/60 backdrop-blur-xl border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)] flex justify-between items-center px-6 h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#ff88b4]" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<h1 class="text-2xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-[#ff88b4] to-[#b884ff] font-manrope">FitMetrik</h1>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-[#ff88b4] overflow-hidden hover:opacity-80 transition-all duration-300 active:scale-95 cursor-pointer">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAaqkvjZUBrw1573MiIx6l16gmP9pLh2RO68x-lG_7H5suBrzFtfpGREZ--3bll0U7w_0fsM50KpZ5BxpUKe_Vh_iOnIC__gJuxkmechiLH-RjYIImW5z0zx1oHjiFnNBJVbZj7vEDyhXHc7yWKnyLbGL65dywU6m-kh7aKdr3N7Kx8c9xqMoUfiQ2qz5YvLdxVcIHT63pg_Wfp0hd9dZS-XkRL7w33DcOElZrFuaySREUGkBqnYDjryGdQOWcvvjtGgt5gQdUVduo"/>
+</div>
+</header>
+<main class="pt-24 px-6 space-y-8 max-w-lg mx-auto">
+<!-- Summary Header with Steps Tracker -->
+<section class="space-y-6">
+<div class="flex justify-between items-end">
+<div class="space-y-1">
+<p class="text-on-surface-variant text-sm uppercase tracking-[0.2em] font-semibold">Pasos Diarios</p>
+<h2 class="text-4xl font-headline font-extrabold tracking-tight">8,450 <span class="text-lg font-medium text-on-surface-variant">steps</span></h2>
+</div>
+<div class="text-right">
+<p class="text-secondary font-bold text-sm tracking-widest uppercase">Meta: 10,000</p>
+<div class="w-24 h-1.5 bg-surface-container-highest rounded-full mt-2 overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-tertiary w-[84%]"></div>
+</div>
+</div>
+</div>
+<!-- Toggle Switch -->
+<div class="flex p-1.5 bg-surface-container-low rounded-full w-full border border-outline-variant/10">
+<button class="flex-1 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest bg-primary text-on-primary-fixed shadow-lg shadow-primary/20 transition-all">Plan General</button>
+<button class="flex-1 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-on-surface transition-all">Plan Especial</button>
+</div>
+</section>
+<!-- Macros & Stats HUD -->
+<div class="grid grid-cols-2 gap-4">
+<div class="grid grid-cols-2 gap-4 col-span-2">
+<div class="glass-card p-4 rounded-xl text-center border-b-2 border-primary/40">
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Proteína</p>
+<p class="text-lg font-headline font-bold text-primary">185g</p>
+</div>
+<div class="glass-card p-4 rounded-xl text-center border-b-2 border-secondary/40">
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Carbos</p>
+<p class="text-lg font-headline font-bold text-secondary">240g</p>
+</div>
+</div>
+<div class="glass-card p-4 rounded-xl text-center border-b-2 border-tertiary/40">
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Grasas</p>
+<p class="text-lg font-headline font-bold text-tertiary">65g</p>
+</div>
+<div class="glass-card p-4 rounded-xl text-center border-b-2 border-white/20">
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Snacks Hoy</p>
+<p class="text-lg font-headline font-bold text-on-surface">3 Items</p>
+</div>
+</div>
+<!-- Meal Section -->
+<section class="space-y-4">
+<h3 class="text-on-surface-variant font-bold text-xs uppercase tracking-[0.3em]">Cronograma de Comidas</h3>
+<!-- Comida 1 (Expanded by Default now as per request) -->
+<div class="glass-card p-5 rounded-2xl flex flex-col gap-4 relative overflow-hidden group border-primary/30" id="comida-1-accordion">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+<!-- Card Header/Summary -->
+<div class="flex items-center gap-4 cursor-pointer" onclick="const content = document.getElementById('comida-1-details'); const icon = document.getElementById('comida-1-chevron'); if(content.style.maxHeight === '0px'){content.style.maxHeight = content.scrollHeight + 'px'; icon.style.transform = 'rotate(180deg)';} else {content.style.maxHeight = '0px'; icon.style.transform = 'rotate(0deg)';}">
+<div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-white/5 ring-1 ring-primary/20">
+<img alt="Meal 1" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA57MW5g1GLKmQf9Pzh58IUrBITFvAI0qTicp8Le9O4S7WDlFdPRoMMvFkSYl9S6kERgZ64B-HCee1dchat39vELcsCP_gaziIvX9yleGpEaJ_lC0VJE9JTvlDZhBN3UGVEabQ2mbJER2hYaTW52-hP7FcX1PrGYFn3msnmAS_CYKqefySDmqwUXMOD3KmrUsVOgEyyFYdZlf9pep3E4W_aA226aB_YxF9ZPtsqf6F6RGNHFowUPiINuXD81pMS-4WXyl-jERtpYzg"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-headline font-bold text-lg leading-tight text-primary">Comida 1</h4>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300 rotate-180" id="comida-1-chevron">expand_more</span>
+</div>
+</div>
+<p class="text-on-surface-variant text-sm truncate font-light italic">Detalles de ingredientes y pesos</p>
+<div class="flex gap-3 mt-2">
+<span class="text-[10px] font-bold text-primary/80">350g Total</span>
+<span class="text-[10px] font-bold text-tertiary/80">30g Protein</span>
+</div>
+</div>
+</div>
+<!-- Expanded Content - Expanded by default via style -->
+<div class="overflow-hidden transition-all duration-300 ease-in-out" id="comida-1-details" style="max-height: 500px;">
+<div class="pt-4 border-t border-white/10 space-y-4">
+<!-- Search Field -->
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="w-full bg-surface-container/50 border border-white/10 rounded-lg py-2.5 pl-10 pr-4 text-xs focus:ring-1 focus:ring-primary focus:border-primary outline-none placeholder:text-on-surface-variant/50" placeholder="Filtrar ingredientes..." type="text"/>
+</div>
+<!-- Detailed List of Food Options -->
+<div class="space-y-2">
+<div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border-l-4 border-primary/60 hover:bg-white/10 transition-colors">
+<div class="flex flex-col">
+<span class="text-sm font-semibold tracking-wide">Huevos revueltos</span>
+<span class="text-[10px] text-on-surface-variant">Proteína base</span>
+</div>
+<span class="text-sm font-black font-headline text-primary">150g</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border-l-4 border-secondary/60 hover:bg-white/10 transition-colors">
+<div class="flex flex-col">
+<span class="text-sm font-semibold tracking-wide">Aguacate Hass</span>
+<span class="text-[10px] text-on-surface-variant">Grasas saludables</span>
+</div>
+<span class="text-sm font-black font-headline text-secondary">50g</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border-l-4 border-tertiary/60 hover:bg-white/10 transition-colors">
+<div class="flex flex-col">
+<span class="text-sm font-semibold tracking-wide">Pan Integral Semillado</span>
+<span class="text-[10px] text-on-surface-variant">Carbohidratos complejos</span>
+</div>
+<span class="text-sm font-black font-headline text-tertiary">80g</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border-l-4 border-white/30 hover:bg-white/10 transition-colors">
+<div class="flex flex-col">
+<span class="text-sm font-semibold tracking-wide">Pechuga de Pollo</span>
+<span class="text-[10px] text-on-surface-variant">Proteína extra</span>
+</div>
+<span class="text-sm font-black font-headline text-on-surface">70g</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Comida 2 -->
+<div class="glass-card p-5 rounded-2xl flex items-center gap-4 relative overflow-hidden group">
+<div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-white/5">
+<img alt="Meal 2" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY_iD8Ir2CCzt31naJ4LAFf4gFLKLCczGPeucHVucREm_Rp2O1qYKzviYEz6QID5VRfb3bEQSp2ulN-6OVYZqc4AmVVH9RrANLdYv__cQ99oOgjLVjJ7hhLpT0DXOJ_lDrWEkjYfvaVc1Dks9xrLNE1-1AObIyCCCJYXmlXnu5G6nTiBmBAE5PkSPQurl6fZZS6mNXPv4eypJ8t5CaCNKvTR02I5c6M0--pkms90BfZlQxEkqjEWE-ciYwlftg5XAzFYr1n_YG-DM"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-headline font-bold text-lg leading-tight">Comida 2</h4>
+<span class="material-symbols-outlined text-outline-variant text-sm">radio_button_unchecked</span>
+</div>
+<p class="text-on-surface-variant text-sm truncate font-light italic">Salmón a la plancha con espárragos</p>
+<div class="flex gap-3 mt-2">
+<span class="text-[10px] font-bold text-primary/80">420g Total</span>
+<span class="text-[10px] font-bold text-tertiary/80">45g Protein</span>
+</div>
+</div>
+</div>
+<!-- Comida 3 -->
+<div class="glass-card p-5 rounded-2xl flex items-center gap-4 relative overflow-hidden group">
+<div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-white/5">
+<img alt="Meal 3" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdR1Y1Cnp3oLhG53rQZ7yf20bRxGhQizO5tIZ_uokdovbzEGtmDOfJcnYKUMgqRNobXYD6DEbTWqAVpgVIQTplUbi5j0JONtcy1WwACYA_Zkpin8esBenThG5-A5idflKcSJ13UGPNwbNvgQdWhw1lBKosG7wkePrwgxOz9mNAXlbQi73KN-tdx96URRV5FLswawl7kfjTJJXhfo9S1rW05fxywYGndPbI1LFlPfwzqueQA1YxpREFJrfrr-I_XAzSFS_CGftQIjM"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-headline font-bold text-lg leading-tight">Comida 3</h4>
+<span class="material-symbols-outlined text-outline-variant text-sm">radio_button_unchecked</span>
+</div>
+<p class="text-on-surface-variant text-sm truncate font-light italic">Pechuga de pollo con ensalada mediterránea</p>
+<div class="flex gap-3 mt-2">
+<span class="text-[10px] font-bold text-primary/80">480g Total</span>
+<span class="text-[10px] font-bold text-tertiary/80">50g Protein</span>
+</div>
+</div>
+</div>
+<!-- Snacks & Suplementos Grid -->
+<div class="grid grid-cols-2 gap-4">
+<div class="glass-card p-5 rounded-2xl space-y-3">
+<div class="flex justify-between items-center">
+<h4 class="font-headline font-bold">Snacks</h4>
+<span class="material-symbols-outlined text-secondary text-lg">ios</span>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">Frutos secos (30g) &amp;<br/>Yogurt Griego (150g)</p>
+<p class="text-[10px] font-bold text-primary tracking-widest uppercase">180g Peso Neto</p>
+</div>
+<div class="glass-card p-5 rounded-2xl space-y-3">
+<div class="flex justify-between items-center">
+<h4 class="font-headline font-bold">Sups</h4>
+<span class="material-symbols-outlined text-tertiary text-lg">pill</span>
+</div>
+<p class="text-xs text-on-surface-variant leading-relaxed">Creatina (5g) &amp;<br/>Omega 3 (2 caps)</p>
+<p class="text-[10px] font-bold text-secondary tracking-widest uppercase">Pura Calidad</p>
+</div>
+</div>
+</section>
+<!-- Hydration Floating Reminder -->
+<div class="bg-gradient-to-br from-secondary/20 to-surface-container-high p-5 rounded-3xl border border-secondary/20 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+</div>
+<div>
+<p class="font-bold text-sm">Hidratación</p>
+<p class="text-xs text-on-surface-variant">2.5L / 3.5L completado</p>
+</div>
+</div>
+<button class="w-10 h-10 bg-secondary text-on-secondary rounded-full flex items-center justify-center active:scale-90 transition-transform shadow-[0_0_15px_rgba(0,238,252,0.4)]">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-24 px-8 pb-6 bg-[#0e1320]/80 backdrop-blur-2xl rounded-t-[2rem] border-t border-white/5 shadow-[0_-10px_40px_rgba(184,132,255,0.1)]">
+<a class="flex flex-col items-center justify-center text-[#00eefc] drop-shadow-[0_0_8px_rgba(0,238,252,0.5)] scale-110 active:scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="font-inter text-[10px] font-bold uppercase tracking-widest mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 opacity-70 hover:text-[#ff88b4] transition-colors active:scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="font-inter text-[10px] font-bold uppercase tracking-widest mt-1">Plans</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 opacity-70 hover:text-[#ff88b4] transition-colors active:scale-90 duration-200 ease-out" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-inter text-[10px] font-bold uppercase tracking-widest mt-1">Profile</span>
+</a>
+</nav>
+<!-- Floating Action Button -->
+<button class="fixed right-6 bottom-28 w-14 h-14 bg-gradient-to-br from-primary to-primary-container text-white rounded-full shadow-lg shadow-primary/40 flex items-center justify-center z-40 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">add_photo_alternate</span>
+</button>
+</body></html>
