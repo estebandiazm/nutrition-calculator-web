@@ -36,7 +36,7 @@ export async function middleware(request: NextRequest) {
     if (!user) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
-    return NextResponse.redirect(new URL(role === 'nutritionist' ? '/clients' : '/my-plan', request.url));
+    return NextResponse.redirect(new URL(role === 'nutritionist' ? '/clients' : '/dashboard', request.url));
   }
 
   if (!user && !isLoginPage && !isAuthCallback) {
@@ -46,7 +46,7 @@ export async function middleware(request: NextRequest) {
 
   if (user && isLoginPage) {
     // Authenticated users trying to access login — redirect to their home
-    return NextResponse.redirect(new URL(role === 'nutritionist' ? '/clients' : '/my-plan', request.url))
+    return NextResponse.redirect(new URL(role === 'nutritionist' ? '/clients' : '/dashboard', request.url))
   }
 
   // If they are on the update-password page, let them stay there
@@ -56,11 +56,11 @@ export async function middleware(request: NextRequest) {
 
   // Prevent clients from accessing dashboard
   if (user && role === 'client' && request.nextUrl.pathname.startsWith('/clients')) {
-    return NextResponse.redirect(new URL('/my-plan', request.url))
+    return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
   // Prevent nutritionists from accessing client portal
-  if (user && role === 'nutritionist' && request.nextUrl.pathname.startsWith('/my-plan')) {
+  if (user && role === 'nutritionist' && request.nextUrl.pathname.startsWith('/dashboard')) {
     return NextResponse.redirect(new URL('/clients', request.url))
   }
 
