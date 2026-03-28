@@ -4,7 +4,7 @@ import { BottomNavBar } from '@/components/layout/BottomNavBar';
 import { StepsCounter } from '@/components/dashboard/StepsCounter';
 import { HydrationTracker } from '@/components/dashboard/HydrationTracker';
 import { MacrosHUD } from '@/components/dashboard/MacrosHUD';
-import { MealCard } from '@/components/dashboard/MealCard';
+import { PlanSectionCard } from '@/components/dashboard/PlanSectionCard';
 import { GlassCard } from '@/components/ui/GlassCard';
 
 import { DietPlan } from '@/domain/types/DietPlan';
@@ -78,7 +78,7 @@ export default async function ClientDashboard() {
       totalProtein: 'Calculado',
       foods,
       icon: 'restaurant_menu',
-      defaultExpanded: index === 0
+      defaultExpanded: false
     };
   });
 
@@ -168,7 +168,7 @@ export default async function ClientDashboard() {
               const isLastAndOdd = allCards.length % 2 !== 0 && idx === allCards.length - 1;
               return (
                 <div key={idx} className={isLastAndOdd ? "md:col-span-2" : ""}>
-                  <MealCard {...card} />
+                  <PlanSectionCard {...card} />
                 </div>
               );
             })}

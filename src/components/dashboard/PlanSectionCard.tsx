@@ -11,7 +11,7 @@ export interface FoodItem {
   colorClass: string;
 }
 
-export interface MealCardProps {
+export interface PlanSectionCardProps {
   title: string;
   description: string;
   totalWeight: string;
@@ -21,7 +21,7 @@ export interface MealCardProps {
   icon?: string;
 }
 
-export function MealCard({ title, description, totalWeight, totalProtein, foods, defaultExpanded = false, icon = 'restaurant_menu' }: MealCardProps) {
+export function PlanSectionCard({ title, description, totalWeight, totalProtein, foods, defaultExpanded = false, icon = 'restaurant_menu' }: PlanSectionCardProps) {
   const [expanded, setExpanded] = useState(defaultExpanded);
   const [search, setSearch] = useState('');
 
@@ -49,7 +49,6 @@ export function MealCard({ title, description, totalWeight, totalProtein, foods,
           <div className="flex justify-between items-start mb-1">
             <h4 className="font-headline font-bold text-lg leading-tight text-primary text-white">{title}</h4>
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-secondary text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
               <span className={`material-symbols-outlined text-on-surface-variant transition-transform duration-300 ${expanded ? 'rotate-180' : ''}`}>expand_more</span>
             </div>
           </div>
@@ -77,7 +76,7 @@ export function MealCard({ title, description, totalWeight, totalProtein, foods,
               type="text"
             />
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
             {filteredFoods.map(food => (
               <div key={food.id} className={`flex items-center justify-between p-3 rounded-xl bg-white/5 border-l-4 ${food.colorClass} hover:bg-white/10 transition-colors`}>
                 <div className="flex flex-col">
