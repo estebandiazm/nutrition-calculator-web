@@ -4,7 +4,7 @@ import { BottomNavBar } from '@/components/layout/BottomNavBar';
 import { StepsCounter } from '@/components/dashboard/StepsCounter';
 import { HydrationTracker } from '@/components/dashboard/HydrationTracker';
 import { MacrosHUD } from '@/components/dashboard/MacrosHUD';
-import { MealCard } from '@/components/dashboard/MealCard';
+import { PlanSectionCard, PlanSectionCardProps } from '@/components/dashboard/PlanSectionCard';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { PlanSwitcher } from '@/components/dashboard/PlanSwitcher';
 
@@ -98,7 +98,7 @@ export default async function ClientDashboard(props: { searchParams: SearchParam
       totalProtein: 'Calculado',
       foods,
       icon: 'restaurant_menu',
-      defaultExpanded: index === 0
+      defaultExpanded: false
     };
   });
 
@@ -114,24 +114,15 @@ export default async function ClientDashboard(props: { searchParams: SearchParam
       amount: snack.description,
       colorClass: "border-primary"
     })) || [],
-    icon: 'cookie'
+    icon: 'cookie',
+    defaultExpanded: false
   };
 
-  const frutasCardData = {
-    title: "Frutas Permitidas",
-    description: "Equivalencias para 1 porción",
-    totalWeight: "1 porción",
-    totalProtein: "-",
-    foods: [
-      { id: 'f1', name: "Manzana", category: "Fruta", amount: "150g", colorClass: "border-tertiary" },
-      { id: 'f2', name: "Fresa", category: "Fruta", amount: "200g", colorClass: "border-tertiary" },
-      { id: 'f3', name: "Banano", category: "Fruta", amount: "90g", colorClass: "border-tertiary" },
-    ],
-    icon: 'nutrition'
-  };
-
-  // The array length is 5 (Comida 1, 2, 3, Snacks, Frutas), making it odd, so the last box spans full width
-  const allCards = [...mealCardsData, snacksCardData, frutasCardData];
+  // Only add snacks if the plan has them
+  const allCards: PlanSectionCardProps[] = [...mealCardsData];
+  if (activePlan.snacks && activePlan.snacks.length > 0) {
+    allCards.push(snacksCardData);
+  }
 
   return (
     <div className="font-display bg-surface-dim text-slate-100 min-h-screen pb-32 lg:pb-0 relative overflow-x-hidden w-full">
@@ -181,7 +172,7 @@ export default async function ClientDashboard(props: { searchParams: SearchParam
               const isLastAndOdd = allCards.length % 2 !== 0 && idx === allCards.length - 1;
               return (
                 <div key={idx} className={isLastAndOdd ? "md:col-span-2" : ""}>
-                  <MealCard {...card} />
+                  <PlanSectionCard {...card} />
                 </div>
               );
             })}
