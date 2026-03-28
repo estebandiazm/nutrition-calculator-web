@@ -4,15 +4,20 @@ import { BottomNavBar } from '@/components/layout/BottomNavBar';
 import { StepsCounter } from '@/components/dashboard/StepsCounter';
 import { HydrationTracker } from '@/components/dashboard/HydrationTracker';
 import { MacrosHUD } from '@/components/dashboard/MacrosHUD';
-import { MealCard } from '@/components/dashboard/MealCard';
+import { PlanSectionCard, PlanSectionCardProps } from '@/components/dashboard/PlanSectionCard';
 import { GlassCard } from '@/components/ui/GlassCard';
+import { PlanSwitcher } from '@/components/dashboard/PlanSwitcher';
 
 import { DietPlan } from '@/domain/types/DietPlan';
 import { createClient } from '@/infrastructure/adapters/supabase/server';
 import { getClientByAuthId } from '@/app/actions/clientActions';
 import { redirect } from 'next/navigation';
 
-export default async function ClientDashboard() {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function ClientDashboard(props: { searchParams: SearchParams }) {
+  const searchParams = await props.searchParams;
+
   const mockPlan: DietPlan = {
     label: "Plan General",
     days: "Lunes a Sábado",
@@ -55,11 +60,26 @@ export default async function ClientDashboard() {
   }
 
   const clientRecord = await getClientByAuthId(user.id);
-  const activePlan = clientRecord?.plans && clientRecord.plans.length > 0 
-    ? clientRecord.plans[clientRecord.plans.length - 1] 
-    : mockPlan;
-
   const isMock = !clientRecord || !clientRecord.plans || clientRecord.plans.length === 0;
+
+  // Determine active plan
+  const plans = isMock ? [mockPlan] : clientRecord.plans;
+  
+  // Parse planIndex from search params
+  const qsIndex = searchParams?.planIndex;
+  let activeIndex = plans.length - 1; // default to the latest plan
+
+  if (qsIndex && typeof qsIndex === 'string') {
+    const parsed = parseInt(qsIndex, 10);
+    if (!isNaN(parsed) && parsed >= 0 && parsed < plans.length) {
+      activeIndex = parsed;
+    }
+  }
+
+  const activePlan = plans[activeIndex];
+
+  // Map plans for switcher
+  const switcherPlans = plans.map(p => ({ label: p.label, days: p.days }));
 
   const mealCardsData = activePlan.meals.map((meal, index) => {
     const foods = meal.blocks.flatMap(block => 
@@ -78,7 +98,7 @@ export default async function ClientDashboard() {
       totalProtein: 'Calculado',
       foods,
       icon: 'restaurant_menu',
-      defaultExpanded: index === 0
+      defaultExpanded: false
     };
   });
 
@@ -94,24 +114,15 @@ export default async function ClientDashboard() {
       amount: snack.description,
       colorClass: "border-primary"
     })) || [],
-    icon: 'cookie'
+    icon: 'cookie',
+    defaultExpanded: false
   };
 
-  const frutasCardData = {
-    title: "Frutas Permitidas",
-    description: "Equivalencias para 1 porción",
-    totalWeight: "1 porción",
-    totalProtein: "-",
-    foods: [
-      { id: 'f1', name: "Manzana", category: "Fruta", amount: "150g", colorClass: "border-tertiary" },
-      { id: 'f2', name: "Fresa", category: "Fruta", amount: "200g", colorClass: "border-tertiary" },
-      { id: 'f3', name: "Banano", category: "Fruta", amount: "90g", colorClass: "border-tertiary" },
-    ],
-    icon: 'nutrition'
-  };
-
-  // The array length is 5 (Comida 1, 2, 3, Snacks, Frutas), making it odd, so the last box spans full width
-  const allCards = [...mealCardsData, snacksCardData, frutasCardData];
+  // Only add snacks if the plan has them
+  const allCards: PlanSectionCardProps[] = [...mealCardsData];
+  if (activePlan.snacks && activePlan.snacks.length > 0) {
+    allCards.push(snacksCardData);
+  }
 
   return (
     <div className="font-display bg-surface-dim text-slate-100 min-h-screen pb-32 lg:pb-0 relative overflow-x-hidden w-full">
@@ -132,14 +143,7 @@ export default async function ClientDashboard() {
               {isMock ? "Mostrando datos de demostración" : `Estrategia nutricional de ${activePlan.label || 'Plan Personalizado'}`}
             </p>
           </div>
-          <div className="flex p-1 bg-white/5 rounded-2xl border border-white/10 lg:w-auto w-full">
-            <button className="flex-1 lg:px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest bg-gradient-to-br from-primary to-accent-purple text-white shadow-[0_0_15px_rgba(236,72,153,0.4)] transition-all">
-              Plan General (6 Days)
-            </button>
-            <button className="flex-1 lg:px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-white transition-all">
-              Plan Especial (1 Day)
-            </button>
-          </div>
+          <PlanSwitcher plans={switcherPlans} activeIndex={activeIndex} />
         </div>
 
         <div className="flex flex-col gap-8">
@@ -168,7 +172,7 @@ export default async function ClientDashboard() {
               const isLastAndOdd = allCards.length % 2 !== 0 && idx === allCards.length - 1;
               return (
                 <div key={idx} className={isLastAndOdd ? "md:col-span-2" : ""}>
-                  <MealCard {...card} />
+                  <PlanSectionCard {...card} />
                 </div>
               );
             })}

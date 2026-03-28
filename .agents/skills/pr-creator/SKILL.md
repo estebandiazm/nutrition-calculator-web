@@ -18,9 +18,9 @@ Follow these steps to create a Pull Request:
     `main` branch.
     - Run `git branch --show-current`.
     - If the current branch is `main`, you MUST create and switch to a new
-      descriptive branch:
+      branch with the format `feat/{change_name}` (e.g., `feat/login-ux-improvement`):
       ```bash
-      git checkout -b <new-branch-name>
+      git checkout -b feat/<change_name>
       ```
 
 2.  **Commit Changes**: Verify that all intended changes are committed.
