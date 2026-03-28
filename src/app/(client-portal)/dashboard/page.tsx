@@ -6,13 +6,18 @@ import { HydrationTracker } from '@/components/dashboard/HydrationTracker';
 import { MacrosHUD } from '@/components/dashboard/MacrosHUD';
 import { MealCard } from '@/components/dashboard/MealCard';
 import { GlassCard } from '@/components/ui/GlassCard';
+import { PlanSwitcher } from '@/components/dashboard/PlanSwitcher';
 
 import { DietPlan } from '@/domain/types/DietPlan';
 import { createClient } from '@/infrastructure/adapters/supabase/server';
 import { getClientByAuthId } from '@/app/actions/clientActions';
 import { redirect } from 'next/navigation';
 
-export default async function ClientDashboard() {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function ClientDashboard(props: { searchParams: SearchParams }) {
+  const searchParams = await props.searchParams;
+
   const mockPlan: DietPlan = {
     label: "Plan General",
     days: "Lunes a Sábado",
@@ -55,11 +60,26 @@ export default async function ClientDashboard() {
   }
 
   const clientRecord = await getClientByAuthId(user.id);
-  const activePlan = clientRecord?.plans && clientRecord.plans.length > 0 
-    ? clientRecord.plans[clientRecord.plans.length - 1] 
-    : mockPlan;
-
   const isMock = !clientRecord || !clientRecord.plans || clientRecord.plans.length === 0;
+
+  // Determine active plan
+  const plans = isMock ? [mockPlan] : clientRecord.plans;
+  
+  // Parse planIndex from search params
+  const qsIndex = searchParams?.planIndex;
+  let activeIndex = plans.length - 1; // default to the latest plan
+
+  if (qsIndex && typeof qsIndex === 'string') {
+    const parsed = parseInt(qsIndex, 10);
+    if (!isNaN(parsed) && parsed >= 0 && parsed < plans.length) {
+      activeIndex = parsed;
+    }
+  }
+
+  const activePlan = plans[activeIndex];
+
+  // Map plans for switcher
+  const switcherPlans = plans.map(p => ({ label: p.label, days: p.days }));
 
   const mealCardsData = activePlan.meals.map((meal, index) => {
     const foods = meal.blocks.flatMap(block => 
@@ -132,14 +152,7 @@ export default async function ClientDashboard() {
               {isMock ? "Mostrando datos de demostración" : `Estrategia nutricional de ${activePlan.label || 'Plan Personalizado'}`}
             </p>
           </div>
-          <div className="flex p-1 bg-white/5 rounded-2xl border border-white/10 lg:w-auto w-full">
-            <button className="flex-1 lg:px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest bg-gradient-to-br from-primary to-accent-purple text-white shadow-[0_0_15px_rgba(236,72,153,0.4)] transition-all">
-              Plan General (6 Days)
-            </button>
-            <button className="flex-1 lg:px-6 py-2.5 rounded-xl text-xs font-bold uppercase tracking-widest text-on-surface-variant hover:text-white transition-all">
-              Plan Especial (1 Day)
-            </button>
-          </div>
+          <PlanSwitcher plans={switcherPlans} activeIndex={activeIndex} />
         </div>
 
         <div className="flex flex-col gap-8">
