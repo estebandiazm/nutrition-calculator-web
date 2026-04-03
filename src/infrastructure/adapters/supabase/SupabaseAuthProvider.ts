@@ -16,7 +16,7 @@ export class SupabaseAuthProvider implements AuthProvider {
     // Attempt to extract role from user metadata
     // Defaulting to 'client' if not found, though we should enforce this in signup
     const rawRole = session.user.user_metadata?.role;
-    const role: Role = (rawRole === 'nutritionist' || rawRole === 'client') ? rawRole : 'client';
+    const role: Role = (rawRole === 'coach' || rawRole === 'client') ? rawRole : 'client';
 
     const authUser: AuthUser = {
       id: session.user.id,

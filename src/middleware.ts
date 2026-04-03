@@ -36,7 +36,9 @@ export async function middleware(request: NextRequest) {
     if (!user) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
-    return NextResponse.redirect(new URL(role === 'nutritionist' ? '/clients' : '/dashboard', request.url));
+    if (role === 'client') return NextResponse.redirect(new URL('/dashboard', request.url));
+    if (role === 'coach') return response; // coach home IS root
+    return NextResponse.redirect(new URL('/login?error=Unknown+role.+Contact+your+administrator.', request.url));
   }
 
   if (!user && !isLoginPage && !isAuthCallback) {
@@ -45,8 +47,10 @@ export async function middleware(request: NextRequest) {
   }
 
   if (user && isLoginPage) {
-    // Authenticated users trying to access login — redirect to their home
-    return NextResponse.redirect(new URL(role === 'nutritionist' ? '/clients' : '/dashboard', request.url))
+    // Unknown role — let them stay on login with the error
+    if (role !== 'coach' && role !== 'client') return response;
+    // Authenticated users with a valid role — redirect to their home
+    return NextResponse.redirect(new URL(role === 'coach' ? '/clients' : '/dashboard', request.url))
   }
 
   // If they are on the update-password page, let them stay there
@@ -59,8 +63,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
-  // Prevent nutritionists from accessing client portal
-  if (user && role === 'nutritionist' && request.nextUrl.pathname.startsWith('/dashboard')) {
+  // Prevent coaches from accessing client portal
+  if (user && role === 'coach' && request.nextUrl.pathname.startsWith('/dashboard')) {
     return NextResponse.redirect(new URL('/clients', request.url))
   }
 

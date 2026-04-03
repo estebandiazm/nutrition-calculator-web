@@ -36,9 +36,9 @@ const DietPlanSchema = new Schema({
 
 // --- Main Client Schema ---
 
-export interface ClientDocument extends Omit<IClient, 'plans' | 'nutritionistId' | 'authId'>, Document {
+export interface ClientDocument extends Omit<IClient, 'plans' | 'coachId' | 'authId'>, Document {
   plans: DietPlan[];
-  nutritionistId: mongoose.Types.ObjectId;
+  coachId: mongoose.Types.ObjectId;
   authId?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -47,7 +47,7 @@ export interface ClientDocument extends Omit<IClient, 'plans' | 'nutritionistId'
 const ClientSchema = new Schema<ClientDocument>({
   name: { type: String, required: true },
   targetWeight: { type: Number },
-  nutritionistId: { type: Schema.Types.ObjectId, ref: 'Nutritionist', required: true },
+  coachId: { type: Schema.Types.ObjectId, ref: 'Coach', required: true },
   authId: { type: String, sparse: true, index: true },
   plans: [DietPlanSchema] 
 }, { 

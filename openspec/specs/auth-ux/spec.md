@@ -56,3 +56,48 @@ The system SHALL present an update password screen matching the Stitch "Web Chan
 #### Scenario: Active user requests password change (Manual Update)
 - **WHEN** an authenticated user manually navigates to `/update-password`
 - **THEN** they are prompted to enter their "Current Password", "New Password", and "Confirm New Password" to authorize the change
+
+<----------------------------------------------------------------------------------------------------------------------- SYNCED FROM multi-role-coach -->
+
+## NEW Requirements (from multi-role-coach)
+
+### Requirement: Role value 'coach' replaces 'nutritionist'
+The system SHALL recognise `'coach'` as the valid role value for coach users. The `AuthProvider` port SHALL update its role type union to `'coach' | 'client'`. The `SupabaseAuthProvider` SHALL map `user_metadata.role === 'coach'` accordingly. Middleware SHALL route users with role `'coach'` to `/clients`.
+
+#### Scenario: Coach role routes to /clients
+- **WHEN** a Supabase session with user_metadata.role = "coach" is evaluated
+- **THEN** the middleware grants access and routes the user to /clients
+
+#### Scenario: Nutritionist role is rejected
+- **WHEN** a Supabase session with user_metadata.role = "nutritionist" is evaluated
+- **THEN** the user is redirected to /login (unrecognised role)
+
+#### Scenario: Client role routes to /dashboard
+- **WHEN** a Supabase session with user_metadata.role = "client" is evaluated
+- **THEN** the middleware grants access and routes the user to /dashboard
+
+### Requirement: Middleware RBAC routing updated
+Middleware SHALL check for role `'coach'` to grant access to `/clients` and other coach-facing routes. A user with role `'nutritionist'` SHALL be treated as having an unrecognised role and SHALL be redirected to `/login`.
+
+#### Scenario: Unauthenticated user redirected to login
+- **WHEN** no active Supabase session exists and a request is made to any protected route
+- **THEN** the middleware redirects the user to /login
+
+#### Scenario: AuthProvider type does not include 'nutritionist'
+- **WHEN** TypeScript strict mode is enabled
+- **THEN** attempting to assign role = "nutritionist" to an AuthProvider Role type SHALL raise a compilation error
+
+### Requirement: Login action implements multi-role redirect
+The login Server Action (`src/app/(auth)/login/actions.ts`) SHALL read `user_metadata.role` from the Supabase session after successful authentication and redirect to the correct route based on role value. Unknown/missing roles SHALL return the user to `/login` with an error message instead of redirecting to a protected route.
+
+#### Scenario: Coach logs in and is redirected to clients list
+- **WHEN** a Supabase user with user_metadata.role = "coach" submits valid credentials on /login
+- **THEN** the system redirects them to /clients
+
+#### Scenario: Client logs in and is redirected to dashboard
+- **WHEN** a Supabase user with user_metadata.role = "client" submits valid credentials on /login
+- **THEN** the system redirects them to /dashboard
+
+#### Scenario: User with unknown role is denied redirect
+- **WHEN** a Supabase user with user_metadata.role = "nutritionist" submits valid credentials on /login
+- **THEN** the system does NOT redirect to a protected route and displays an error message on /login

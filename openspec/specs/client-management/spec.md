@@ -98,3 +98,29 @@ The system SHALL provide a `createClient` Server Action that accepts client data
 #### Scenario: New client created successfully
 - **WHEN** the `createClient` action is invoked with valid client data (at minimum a `name`)
 - **THEN** the system SHALL save the client to the database and return the created client object
+
+<----------------------------------------------------------------------------------------------------------------------- SYNCED FROM multi-role-coach -->
+
+## MODIFIED Requirements (from multi-role-coach)
+
+### Requirement: Coach reference on Client
+The system SHALL use a `coachId` field on the `Client` Mongoose model (required ObjectId reference to the `Coach` collection) in place of `nutritionistId`. Every client MUST be associated with a coach.
+
+#### Scenario: Client created with coach reference
+- **WHEN** a new client is created with a valid `coachId`
+- **THEN** the system SHALL store the reference and the client SHALL be retrievable by that coach
+
+#### Scenario: Client creation rejected without coach reference
+- **WHEN** a new client is created without a `coachId`
+- **THEN** the system SHALL reject the operation with a validation error
+
+### Requirement: Filter clients by coach
+The system SHALL provide a `getClientsByCoach` Server Action that retrieves all clients associated with a specific coach ID. The action signature is `getClientsByCoach(coachId: string)`.
+
+#### Scenario: Clients found for coach
+- **WHEN** `getClientsByCoach` is invoked with a coach ID that has associated clients
+- **THEN** the system SHALL return an array of matching client documents ordered by most recently updated
+
+#### Scenario: No clients for coach
+- **WHEN** `getClientsByCoach` is invoked with a coach ID that has no associated clients
+- **THEN** the system SHALL return an empty array

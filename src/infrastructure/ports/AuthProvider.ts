@@ -1,4 +1,4 @@
-export type Role = 'nutritionist' | 'client';
+export type Role = 'coach' | 'client';
 
 export interface AuthUser {
   id: string;

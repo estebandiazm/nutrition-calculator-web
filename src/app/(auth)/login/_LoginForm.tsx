@@ -1,17 +1,45 @@
 'use client';
 
 import { useState } from 'react';
+import { useFormStatus } from 'react-dom';
 import styles from './login.module.css';
 import { loginWithPassword, loginWithMagicLink } from './actions';
 
 type Tab = 'password' | 'magic';
 
+function PasswordSubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      className={`${styles.btnPrimary} ${pending ? styles.btnLoader : ''}`}
+      disabled={pending}
+    >
+      <span>{pending ? 'Signing in...' : 'Sign In'}</span>
+      {!pending && (
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 5l7 7m0 0l-7 7m7-7H3" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+        </svg>
+      )}
+    </button>
+  );
+}
+
+function MagicLinkSubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      className={`${styles.btnGhost} ${pending ? styles.btnLoader : ''}`}
+      disabled={pending}
+    >
+      {pending ? 'Sending link...' : 'Send Magic Link'}
+    </button>
+  );
+}
+
 export function LoginForm() {
   const [tab, setTab] = useState<Tab>('password');
-  // Fake loading state just for demo purposes matching the Stitch behavior
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = () => setTimeout(() => setLoading(true), 10);
 
   return (
     <>
@@ -33,7 +61,7 @@ export function LoginForm() {
       </div>
 
       {tab === 'password' ? (
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} action={loginWithPassword}>
           <div>
             <label className={styles.fieldLabel} htmlFor="email-pw">Email Address</label>
             <input
@@ -64,21 +92,10 @@ export function LoginForm() {
             />
           </div>
 
-          <button 
-            formAction={loginWithPassword} 
-            className={`${styles.btnPrimary} ${loading ? styles.btnLoader : ''}`}
-            disabled={loading}
-          >
-            <span>{loading ? 'Signing in...' : 'Sign In'}</span>
-            {!loading && (
-              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14 5l7 7m0 0l-7 7m7-7H3" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-              </svg>
-            )}
-          </button>
+          <PasswordSubmitButton />
         </form>
       ) : (
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} action={loginWithMagicLink}>
           <div>
             <label className={styles.fieldLabel} htmlFor="email-magic">Email Address</label>
             <input
@@ -96,13 +113,7 @@ export function LoginForm() {
             We&apos;ll send a one-click login link to your inbox. No password needed.
           </p>
 
-          <button 
-            formAction={loginWithMagicLink} 
-            className={`${styles.btnGhost} ${loading ? styles.btnLoader : ''}`}
-            disabled={loading}
-          >
-            {loading ? 'Sending link...' : 'Send Magic Link'}
-          </button>
+          <MagicLinkSubmitButton />
         </form>
       )}
     </>

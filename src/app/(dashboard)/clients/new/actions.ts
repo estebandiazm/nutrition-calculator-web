@@ -23,16 +23,16 @@ export async function inviteClient(formData: FormData) {
   }
 
   // 2. Save the new Client entity to our DB repository
-  const defaultNutritionistId = process.env.NEXT_PUBLIC_DEFAULT_NUTRITIONIST_ID;
-  if (!defaultNutritionistId) {
-    console.error('Missing NEXT_PUBLIC_DEFAULT_NUTRITIONIST_ID');
+  const defaultCoachId = process.env.NEXT_PUBLIC_DEFAULT_COACH_ID;
+  if (!defaultCoachId) {
+    console.error('Missing NEXT_PUBLIC_DEFAULT_COACH_ID');
     redirect('/clients/new?error=System configuration error');
   }
 
   await createDbClient({
     name,
     authId: authUser.id,
-    nutritionistId: defaultNutritionistId,
+    coachId: defaultCoachId,
   });
 
   // 3. Success
