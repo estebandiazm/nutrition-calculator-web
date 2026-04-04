@@ -19,7 +19,7 @@ function toClient(doc: ClientDocument): Client & { id: string } {
     id: String(plain._id),
     name: plain.name,
     targetWeight: plain.targetWeight,
-    nutritionistId: String(plain.nutritionistId),
+    coachId: String(plain.coachId),
     authId: plain.authId,
     plans: (plain.plans ?? []).map(sanitisePlan),
   };
@@ -35,13 +35,13 @@ function sanitisePlan(plan: any): DietPlan {
 // ─── Client CRUD ────────────────────────────────────────────────────────────
 
 export async function createClient(
-  data: Pick<Client, 'name' | 'nutritionistId'> & Partial<Pick<Client, 'targetWeight' | 'authId'>>
+  data: Pick<Client, 'name' | 'coachId'> & Partial<Pick<Client, 'targetWeight' | 'authId'>>
 ): Promise<Client & { id: string }> {
   await dbConnect();
   const doc = await ClientModel.create({
     name: data.name,
     targetWeight: data.targetWeight,
-    nutritionistId: data.nutritionistId,
+    coachId: data.coachId,
     authId: data.authId,
     plans: [],
   });
@@ -57,7 +57,7 @@ export async function getClients(): Promise<(Client & { id: string })[]> {
       id: String(plain._id),
       name: plain.name,
       targetWeight: plain.targetWeight,
-      nutritionistId: String(plain.nutritionistId),
+      coachId: String(plain.coachId),
       plans: (plain.plans ?? []).map(sanitisePlan),
     };
   });
@@ -81,11 +81,11 @@ export async function getClientByAuthId(
   return toClient(doc);
 }
 
-export async function getClientsByNutritionist(
-  nutritionistId: string
+export async function getClientsByCoachId(
+  coachId: string
 ): Promise<(Client & { id: string })[]> {
   await dbConnect();
-  const docs = await ClientModel.find({ nutritionistId }).sort({ updatedAt: -1 });
+  const docs = await ClientModel.find({ coachId }).sort({ updatedAt: -1 });
   return docs.map((doc: ClientDocument) => toClient(doc));
 }
 

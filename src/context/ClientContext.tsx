@@ -25,11 +25,11 @@ const ClientProvider: React.FC<ClientContextProps> = ({ children }) => {
         }
         setClient(parsed);
       } else {
-        setClient({ name: "", plans: [], nutritionistId: "" });
+        setClient({ name: "", plans: [], coachId: "" });
       }
     } catch (err) {
       console.warn("Error leyendo localStorage", err);
-      setClient({ name: "", plans: [], nutritionistId: "" });
+      setClient({ name: "", plans: [], coachId: "" });
     }
   }, []);
 

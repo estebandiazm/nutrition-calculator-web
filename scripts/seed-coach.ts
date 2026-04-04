@@ -1,5 +1,5 @@
-// Seed script: creates a default Nutritionist document and prints its _id
-// Usage: npx -y tsx scripts/seed-nutritionist.ts
+// Seed script: creates a default Coach document and prints its _id
+// Usage: npx -y tsx scripts/seed-coach.ts
 
 import mongoose from 'mongoose';
 import { readFileSync } from 'fs';
@@ -15,44 +15,45 @@ if (!match) {
 const MONGODB_URI = match[1].trim();
 
 // Inline schema to avoid Next.js import issues
-const NutritionistSchema = new mongoose.Schema(
+const CoachSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
+    authId: { type: String, sparse: true, index: true, unique: true },
   },
-  { timestamps: true }
+  { timestamps: true, collection: 'coaches' }
 );
 
 async function main() {
   await mongoose.connect(MONGODB_URI);
   console.log('Connected to MongoDB');
 
-  const Nutritionist =
-    mongoose.models.Nutritionist ||
-    mongoose.model('Nutritionist', NutritionistSchema);
+  const Coach =
+    mongoose.models.Coach ||
+    mongoose.model('Coach', CoachSchema);
 
   // Check if one already exists
-  const existing = await Nutritionist.findOne();
+  const existing = await Coach.findOne();
   if (existing) {
-    console.log(`\nNutritionist already exists:`);
+    console.log(`\nCoach already exists:`);
     console.log(`  _id:   ${existing._id}`);
     console.log(`  name:  ${existing.name}`);
     console.log(`  email: ${existing.email}`);
-    console.log(`\nSet in .env.local:\nNEXT_PUBLIC_DEFAULT_NUTRITIONIST_ID=${existing._id}`);
+    console.log(`\nSet in .env.local:\nNEXT_PUBLIC_DEFAULT_COACH_ID=${existing._id}`);
     await mongoose.disconnect();
     return;
   }
 
-  const doc = await Nutritionist.create({
+  const doc = await Coach.create({
     name: 'Juan Esteban Diaz',
-    email: 'nutricionista@example.com',
+    email: 'coach@example.com',
   });
 
-  console.log(`\nNutritionist created:`);
+  console.log(`\nCoach created:`);
   console.log(`  _id:   ${doc._id}`);
   console.log(`  name:  ${doc.name}`);
   console.log(`  email: ${doc.email}`);
-  console.log(`\nSet in .env.local:\nNEXT_PUBLIC_DEFAULT_NUTRITIONIST_ID=${doc._id}`);
+  console.log(`\nSet in .env.local:\nNEXT_PUBLIC_DEFAULT_COACH_ID=${doc._id}`);
 
   await mongoose.disconnect();
 }

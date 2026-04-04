@@ -104,7 +104,7 @@ const Creator = () => {
 
     saveClient({
       name: clientName,
-      nutritionistId: '',
+      coachId: '',
       targetWeight: targetWeight !== '' ? targetWeight : undefined,
       plans: dietPlans,
     });
@@ -282,7 +282,7 @@ const Creator = () => {
           open={saveModalOpen}
           onClose={() => setSaveModalOpen(false)}
           plans={generatedPlans}
-          nutritionistId={process.env.NEXT_PUBLIC_DEFAULT_NUTRITIONIST_ID ?? ''}
+          coachId={process.env.NEXT_PUBLIC_DEFAULT_COACH_ID ?? ''}
         />
       </Box>
     </ThemeProvider>
