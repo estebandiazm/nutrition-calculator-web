@@ -1,0 +1,13 @@
+change: coach-dashboard-redesign
+status: archived
+implemented: true
+verified: true
+ready_for_merge: true
+branch: feat/coach-dashboard-redesign
+commit_hash: 19fad68dfda17a02b255b45e603bb7f5484c6a8f
+summary: Coach dashboard redesign with Stitch UI, multi-role routing, invitation system, and data isolation
+files_changed: 21
+files_created: 11
+files_deleted: 1
+tests_added: 2
+archived_at: 2026-04-04T00:00:00Z

@@ -37,7 +37,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
     if (role === 'client') return NextResponse.redirect(new URL('/dashboard', request.url));
-    if (role === 'coach') return response; // coach home IS root
+    if (role === 'coach') return NextResponse.redirect(new URL('/clients', request.url));
     return NextResponse.redirect(new URL('/login?error=Unknown+role.+Contact+your+administrator.', request.url));
   }
 

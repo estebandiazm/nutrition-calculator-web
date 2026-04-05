@@ -50,9 +50,15 @@ const pillInput = {
   '& input[type=number]::-webkit-inner-spin-button': { display: 'none' },
 };
 
+// ─── types ───────────────────────────────────────────────────────────────────
+
+interface CreatorProps {
+  coachId: string;
+}
+
 // ─── component ──────────────────────────────────────────────────────────────
 
-const Creator = () => {
+const Creator = ({ coachId }: CreatorProps) => {
   const router = useRouter();
   const { saveClient } = useContext(ClientContext) as ClientContextType;
 
@@ -282,7 +288,7 @@ const Creator = () => {
           open={saveModalOpen}
           onClose={() => setSaveModalOpen(false)}
           plans={generatedPlans}
-          coachId={process.env.NEXT_PUBLIC_DEFAULT_COACH_ID ?? ''}
+          coachId={coachId}
         />
       </Box>
     </ThemeProvider>

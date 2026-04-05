@@ -19,12 +19,13 @@ function toCoach(doc: CoachDocument): Coach & { id: string } {
 // ─── CRUD ───────────────────────────────────────────────────────────────────
 
 export async function createCoach(
-  data: Pick<Coach, 'name' | 'email'>
+  data: Pick<Coach, 'name' | 'email'> & { authId?: string }
 ): Promise<Coach & { id: string }> {
   await dbConnect();
   const doc = await CoachModel.create({
     name: data.name,
     email: data.email,
+    ...(data.authId ? { authId: data.authId } : {}),
   });
   return toCoach(doc);
 }

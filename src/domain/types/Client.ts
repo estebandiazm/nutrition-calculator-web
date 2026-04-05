@@ -6,4 +6,5 @@ export interface Client {
     coachId: string;
     authId?: string;
     plans: DietPlan[];
+    updatedAt?: string | Date;
 }
