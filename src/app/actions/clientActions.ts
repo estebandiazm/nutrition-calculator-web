@@ -13,7 +13,7 @@ import { DietPlan } from '../../domain/types/DietPlan';
  * JSON round-trip converts ObjectIds → strings, Dates → ISO strings,
  * and strips any toJSON / prototype references.
  */
-function toClient(doc: ClientDocument): Client & { id: string } {
+function toClient(doc: ClientDocument): Client & { id: string; updatedAt: Date } {
   const plain = JSON.parse(JSON.stringify(doc.toObject()));
   return {
     id: String(plain._id),
@@ -22,6 +22,7 @@ function toClient(doc: ClientDocument): Client & { id: string } {
     coachId: String(plain.coachId),
     authId: plain.authId,
     plans: (plain.plans ?? []).map(sanitisePlan),
+    updatedAt: new Date(plain.updatedAt),
   };
 }
 
@@ -48,19 +49,10 @@ export async function createClient(
   return toClient(doc);
 }
 
-export async function getClients(): Promise<(Client & { id: string })[]> {
+export async function getClients(): Promise<(Client & { id: string; updatedAt: Date })[]> {
   await dbConnect();
-  const docs = await ClientModel.find().sort({ updatedAt: -1 }).lean();
-  return docs.map((doc: any) => {
-    const plain = JSON.parse(JSON.stringify(doc));
-    return {
-      id: String(plain._id),
-      name: plain.name,
-      targetWeight: plain.targetWeight,
-      coachId: String(plain.coachId),
-      plans: (plain.plans ?? []).map(sanitisePlan),
-    };
-  });
+  const docs = await ClientModel.find().sort({ updatedAt: -1 });
+  return docs.map((doc: ClientDocument) => toClient(doc));
 }
 
 export async function getClientById(

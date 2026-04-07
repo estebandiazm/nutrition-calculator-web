@@ -1,3 +1,5 @@
+import { redirect } from 'next/navigation';
+import { authProvider } from '@/lib/registry';
 import styles from './login.module.css';
 import { Alert } from '@/components/ui/Alert';
 import { LoginForm } from './_LoginForm';
@@ -13,6 +15,13 @@ function resolveErrorMessage(error: string): string {
 export default async function LoginPage(props: {
   searchParams: Promise<{ error?: string; message?: string }>;
 }) {
+  // Redirect authenticated users to their home (prevents flickering)
+  const session = await authProvider.getSession();
+  if (session?.user) {
+    const role = session.user.role;
+    redirect(role === 'coach' ? '/clients' : '/dashboard');
+  }
+
   const searchParams = await props.searchParams;
 
   return (

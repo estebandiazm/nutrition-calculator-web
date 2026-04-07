@@ -39,7 +39,7 @@ async function main() {
     console.log(`  _id:   ${existing._id}`);
     console.log(`  name:  ${existing.name}`);
     console.log(`  email: ${existing.email}`);
-    console.log(`\nSet in .env.local:\nNEXT_PUBLIC_DEFAULT_COACH_ID=${existing._id}`);
+    console.log(`\nCoach ID: ${existing._id} (no longer needed in .env.local — auth is session-based)`);
     await mongoose.disconnect();
     return;
   }
@@ -53,7 +53,7 @@ async function main() {
   console.log(`  _id:   ${doc._id}`);
   console.log(`  name:  ${doc.name}`);
   console.log(`  email: ${doc.email}`);
-  console.log(`\nSet in .env.local:\nNEXT_PUBLIC_DEFAULT_COACH_ID=${doc._id}`);
+  console.log(`\nCoach ID: ${doc._id} (no longer needed in .env.local — auth is session-based)`);
 
   await mongoose.disconnect();
 }
