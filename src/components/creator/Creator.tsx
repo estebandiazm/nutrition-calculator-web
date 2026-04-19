@@ -1,14 +1,11 @@
 'use client';
 
 import React, { useContext, useState } from 'react';
-import { Box, Button, TextField, Typography, ThemeProvider } from '@mui/material';
-import { AccountCircle, MonitorWeightRounded, AddCircleOutline, SaveOutlined, CloudUploadOutlined } from '@mui/icons-material';
 import { ClientContext } from '../../context/ClientContext';
 import { ClientContextType } from '../../context/ClientContextType';
 import { DietEngine } from '../../domain/services/DietEngine';
 import { FoodDatabase } from '../../domain/services/FoodDatabase';
 import { useRouter } from 'next/navigation';
-import { darkTheme } from '../../themes';
 import Menu from '../menu/Menu';
 import PlanCard, { PlanDraft } from './PlanCard';
 import SavePlanModal from './SavePlanModal';
@@ -29,26 +26,7 @@ const createDefaultPlan = (): PlanDraft => ({
 
 // ─── styles ─────────────────────────────────────────────────────────────────
 
-const rootBg = {
-  minHeight: '100vh',
-  background: 'linear-gradient(135deg, #0a1628 0%, #0d2157 50%, #0a1628 100%)',
-  py: 3,
-  px: { xs: 2, sm: 3, md: 6 },
-};
-
-const pillInput = {
-  '& .MuiOutlinedInput-root': {
-    borderRadius: '50px',
-    background: 'rgba(255,255,255,0.08)',
-    color: '#fff',
-    '& fieldset': { borderColor: 'rgba(255,255,255,0.25)' },
-    '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.5)' },
-    '&.Mui-focused fieldset': { borderColor: '#7C9FFF' },
-  },
-  '& .MuiInputBase-input': { color: '#fff' },
-  '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.6)' },
-  '& input[type=number]::-webkit-inner-spin-button': { display: 'none' },
-};
+const pillInputClass = 'w-full px-4 py-2 rounded-full bg-white/8 border border-white/25 text-white placeholder-gray-400 focus:border-[#7C9FFF] focus:outline-none';
 
 // ─── types ───────────────────────────────────────────────────────────────────
 
@@ -152,146 +130,86 @@ const Creator = ({ coachId }: CreatorProps) => {
   };
 
   return (
-    <ThemeProvider theme={darkTheme}>
-      <Box sx={rootBg}>
-        <Menu />
+    <div className="min-h-screen bg-gradient-to-b from-[#0a1628] via-[#0d2157] to-[#0a1628] py-6 px-4 sm:px-6 md:px-12">
+      <Menu />
 
-        {/* ── Client header ── */}
-        <Box sx={{ maxWidth: 600, mx: 'auto', mb: 4 }}>
-          <TextField
-            fullWidth
-            label="Client"
-            value={clientName}
-            onChange={(e) => setClientName(e.target.value)}
-            variant="outlined"
-            size="small"
-            sx={{ ...pillInput, mb: 2 }}
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <AccountCircle sx={{ color: 'rgba(255,255,255,0.5)', mr: 1 }} />
-                ),
-              },
-            }}
-          />
-          <TextField
-            fullWidth
-            label="Target Weight"
-            type="number"
-            value={targetWeight}
-            onChange={(e) =>
-              setTargetWeight(e.target.value === '' ? '' : Number(e.target.value))
-            }
-            variant="outlined"
-            size="small"
-            sx={pillInput}
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <MonitorWeightRounded sx={{ color: 'rgba(255,255,255,0.5)', mr: 1 }} />
-                ),
-                endAdornment: (
-                  <Typography sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.85rem', mr: 1 }}>
-                    kg
-                  </Typography>
-                ),
-              },
-            }}
-          />
-        </Box>
-
-        {/* ── Plan cards ── */}
-        <Box sx={{ maxWidth: 600, mx: 'auto' }}>
-          {plans.map((plan, index) => (
-            <PlanCard
-              key={plan.id}
-              plan={plan}
-              index={index}
-              onUpdate={handlePlanUpdate}
+      {/* ── Client header ── */}
+      <div className="max-w-2xl mx-auto mb-8 mt-12">
+        <div className="mb-4">
+          <label className="text-xs text-white/60 font-semibold block mb-2">Client</label>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/25 focus-within:border-[#7C9FFF]">
+            <span>👤</span>
+            <input
+              type="text"
+              placeholder="Client name"
+              value={clientName}
+              onChange={(e) => setClientName(e.target.value)}
+              className="flex-1 bg-transparent text-white placeholder-gray-400 outline-none"
             />
-          ))}
+          </div>
+        </div>
 
-          {/* ── Add Another Plan ── */}
-          <Button
-            fullWidth
-            variant="outlined"
-            onClick={handleAddPlan}
-            startIcon={<AddCircleOutline />}
-            sx={{
-              borderColor: 'rgba(255,255,255,0.3)',
-              color: 'rgba(255,255,255,0.8)',
-              borderRadius: '50px',
-              textTransform: 'none',
-              fontWeight: 600,
-              py: 1.5,
-              mb: 2,
-              '&:hover': {
-                borderColor: '#7C9FFF',
-                color: '#7C9FFF',
-                background: 'rgba(124,159,255,0.08)',
-              },
-            }}
-          >
-            Add Another Plan
-          </Button>
+        <div>
+          <label className="text-xs text-white/60 font-semibold block mb-2">Target Weight</label>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/25 focus-within:border-[#7C9FFF]">
+            <span>⚖️</span>
+            <input
+              type="number"
+              placeholder="Target weight"
+              value={targetWeight}
+              onChange={(e) =>
+                setTargetWeight(e.target.value === '' ? '' : Number(e.target.value))
+              }
+              className="flex-1 bg-transparent text-white placeholder-gray-400 outline-none"
+            />
+            <span className="text-white/50 text-sm">kg</span>
+          </div>
+        </div>
+      </div>
 
-          {/* ── Save All Plans ── */}
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={handleSaveAll}
-            startIcon={<SaveOutlined />}
-            disableElevation
-            sx={{
-              background: 'linear-gradient(135deg, #E91E8C, #9C27B0)',
-              color: '#fff',
-              borderRadius: '50px',
-              textTransform: 'none',
-              fontWeight: 700,
-              fontSize: '1rem',
-              py: 1.8,
-              mb: 4,
-              '&:hover': {
-                background: 'linear-gradient(135deg, #C2185B, #7B1FA2)',
-              },
-            }}
-          >
-            Guardar Planes
-          </Button>
+      {/* ── Plan cards ── */}
+      <div className="max-w-2xl mx-auto">
+        {plans.map((plan, index) => (
+          <PlanCard
+            key={plan.id}
+            plan={plan}
+            index={index}
+            onUpdate={handlePlanUpdate}
+          />
+        ))}
 
-          {/* ── Save to Database ── */}
-          <Button
-            fullWidth
-            variant="outlined"
-            onClick={handleSaveToDB}
-            startIcon={<CloudUploadOutlined />}
-            sx={{
-              borderColor: 'rgba(124,159,255,0.4)',
-              color: '#7C9FFF',
-              borderRadius: '50px',
-              textTransform: 'none',
-              fontWeight: 600,
-              fontSize: '0.95rem',
-              py: 1.5,
-              mb: 4,
-              '&:hover': {
-                borderColor: '#7C9FFF',
-                background: 'rgba(124,159,255,0.08)',
-              },
-            }}
-          >
-            Guardar en Base de Datos
-          </Button>
-        </Box>
+        {/* ── Add Another Plan ── */}
+        <button
+          onClick={handleAddPlan}
+          className="w-full px-6 py-3 mb-4 rounded-full border border-white/30 text-white/80 font-semibold hover:border-[#7C9FFF] hover:text-[#7C9FFF] hover:bg-[#7C9FFF]/8 transition flex items-center justify-center gap-2"
+        >
+          <span>➕</span> Add Another Plan
+        </button>
 
-        <SavePlanModal
-          open={saveModalOpen}
-          onClose={() => setSaveModalOpen(false)}
-          plans={generatedPlans}
-          coachId={coachId}
-        />
-      </Box>
-    </ThemeProvider>
+        {/* ── Save All Plans ── */}
+        <button
+          onClick={handleSaveAll}
+          className="w-full px-6 py-3 mb-6 rounded-full bg-gradient-to-r from-[#E91E8C] to-[#9C27B0] text-white font-bold hover:from-[#C2185B] hover:to-[#7B1FA2] transition flex items-center justify-center gap-2"
+        >
+          <span>💾</span> Guardar Planes
+        </button>
+
+        {/* ── Save to Database ── */}
+        <button
+          onClick={handleSaveToDB}
+          className="w-full px-6 py-3 mb-8 rounded-full border border-[#7C9FFF]/40 text-[#7C9FFF] font-semibold hover:border-[#7C9FFF] hover:bg-[#7C9FFF]/8 transition flex items-center justify-center gap-2"
+        >
+          <span>☁️</span> Guardar en Base de Datos
+        </button>
+      </div>
+
+      <SavePlanModal
+        open={saveModalOpen}
+        onClose={() => setSaveModalOpen(false)}
+        plans={generatedPlans}
+        coachId={coachId}
+      />
+    </div>
   );
 };
 

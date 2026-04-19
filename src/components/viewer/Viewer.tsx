@@ -1,16 +1,9 @@
 'use client'
 
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Avatar, Button, Grid, Stack, ThemeProvider, Chip, Box, Divider } from "@mui/material";
 import FoodTable from "../food-table/FoodTable";
 import React, { useContext, useEffect, useState } from "react";
 import { ClientContext } from "../../context/ClientContext";
 import { ClientContextType } from "../../context/ClientContextType";
-import { lightTheme } from "../../themes";
 import { useRouter } from "next/navigation";
 import { DietPlan } from "../../domain/types/DietPlan";
 
@@ -22,6 +15,7 @@ interface ViewerProps {
 const Viewer = ({ overridePlans, overrideClientName }: ViewerProps = {}) => {
   const router = useRouter();
   const { client } = useContext(ClientContext) as ClientContextType;
+  const [expandedMeal, setExpandedMeal] = useState<string | null>(null);
 
   let [isLoaded, setIsLoaded] = useState(false);
 
@@ -31,14 +25,14 @@ const Viewer = ({ overridePlans, overrideClientName }: ViewerProps = {}) => {
   }, [client]);
 
   if (!isLoaded) {
-    return <Typography sx={{ m: 4 }}>Cargando cliente...</Typography>;
+    return <p className="m-4 text-white">Cargando cliente...</p>;
   }
 
   const clientName = overrideClientName ?? client.name;
   const plans: DietPlan[] = overridePlans ?? client.plans ?? [];
 
   if (!clientName && !overridePlans) {
-    return <Typography sx={{ m: 4 }}>Cargando cliente...</Typography>;
+    return <p className="m-4 text-white">Cargando cliente...</p>;
   }
 
   const saveHandler = () => {
@@ -46,81 +40,86 @@ const Viewer = ({ overridePlans, overrideClientName }: ViewerProps = {}) => {
   };
 
   return (
-    <ThemeProvider theme={lightTheme}>
-      <Box sx={{ m: 2 }}>
-        <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
-          <Avatar sx={{ bgcolor: "primary.main" }}>
-            {clientName ? clientName.charAt(0).toUpperCase() : "U"}
-          </Avatar>
-          <Typography variant="h5">Nombre: {clientName}</Typography>
+    <div className="m-4 bg-gradient-to-b from-[#0a1628] via-[#0d2157] to-[#0a1628] min-h-screen p-6">
+      {/* Client header */}
+      <div className="flex items-center gap-4 mb-6">
+        <div className="w-12 h-12 rounded-full bg-[#7C9FFF]/20 flex items-center justify-center text-white font-bold text-lg">
+          {clientName ? clientName.charAt(0).toUpperCase() : "U"}
+        </div>
+        <div>
+          <h2 className="text-xl font-bold text-white">Nombre: {clientName}</h2>
           {!overridePlans && client.targetWeight && (
-            <Typography variant="body2" color="text.secondary">
-              Peso objetivo: {client.targetWeight} kg
-            </Typography>
+            <p className="text-sm text-white/60">Peso objetivo: {client.targetWeight} kg</p>
           )}
-        </Stack>
+        </div>
+      </div>
 
-        {plans.length === 0 && (
-          <Typography sx={{ mt: 2 }} color="text.secondary">
-            No hay planes guardados para este cliente.
-          </Typography>
-        )}
+      {plans.length === 0 && (
+        <p className="mt-4 text-white/60">No hay planes guardados para este cliente.</p>
+      )}
 
-        {plans.map((plan: DietPlan, planIndex: number) => (
-          <Box key={planIndex} sx={{ mb: 4 }}>
-            {/* Plan header */}
-            <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
-              <Typography variant="h6" fontWeight={700}>
-                {plan.label ?? `Plan ${planIndex + 1}`}
-              </Typography>
-              {plan.days && (
-                <Chip label={plan.days} size="small" color="primary" variant="outlined" />
-              )}
-            </Stack>
-            <Divider sx={{ mb: 2 }} />
+      {plans.map((plan: DietPlan, planIndex: number) => (
+        <div key={planIndex} className="mb-8">
+          {/* Plan header */}
+          <div className="flex items-center gap-3 mb-4">
+            <h3 className="text-lg font-bold text-white">
+              {plan.label ?? `Plan ${planIndex + 1}`}
+            </h3>
+            {plan.days && (
+              <span className="text-xs px-3 py-1 rounded-full border border-[#7C9FFF]/40 text-[#7C9FFF] font-semibold">
+                {plan.days}
+              </span>
+            )}
+          </div>
+          <div className="border-t border-white/10 mb-4" />
 
-            {plan.meals.map((meal: any, index: number) => (
-              <Accordion key={index} sx={{ mb: 2 }}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls={`plan${planIndex}-panel${index}-content`}
-                  id={`plan${planIndex}-panel${index}-header`}
+          {/* Meals */}
+          {plan.meals.map((meal: any, mealIndex: number) => {
+            const isExpanded = expandedMeal === `${planIndex}-${mealIndex}`;
+            return (
+              <div key={mealIndex} className="mb-4 border border-white/10 rounded-lg overflow-hidden">
+                <button
+                  onClick={() => setExpandedMeal(isExpanded ? null : `${planIndex}-${mealIndex}`)}
+                  className="w-full px-4 py-3 flex items-center justify-between bg-white/5 hover:bg-white/10 transition text-white font-semibold"
                 >
-                  <Typography variant="h2">{meal.mealName}</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Grid container spacing={2}>
-                    {meal.blocks.map((block: any, bIndex: number) => (
-                      <Grid size={{ xs: 12, sm: 12, md: Math.max(12 / meal.blocks.length, 6) }} key={bIndex}>
-                        <Stack direction="row" spacing={1} sx={{ mb: 2, mt: 1 }}>
-                          <Chip label={block.blockType} color="primary" variant="outlined" size="small" />
-                        </Stack>
-                        <FoodTable
-                          list={block.options.map((opt: any) => ({
-                            name: opt.foodName,
-                            totalGrams: opt.grams,
-                            category: block.blockType as any,
-                            grams: opt.grams
-                          }))}
-                        />
-                      </Grid>
-                    ))}
-                  </Grid>
-                </AccordionDetails>
-              </Accordion>
-            ))}
-          </Box>
-        ))}
+                  <span>{meal.mealName}</span>
+                  <span className={`transition-transform ${isExpanded ? 'rotate-180' : ''}`}>▼</span>
+                </button>
 
-        <Button
-          variant="contained"
-          onClick={saveHandler}
-          sx={{ width: "100%", mt: 2 }}
-        >
-          Regresar
-        </Button>
-      </Box>
-    </ThemeProvider>
+                {isExpanded && (
+                  <div className="p-4 bg-white/2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {meal.blocks.map((block: any, bIndex: number) => (
+                        <div key={bIndex} className="space-y-3">
+                          <span className="text-xs px-3 py-1 rounded-full border border-[#7C9FFF]/40 text-[#7C9FFF] font-semibold inline-block">
+                            {block.blockType}
+                          </span>
+                          <FoodTable
+                            list={block.options.map((opt: any) => ({
+                              name: opt.foodName,
+                              totalGrams: opt.grams,
+                              category: block.blockType as any,
+                              grams: opt.grams
+                            }))}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ))}
+
+      <button
+        onClick={saveHandler}
+        className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-[#E91E8C] to-[#9C27B0] text-white font-bold rounded-full hover:from-[#C2185B] hover:to-[#7B1FA2] transition"
+      >
+        Regresar
+      </button>
+    </div>
   );
 };
 
