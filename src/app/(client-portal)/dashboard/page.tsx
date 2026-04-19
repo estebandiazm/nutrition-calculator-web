@@ -62,6 +62,13 @@ export default async function ClientDashboard(props: { searchParams: SearchParam
   const clientRecord = await getClientByAuthId(user.id);
   const isMock = !clientRecord || !clientRecord.plans || clientRecord.plans.length === 0;
 
+  // Calculate daily average from daily steps
+  const dailySteps = clientRecord?.dailySteps || [];
+  const dailyAverage = dailySteps.length > 0
+    ? Math.round(dailySteps.reduce((sum, step) => sum + step.steps, 0) / dailySteps.length)
+    : 0;
+  const stepGoal = clientRecord?.stepGoal || 10000;
+
   // Determine active plan
   const plans = isMock ? [mockPlan] : clientRecord.plans;
   
@@ -150,7 +157,7 @@ export default async function ClientDashboard(props: { searchParams: SearchParam
           {/* TOP SECTION: Summary Widgets row */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <MacrosHUD />
-            <StepsCounter current={8420} goal={10000} />
+            <StepsCounter current={dailyAverage} goal={stepGoal} />
             <HydrationTracker current={3.5} goal={3.5} />
             
             <GlassCard className="rounded-3xl p-6 border-white/10 border-b-4 lg:border-l-4 lg:border-b-0 border-tertiary">

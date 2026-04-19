@@ -1,4 +1,5 @@
 import { DietPlan } from "./DietPlan";
+import { DailyStep } from "./DailySteps";
 
 export interface Client {
     name: string;
@@ -6,5 +7,7 @@ export interface Client {
     coachId: string;
     authId?: string;
     plans: DietPlan[];
+    dailySteps?: DailyStep[];
+    stepGoal?: number;
     updatedAt?: string | Date;
 }
