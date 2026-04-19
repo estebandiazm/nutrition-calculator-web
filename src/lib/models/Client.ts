@@ -34,12 +34,21 @@ const DietPlanSchema = new Schema({
   snacks: [SnackOptionSchema],
 }, { timestamps: true });
 
+const DailyStepsSchema = new Schema({
+  date: { type: Date, required: true },
+  steps: { type: Number, required: true, min: 0, max: 100000 },
+  notes: { type: String }
+}, { _id: false });
+
 // --- Main Client Schema ---
 
-export interface ClientDocument extends Omit<IClient, 'plans' | 'coachId' | 'authId'>, Document {
+export interface ClientDocument extends Omit<IClient, 'plans' | 'coachId' | 'authId' | 'dailySteps'>, Document {
   plans: DietPlan[];
   coachId: mongoose.Types.ObjectId;
   authId?: string;
+  dailySteps: Array<{ date: Date; steps: number; notes?: string }>;
+  stepGoal?: number;
+  apiKey?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -49,8 +58,11 @@ const ClientSchema = new Schema<ClientDocument>({
   targetWeight: { type: Number },
   coachId: { type: Schema.Types.ObjectId, ref: 'Coach', required: true },
   authId: { type: String, sparse: true, index: true },
-  plans: [DietPlanSchema] 
-}, { 
+  plans: [DietPlanSchema],
+  dailySteps: [DailyStepsSchema],
+  stepGoal: { type: Number },
+  apiKey: { type: String, unique: true, sparse: true, index: true }
+}, {
   timestamps: true,
   toJSON: { virtuals: true },
   toObject: { virtuals: true }
