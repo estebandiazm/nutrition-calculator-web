@@ -138,7 +138,7 @@ const Creator = ({ coachId }: CreatorProps) => {
         <div className="mb-4">
           <label className="text-xs text-white/60 font-semibold block mb-2">Client</label>
           <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/25 focus-within:border-[#7C9FFF]">
-            <span>👤</span>
+            <span className="material-symbols-outlined text-white/60 text-sm">person</span>
             <input
               type="text"
               placeholder="Client name"
@@ -152,7 +152,7 @@ const Creator = ({ coachId }: CreatorProps) => {
         <div>
           <label className="text-xs text-white/60 font-semibold block mb-2">Target Weight</label>
           <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/8 border border-white/25 focus-within:border-[#7C9FFF]">
-            <span>⚖️</span>
+            <span className="material-symbols-outlined text-white/60 text-sm">scale</span>
             <input
               type="number"
               placeholder="Target weight"
@@ -183,7 +183,7 @@ const Creator = ({ coachId }: CreatorProps) => {
           onClick={handleAddPlan}
           className="w-full px-6 py-3 mb-4 rounded-full border border-white/30 text-white/80 font-semibold hover:border-[#7C9FFF] hover:text-[#7C9FFF] hover:bg-[#7C9FFF]/8 transition flex items-center justify-center gap-2"
         >
-          <span>➕</span> Add Another Plan
+          <span className="material-symbols-outlined">add_circle</span> Add Another Plan
         </button>
 
         {/* ── Save All Plans ── */}
@@ -191,7 +191,7 @@ const Creator = ({ coachId }: CreatorProps) => {
           onClick={handleSaveAll}
           className="w-full px-6 py-3 mb-6 rounded-full bg-gradient-to-r from-[#E91E8C] to-[#9C27B0] text-white font-bold hover:from-[#C2185B] hover:to-[#7B1FA2] transition flex items-center justify-center gap-2"
         >
-          <span>💾</span> Guardar Planes
+          <span className="material-symbols-outlined">save</span> Guardar Planes
         </button>
 
         {/* ── Save to Database ── */}
@@ -199,7 +199,7 @@ const Creator = ({ coachId }: CreatorProps) => {
           onClick={handleSaveToDB}
           className="w-full px-6 py-3 mb-8 rounded-full border border-[#7C9FFF]/40 text-[#7C9FFF] font-semibold hover:border-[#7C9FFF] hover:bg-[#7C9FFF]/8 transition flex items-center justify-center gap-2"
         >
-          <span>☁️</span> Guardar en Base de Datos
+          <span className="material-symbols-outlined">cloud_upload</span> Guardar en Base de Datos
         </button>
       </div>
 

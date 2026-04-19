@@ -98,7 +98,7 @@ export default function SavePlanModal({ open, onClose, plans, coachId }: SavePla
       <div className="bg-gradient-to-b from-[#0d1a33] to-[#14285a] border border-white/10 rounded-2xl w-full max-w-sm mx-4">
         {/* Header */}
         <div className="border-b border-white/10 px-6 py-4 flex items-center gap-2">
-          <span className="text-lg">💾</span>
+          <span className="material-symbols-outlined text-[#7C9FFF]">save</span>
           <h2 className="text-white font-bold">Guardar en Base de Datos</h2>
         </div>
 
@@ -116,7 +116,7 @@ export default function SavePlanModal({ open, onClose, plans, coachId }: SavePla
 
               {fetchingClients ? (
                 <div className="flex justify-center py-6">
-                  <span className="text-xl">⏳</span>
+                  <span className="material-symbols-outlined text-[#7C9FFF] text-2xl animate-spin">hourglass_empty</span>
                 </div>
               ) : (
                 <>
@@ -139,9 +139,9 @@ export default function SavePlanModal({ open, onClose, plans, coachId }: SavePla
                       </select>
                       <button
                         onClick={() => setIsNewClient(true)}
-                        className="text-xs text-white/60 hover:text-[#7C9FFF] transition"
+                        className="text-xs text-white/60 hover:text-[#7C9FFF] transition flex items-center gap-1"
                       >
-                        ➕ Crear nuevo cliente
+                        <span className="material-symbols-outlined text-sm">add_circle</span> Crear nuevo cliente
                       </button>
                     </>
                   )}
@@ -192,7 +192,12 @@ export default function SavePlanModal({ open, onClose, plans, coachId }: SavePla
               disabled={!canSave || loading}
               className="px-6 py-2 rounded-full bg-gradient-to-r from-[#E91E8C] to-[#9C27B0] text-white font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:from-[#C2185B] hover:to-[#7B1FA2] transition flex items-center gap-2"
             >
-              {loading ? '⏳' : '💾'} Guardar
+              {loading ? (
+                <span className="material-symbols-outlined text-sm animate-spin">hourglass_empty</span>
+              ) : (
+                <span className="material-symbols-outlined text-sm">save</span>
+              )}
+              Guardar
             </button>
           </div>
         )}
