@@ -16,7 +16,7 @@ export class SupabaseAuthProvider implements AuthProvider {
     // Attempt to extract role from user metadata
     // Defaulting to 'client' if not found, though we should enforce this in signup
     const rawRole = session.user.user_metadata?.role;
-    const role: Role = (rawRole === 'nutritionist' || rawRole === 'client') ? rawRole : 'client';
+    const role: Role = (rawRole === 'coach' || rawRole === 'client') ? rawRole : 'client';
 
     const authUser: AuthUser = {
       id: session.user.id,
@@ -44,7 +44,7 @@ export class SupabaseAuthProvider implements AuthProvider {
    * This MUST be called from a secure server context (e.g. Server Action).
    * @param email The client's email address
    */
-  async inviteUser(email: string): Promise<{ id: string } | null> {
+  async inviteUser(email: string, role: Role = 'client'): Promise<{ id: string } | null> {
     // Note: We need a client initialized with the SERVICE_ROLE_KEY to bypass RLS and use admin features.
     if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
       console.error('Missing SUPABASE_SERVICE_ROLE_KEY environment variable. Cannot invite user.');
@@ -67,7 +67,7 @@ export class SupabaseAuthProvider implements AuthProvider {
     );
 
     const { data, error } = await adminAuthClient.auth.admin.inviteUserByEmail(email, {
-        data: { role: 'client' } // Inject the role into user_metadata
+        data: { role } // Inject the role into user_metadata
     });
 
     if (error) {

@@ -4,7 +4,9 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/infrastructure/adapters/supabase/server';
 
 function getRedirectUrl(role: string | undefined): string {
-  return role === 'nutritionist' ? '/clients' : '/dashboard';
+  if (role === 'coach') return '/clients';
+  if (role === 'client') return '/dashboard';
+  return '/login?error=Unknown+role.+Contact+your+administrator.';
 }
 
 export async function loginWithPassword(formData: FormData) {

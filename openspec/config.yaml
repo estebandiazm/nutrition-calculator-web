@@ -1,20 +1,33 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+project: fitmetrik-web
+stack:
+  framework: Next.js 16 (App Router)
+  language: TypeScript (strict)
+  runtime: React 19
+  ui: MUI 7 + Tailwind CSS v4
+  database: MongoDB (Mongoose)
+  auth: Supabase Auth
+  validation: Zod 4
+  testing:
+    e2e: Playwright (configured, tests/auth.spec.ts, tests/invite.spec.ts)
+    unit: Vitest (NOT configured — target domain/services/)
+artifact_store: hybrid
+strict_tdd: true
+conventions:
+  branch: change/{change_name}
+  commit: conventional commits
+  pr: issue-first
+  file_naming: kebab-case for files, PascalCase for types and components
+  server_components: default (use client only for interactivity)
+  mutations: Server Actions in src/app/actions/
+  domain: pure TypeScript only, no infra/React imports
+  dependency_injection: src/lib/registry.ts (manual, no DI framework)
 
 # Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+# rules:
+#   proposal:
+#     - Keep proposals under 500 words
+#     - Always include a "Non-goals" section
+#   tasks:
+#     - Break tasks into chunks of max 2 hours

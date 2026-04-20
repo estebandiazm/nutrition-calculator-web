@@ -1,4 +1,4 @@
-export type Role = 'nutritionist' | 'client';
+export type Role = 'coach' | 'client';
 
 export interface AuthUser {
   id: string;
@@ -23,9 +23,10 @@ export interface AuthProvider {
   signOut(): Promise<void>;
 
   /**
-   * Invites a client to the platform.
+   * Invites a user to the platform.
    * Typically generates an email with a magic link or temporary password.
-   * @param email The client's email address
+   * @param email The user's email address
+   * @param role The role to assign to the invited user (defaults to 'client')
    */
-  inviteUser(email: string): Promise<{ id: string } | null>;
+  inviteUser(email: string, role?: Role): Promise<{ id: string } | null>;
 }

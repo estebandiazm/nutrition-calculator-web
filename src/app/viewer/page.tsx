@@ -7,7 +7,6 @@ import { Client } from '../../domain/types/Client';
 import { DietPlan } from '../../domain/types/DietPlan';
 import Viewer from '../../components/viewer/Viewer';
 import ClientProvider from '../../context/ClientContext';
-import { Typography } from '@mui/material';
 
 // ─── Inner component that reads search params ────────────────────────────────
 
@@ -56,10 +55,10 @@ function ViewerContent() {
   // ── Database-loaded plan ──
   if (clientId) {
     if (loading) {
-      return <Typography sx={{ m: 4 }}>Cargando plan...</Typography>;
+      return <p className="m-4 text-white">Cargando plan...</p>;
     }
     if (error) {
-      return <Typography sx={{ m: 4, color: 'error.main' }}>{error}</Typography>;
+      return <p className="m-4 text-red-400">{error}</p>;
     }
     if (dbPlans) {
       return (
@@ -84,7 +83,7 @@ function ViewerContent() {
 
 export default function ViewerPage() {
   return (
-    <Suspense fallback={<Typography sx={{ m: 4 }}>Cargando...</Typography>}>
+    <Suspense fallback={<p className="m-4 text-white">Cargando...</p>}>
       <ViewerContent />
     </Suspense>
   );

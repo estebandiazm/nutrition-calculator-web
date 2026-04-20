@@ -1,20 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Box,
-  Button,
-  TextField,
-  Typography,
-  CircularProgress,
-  Autocomplete,
-  Alert,
-} from '@mui/material';
-import { PersonAdd, SaveOutlined } from '@mui/icons-material';
 import { getClients, createClient, addDietPlanToClient } from '../../app/actions/clientActions';
 import { Client } from '../../domain/types/Client';
 import { DietPlan } from '../../domain/types/DietPlan';
@@ -27,34 +13,12 @@ interface SavePlanModalProps {
   open: boolean;
   onClose: () => void;
   plans: DietPlan[];
-  nutritionistId: string;
+  coachId: string;
 }
-
-// ─── styles ─────────────────────────────────────────────────────────────────
-
-const dialogPaperSx = {
-  background: 'linear-gradient(135deg, #0d1a33 0%, #14285a 100%)',
-  border: '1px solid rgba(255,255,255,0.10)',
-  borderRadius: '16px',
-  minWidth: { xs: '90vw', sm: 420 },
-};
-
-const pillInput = {
-  '& .MuiOutlinedInput-root': {
-    borderRadius: '50px',
-    background: 'rgba(255,255,255,0.08)',
-    color: '#fff',
-    '& fieldset': { borderColor: 'rgba(255,255,255,0.25)' },
-    '&:hover fieldset': { borderColor: 'rgba(255,255,255,0.5)' },
-    '&.Mui-focused fieldset': { borderColor: '#7C9FFF' },
-  },
-  '& .MuiInputBase-input': { color: '#fff' },
-  '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.6)' },
-};
 
 // ─── component ──────────────────────────────────────────────────────────────
 
-export default function SavePlanModal({ open, onClose, plans, nutritionistId }: SavePlanModalProps) {
+export default function SavePlanModal({ open, onClose, plans, coachId }: SavePlanModalProps) {
   const [clients, setClients] = useState<ClientWithId[]>([]);
   const [selectedClient, setSelectedClient] = useState<ClientWithId | null>(null);
   const [newClientName, setNewClientName] = useState('');
@@ -104,7 +68,7 @@ export default function SavePlanModal({ open, onClose, plans, nutritionistId }: 
         }
         const created = await createClient({
           name: newClientName.trim(),
-          nutritionistId,
+          coachId,
         });
         targetClientId = created.id;
       } else {
@@ -127,177 +91,117 @@ export default function SavePlanModal({ open, onClose, plans, nutritionistId }: 
 
   const canSave = isNewClient ? newClientName.trim().length > 0 : selectedClient !== null;
 
+  if (!open) return null;
+
   return (
-    <Dialog open={open} onClose={onClose} PaperProps={{ sx: dialogPaperSx }}>
-      <DialogTitle
-        sx={{
-          color: '#fff',
-          fontWeight: 700,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-        }}
-      >
-        <SaveOutlined sx={{ color: '#7C9FFF' }} />
-        Guardar en Base de Datos
-      </DialogTitle>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-gradient-to-b from-[#0d1a33] to-[#14285a] border border-white/10 rounded-2xl w-full max-w-sm mx-4">
+        {/* Header */}
+        <div className="border-b border-white/10 px-6 py-4 flex items-center gap-2">
+          <span className="material-symbols-outlined text-[#7C9FFF]">save</span>
+          <h2 className="text-white font-bold">Guardar en Base de Datos</h2>
+        </div>
 
-      <DialogContent>
-        {success ? (
-          <Alert
-            severity="success"
-            sx={{
-              mt: 1,
-              background: 'rgba(76,175,80,0.12)',
-              color: '#81c784',
-              border: '1px solid rgba(76,175,80,0.25)',
-              '& .MuiAlert-icon': { color: '#81c784' },
-            }}
-          >
-            ¡Planes guardados exitosamente!
-          </Alert>
-        ) : (
-          <Box sx={{ mt: 1 }}>
-            <Typography sx={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', mb: 2 }}>
-              {plans.length} plan{plans.length !== 1 ? 'es' : ''} se guardarán en el perfil del cliente.
-            </Typography>
+        {/* Content */}
+        <div className="px-6 py-6">
+          {success ? (
+            <div className="bg-green-500/12 border border-green-500/25 rounded-lg p-3 text-green-400">
+              ✓ ¡Planes guardados exitosamente!
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <p className="text-white/60 text-sm">
+                {plans.length} plan{plans.length !== 1 ? 'es' : ''} se guardarán en el perfil del cliente.
+              </p>
 
-            {fetchingClients ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
-                <CircularProgress size={28} sx={{ color: '#7C9FFF' }} />
-              </Box>
-            ) : (
-              <>
-                {!isNewClient && clients.length > 0 && (
-                  <>
-                    <Autocomplete
-                      options={clients}
-                      getOptionLabel={(option) => option.name}
-                      value={selectedClient}
-                      onChange={(_, value) => setSelectedClient(value)}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Seleccionar Cliente"
-                          size="small"
-                          sx={pillInput}
-                        />
-                      )}
-                      sx={{
-                        mb: 1.5,
-                        '& .MuiAutocomplete-popupIndicator': { color: 'rgba(255,255,255,0.5)' },
-                        '& .MuiAutocomplete-clearIndicator': { color: 'rgba(255,255,255,0.5)' },
-                      }}
-                      slotProps={{
-                        paper: {
-                          sx: {
-                            background: '#14285a',
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            color: '#fff',
-                          },
-                        },
-                      }}
-                    />
-                    <Button
-                      size="small"
-                      startIcon={<PersonAdd />}
-                      onClick={() => setIsNewClient(true)}
-                      sx={{
-                        color: 'rgba(255,255,255,0.6)',
-                        textTransform: 'none',
-                        fontSize: '0.8rem',
-                        '&:hover': { color: '#7C9FFF' },
-                      }}
-                    >
-                      Crear nuevo cliente
-                    </Button>
-                  </>
-                )}
-
-                {isNewClient && (
-                  <>
-                    <TextField
-                      fullWidth
-                      label="Nombre del Cliente"
-                      value={newClientName}
-                      onChange={(e) => setNewClientName(e.target.value)}
-                      size="small"
-                      sx={{ ...pillInput, mb: 1.5 }}
-                      autoFocus
-                    />
-                    {clients.length > 0 && (
-                      <Button
-                        size="small"
-                        onClick={() => setIsNewClient(false)}
-                        sx={{
-                          color: 'rgba(255,255,255,0.6)',
-                          textTransform: 'none',
-                          fontSize: '0.8rem',
-                          '&:hover': { color: '#7C9FFF' },
+              {fetchingClients ? (
+                <div className="flex justify-center py-6">
+                  <span className="material-symbols-outlined text-[#7C9FFF] text-2xl animate-spin">hourglass_empty</span>
+                </div>
+              ) : (
+                <>
+                  {!isNewClient && clients.length > 0 && (
+                    <>
+                      <select
+                        value={selectedClient?.id ?? ''}
+                        onChange={(e) => {
+                          const client = clients.find((c) => c.id === e.target.value);
+                          setSelectedClient(client || null);
                         }}
+                        className="w-full px-4 py-2 rounded-full bg-white/8 border border-white/25 text-white focus:border-[#7C9FFF] focus:outline-none"
                       >
-                        Seleccionar cliente existente
-                      </Button>
-                    )}
-                  </>
-                )}
-              </>
-            )}
+                        <option value="">Seleccionar Cliente</option>
+                        {clients.map((client) => (
+                          <option key={client.id} value={client.id}>
+                            {client.name}
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        onClick={() => setIsNewClient(true)}
+                        className="text-xs text-white/60 hover:text-[#7C9FFF] transition flex items-center gap-1"
+                      >
+                        <span className="material-symbols-outlined text-sm">add_circle</span> Crear nuevo cliente
+                      </button>
+                    </>
+                  )}
 
-            {error && (
-              <Alert
-                severity="error"
-                sx={{
-                  mt: 2,
-                  background: 'rgba(244,67,54,0.12)',
-                  color: '#ef9a9a',
-                  border: '1px solid rgba(244,67,54,0.25)',
-                  '& .MuiAlert-icon': { color: '#ef9a9a' },
-                }}
-              >
-                {error}
-              </Alert>
-            )}
-          </Box>
+                  {isNewClient && (
+                    <>
+                      <input
+                        type="text"
+                        placeholder="Nombre del Cliente"
+                        value={newClientName}
+                        onChange={(e) => setNewClientName(e.target.value)}
+                        autoFocus
+                        className="w-full px-4 py-2 rounded-full bg-white/8 border border-white/25 text-white placeholder-gray-400 focus:border-[#7C9FFF] focus:outline-none"
+                      />
+                      {clients.length > 0 && (
+                        <button
+                          onClick={() => setIsNewClient(false)}
+                          className="text-xs text-white/60 hover:text-[#7C9FFF] transition"
+                        >
+                          ← Seleccionar cliente existente
+                        </button>
+                      )}
+                    </>
+                  )}
+                </>
+              )}
+
+              {error && (
+                <div className="bg-red-500/12 border border-red-500/25 rounded-lg p-3 text-red-400 text-sm">
+                  ❌ {error}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Actions */}
+        {!success && (
+          <div className="border-t border-white/10 px-6 py-4 flex justify-end gap-3">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 text-white/50 hover:text-white/70 transition text-sm font-semibold"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={!canSave || loading}
+              className="px-6 py-2 rounded-full bg-gradient-to-r from-[#E91E8C] to-[#9C27B0] text-white font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:from-[#C2185B] hover:to-[#7B1FA2] transition flex items-center gap-2"
+            >
+              {loading ? (
+                <span className="material-symbols-outlined text-sm animate-spin">hourglass_empty</span>
+              ) : (
+                <span className="material-symbols-outlined text-sm">save</span>
+              )}
+              Guardar
+            </button>
+          </div>
         )}
-      </DialogContent>
-
-      {!success && (
-        <DialogActions sx={{ px: 3, pb: 2.5 }}>
-          <Button
-            onClick={onClose}
-            sx={{
-              color: 'rgba(255,255,255,0.5)',
-              textTransform: 'none',
-            }}
-          >
-            Cancelar
-          </Button>
-          <Button
-            onClick={handleSave}
-            disabled={!canSave || loading}
-            variant="contained"
-            disableElevation
-            startIcon={loading ? <CircularProgress size={16} sx={{ color: '#fff' }} /> : <SaveOutlined />}
-            sx={{
-              background: 'linear-gradient(135deg, #E91E8C, #9C27B0)',
-              borderRadius: '50px',
-              textTransform: 'none',
-              fontWeight: 600,
-              px: 3,
-              '&:hover': {
-                background: 'linear-gradient(135deg, #C2185B, #7B1FA2)',
-              },
-              '&.Mui-disabled': {
-                background: 'rgba(255,255,255,0.1)',
-                color: 'rgba(255,255,255,0.3)',
-              },
-            }}
-          >
-            Guardar
-          </Button>
-        </DialogActions>
-      )}
-    </Dialog>
+      </div>
+    </div>
   );
 }

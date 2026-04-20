@@ -4,6 +4,8 @@ import dbConnect from '../../lib/db/mongodb';
 import { ClientModel, ClientDocument } from '../../lib/models/Client';
 import { Client } from '../../domain/types/Client';
 import { DietPlan } from '../../domain/types/DietPlan';
+import { DailyStep, DailyStepSchema } from '../../domain/types/DailySteps';
+import { generateApiKey } from '../../lib/utils/crypto';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -13,15 +15,18 @@ import { DietPlan } from '../../domain/types/DietPlan';
  * JSON round-trip converts ObjectIds → strings, Dates → ISO strings,
  * and strips any toJSON / prototype references.
  */
-function toClient(doc: ClientDocument): Client & { id: string } {
+function toClient(doc: ClientDocument): Client & { id: string; updatedAt: Date } {
   const plain = JSON.parse(JSON.stringify(doc.toObject()));
   return {
     id: String(plain._id),
     name: plain.name,
     targetWeight: plain.targetWeight,
-    nutritionistId: String(plain.nutritionistId),
+    coachId: String(plain.coachId),
     authId: plain.authId,
     plans: (plain.plans ?? []).map(sanitisePlan),
+    dailySteps: plain.dailySteps ?? [],
+    stepGoal: plain.stepGoal,
+    updatedAt: new Date(plain.updatedAt),
   };
 }
 
@@ -35,32 +40,25 @@ function sanitisePlan(plan: any): DietPlan {
 // ─── Client CRUD ────────────────────────────────────────────────────────────
 
 export async function createClient(
-  data: Pick<Client, 'name' | 'nutritionistId'> & Partial<Pick<Client, 'targetWeight' | 'authId'>>
+  data: Pick<Client, 'name' | 'coachId'> & Partial<Pick<Client, 'targetWeight' | 'authId'>>
 ): Promise<Client & { id: string }> {
   await dbConnect();
   const doc = await ClientModel.create({
     name: data.name,
     targetWeight: data.targetWeight,
-    nutritionistId: data.nutritionistId,
+    coachId: data.coachId,
     authId: data.authId,
     plans: [],
+    dailySteps: [],
+    apiKey: generateApiKey(),
   });
   return toClient(doc);
 }
 
-export async function getClients(): Promise<(Client & { id: string })[]> {
+export async function getClients(): Promise<(Client & { id: string; updatedAt: Date })[]> {
   await dbConnect();
-  const docs = await ClientModel.find().sort({ updatedAt: -1 }).lean();
-  return docs.map((doc: any) => {
-    const plain = JSON.parse(JSON.stringify(doc));
-    return {
-      id: String(plain._id),
-      name: plain.name,
-      targetWeight: plain.targetWeight,
-      nutritionistId: String(plain.nutritionistId),
-      plans: (plain.plans ?? []).map(sanitisePlan),
-    };
-  });
+  const docs = await ClientModel.find().sort({ updatedAt: -1 });
+  return docs.map((doc: ClientDocument) => toClient(doc));
 }
 
 export async function getClientById(
@@ -81,11 +79,11 @@ export async function getClientByAuthId(
   return toClient(doc);
 }
 
-export async function getClientsByNutritionist(
-  nutritionistId: string
-): Promise<(Client & { id: string })[]> {
+export async function getClientsByCoachId(
+  coachId: string
+): Promise<(Client & { id: string; updatedAt: Date })[]> {
   await dbConnect();
-  const docs = await ClientModel.find({ nutritionistId }).sort({ updatedAt: -1 });
+  const docs = await ClientModel.find({ coachId }).sort({ updatedAt: -1 });
   return docs.map((doc: ClientDocument) => toClient(doc));
 }
 
@@ -113,4 +111,107 @@ export async function addDietPlanToClient(
   );
   if (!doc) return null;
   return toClient(doc);
+}
+
+// ─── Daily Steps ────────────────────────────────────────────────────────────
+
+export async function addDailyStep(
+  clientId: string,
+  date: Date,
+  steps: number,
+  notes?: string
+): Promise<(Client & { id: string }) | null> {
+  await dbConnect();
+
+  const parsed = DailyStepSchema.safeParse({ date, steps, notes });
+  if (!parsed.success) {
+    throw new Error(`Validation error: ${parsed.error.message}`);
+  }
+
+  const normalizedDate = new Date(date);
+  normalizedDate.setHours(0, 0, 0, 0);
+
+  const doc = await ClientModel.findById(clientId);
+  if (!doc) return null;
+
+  const existingIndex = doc.dailySteps.findIndex(
+    (step: any) => new Date(step.date).toDateString() === normalizedDate.toDateString()
+  );
+
+  if (existingIndex >= 0) {
+    doc.dailySteps[existingIndex] = { date: normalizedDate, steps, notes };
+  } else {
+    doc.dailySteps.push({ date: normalizedDate, steps, notes });
+  }
+
+  await doc.save();
+  return toClient(doc);
+}
+
+export async function getDailyStepsRange(
+  clientId: string,
+  startDate: Date,
+  endDate: Date
+): Promise<DailyStep[]> {
+  await dbConnect();
+  const doc = await ClientModel.findById(clientId);
+  if (!doc) return [];
+
+  const filtered = doc.dailySteps.filter((step: any) => {
+    const stepDate = new Date(step.date);
+    return stepDate >= startDate && stepDate <= endDate;
+  });
+
+  return filtered.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+export async function getDailyStepsAverage(
+  clientId: string,
+  days: number = 30
+): Promise<{ average: number; count: number }> {
+  await dbConnect();
+  const doc = await ClientModel.findById(clientId);
+  if (!doc || doc.dailySteps.length === 0) return { average: 0, count: 0 };
+
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - days);
+
+  const filtered = doc.dailySteps.filter((step: any) => {
+    return new Date(step.date) >= cutoffDate;
+  });
+
+  if (filtered.length === 0) return { average: 0, count: 0 };
+
+  const total = filtered.reduce((sum: number, step: any) => sum + step.steps, 0);
+  const average = Math.round(total / filtered.length);
+
+  return { average, count: filtered.length };
+}
+
+export async function setStepGoal(
+  clientId: string,
+  goal: number
+): Promise<(Client & { id: string }) | null> {
+  await dbConnect();
+
+  if (!Number.isInteger(goal) || goal <= 0) {
+    throw new Error('Step goal must be a positive integer');
+  }
+
+  const doc = await ClientModel.findByIdAndUpdate(
+    clientId,
+    { stepGoal: goal },
+    { new: true }
+  );
+  if (!doc) return null;
+  return toClient(doc);
+}
+
+export async function getStepGoal(
+  clientId: string
+): Promise<number | null> {
+  await dbConnect();
+  const doc = await ClientModel.findById(clientId);
+  if (!doc) return null;
+  return doc.stepGoal ?? null;
 }

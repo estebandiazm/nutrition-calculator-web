@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { usePathname } from 'next/navigation';
 import { logout } from '@/app/actions/authActions';
 
 interface TopAppBarProps {
@@ -8,10 +9,11 @@ interface TopAppBarProps {
   avatarUrl?: string;
 }
 
-export function TopAppBar({ 
-  clientName = "Alex Rivera", 
-  avatarUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuDLGK2Uxkg82D9Ie59FqCxm06CNQMKfIbj8V5u0xrHZRMVvKHFt8tofixLFidkzdJV5ZvQLxvg57V7jPgFNyuBl2i7huvdIep-atgjZAJB_gGj4OgyoKywK6BPqKkMP7ndHIoqX9JNwzGQZlZyv6puIpBWIwgrWhepLcBbt2gu2heZHQ2jjR2Od5Hmf71U27o6AdpC6NbtrciSCKRB2mqZKcmm-_EKq1qBiGDvc_r5EroIzdUey7UU5i8HQDKkHWKKTUpYvWy55o3c" 
+export function TopAppBar({
+  clientName = "Alex Rivera",
+  avatarUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuDLGK2Uxkg82D9Ie59FqCxm06CNQMKfIbj8V5u0xrHZRMVvKHFt8tofixLFidkzdJV5ZvQLxvg57V7jPgFNyuBl2i7huvdIep-atgjZAJB_gGj4OgyoKywK6BPqKkMP7ndHIoqX9JNwzGQZlZyv6puIpBWIwgrWhepLcBbt2gu2heZHQ2jjR2Od5Hmf71U27o6AdpC6NbtrciSCKRB2mqZKcmm-_EKq1qBiGDvc_r5EroIzdUey7UU5i8HQDKkHWKKTUpYvWy55o3c"
 }: TopAppBarProps) {
+  const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-50 w-full glass-card border-b border-white/10 px-6 py-4 lg:px-20">
@@ -26,8 +28,32 @@ export function TopAppBar({
         </div>
         
         <nav className="hidden md:flex items-center gap-10">
-          <a className="text-sm font-semibold text-accent-pink border-b-2 border-accent-pink pb-1" href="/dashboard">Dashboard</a>
-          <a className="text-sm font-semibold text-white/90 hover:text-accent-pink transition-colors" href="#">My Plans</a>
+          <a
+            href="/dashboard"
+            className={`text-sm font-semibold pb-1 border-b-2 transition-colors ${
+              pathname === '/dashboard'
+                ? 'text-accent-pink border-accent-pink'
+                : 'text-white/90 border-transparent hover:text-accent-pink'
+            }`}
+          >
+            Dashboard
+          </a>
+          <a
+            href="/activity"
+            className={`text-sm font-semibold pb-1 border-b-2 transition-colors ${
+              pathname === '/activity'
+                ? 'text-accent-pink border-accent-pink'
+                : 'text-white/90 border-transparent hover:text-accent-pink'
+            }`}
+          >
+            Activity
+          </a>
+          <a
+            href="#"
+            className="text-sm font-semibold text-white/90 hover:text-accent-pink transition-colors pb-1 border-b-2 border-transparent"
+          >
+            My Plans
+          </a>
         </nav>
 
         <div className="flex items-center gap-4">

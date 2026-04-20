@@ -34,12 +34,21 @@ const DietPlanSchema = new Schema({
   snacks: [SnackOptionSchema],
 }, { timestamps: true });
 
+const DailyStepsSchema = new Schema({
+  date: { type: Date, required: true },
+  steps: { type: Number, required: true, min: 0, max: 100000 },
+  notes: { type: String }
+}, { _id: false });
+
 // --- Main Client Schema ---
 
-export interface ClientDocument extends Omit<IClient, 'plans' | 'nutritionistId' | 'authId'>, Document {
+export interface ClientDocument extends Omit<IClient, 'plans' | 'coachId' | 'authId' | 'dailySteps'>, Document {
   plans: DietPlan[];
-  nutritionistId: mongoose.Types.ObjectId;
+  coachId: mongoose.Types.ObjectId;
   authId?: string;
+  dailySteps: Array<{ date: Date; steps: number; notes?: string }>;
+  stepGoal?: number;
+  apiKey?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -47,10 +56,13 @@ export interface ClientDocument extends Omit<IClient, 'plans' | 'nutritionistId'
 const ClientSchema = new Schema<ClientDocument>({
   name: { type: String, required: true },
   targetWeight: { type: Number },
-  nutritionistId: { type: Schema.Types.ObjectId, ref: 'Nutritionist', required: true },
+  coachId: { type: Schema.Types.ObjectId, ref: 'Coach', required: true },
   authId: { type: String, sparse: true, index: true },
-  plans: [DietPlanSchema] 
-}, { 
+  plans: [DietPlanSchema],
+  dailySteps: [DailyStepsSchema],
+  stepGoal: { type: Number },
+  apiKey: { type: String, unique: true, sparse: true, index: true }
+}, {
   timestamps: true,
   toJSON: { virtuals: true },
   toObject: { virtuals: true }
