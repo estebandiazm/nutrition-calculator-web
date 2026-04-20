@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { TopAppBar } from '@/components/layout/TopAppBar';
 import { BottomNavBar } from '@/components/layout/BottomNavBar';
 import { ActivityPageClient } from '@/components/activity/ActivityPageClient';
@@ -21,6 +21,8 @@ export default async function ActivityPage() {
 
   const dailySteps = clientRecord.dailySteps || [];
   const stepGoal = clientRecord.stepGoal || undefined;
+  const dailyWeights = clientRecord.dailyWeights || [];
+  const targetWeight = clientRecord.targetWeight || undefined;
 
   return (
     <div className="font-display bg-surface-dim text-slate-100 min-h-screen pb-32 lg:pb-0 relative overflow-x-hidden w-full">
@@ -33,12 +35,16 @@ export default async function ActivityPage() {
       <TopAppBar clientName={clientRecord.name || "Client User"} />
 
       <main className="flex-1 max-w-[1440px] mx-auto w-full p-6 lg:p-10 flex flex-col gap-8 mt-4">
-        <ActivityPageClient
-          clientId={clientRecord.id}
-          clientName={clientRecord.name}
-          dailySteps={dailySteps}
-          stepGoal={stepGoal}
-        />
+        <Suspense fallback={null}>
+          <ActivityPageClient
+            clientId={clientRecord.id}
+            clientName={clientRecord.name}
+            dailySteps={dailySteps}
+            dailyWeights={dailyWeights}
+            stepGoal={stepGoal}
+            targetWeight={targetWeight}
+          />
+        </Suspense>
       </main>
 
       <BottomNavBar />

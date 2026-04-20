@@ -4,13 +4,16 @@ import { redirect } from 'next/navigation';
 
 import { authProvider } from '@/lib/registry';
 import { getCoachByAuthId } from '@/app/actions/coachActions';
-import { getClientById } from '@/app/actions/clientActions';
+import { getClientById, getDailyWeights } from '@/app/actions/clientActions';
 import { CoachHeader } from '@/components/coach/CoachHeader';
 import { CoachSidebar } from '@/components/coach/CoachSidebar';
 import SummaryCard from '@/components/activity/SummaryCard';
 import TrendsChart from '@/components/activity/TrendsChart';
 import RecentRecords from '@/components/activity/RecentRecords';
 import StepGoalEditor from '@/components/coach/StepGoalEditor';
+import WeightGoalEditor from '@/components/coach/WeightGoalEditor';
+import WeightTrendsChart from '@/components/activity/WeightTrendsChart';
+import WeightRecentRecords from '@/components/activity/WeightRecentRecords';
 
 interface ClientDetailPageProps {
   params: Promise<{ clientId: string }>;
@@ -42,6 +45,8 @@ export default async function ClientDetailPage(props: ClientDetailPageProps) {
 
   const dailySteps = client.dailySteps || [];
   const stepGoal = client.stepGoal || undefined;
+
+  const weights = await getDailyWeights(clientId);
 
   const dailyAverage = dailySteps.length > 0
     ? Math.round(dailySteps.reduce((sum, step) => sum + step.steps, 0) / dailySteps.length)
@@ -124,6 +129,64 @@ export default async function ClientDetailPage(props: ClientDetailPageProps) {
                 <p className="text-[#94a3b8] text-center py-8">No step records yet.</p>
               )}
             </div>
+          </div>
+
+          {/* Weight Tracking Section */}
+          <div className="space-y-6 mt-8">
+            <h2 className="text-xl font-bold text-white">Weight Tracking</h2>
+
+            {/* Weight Goal Editor */}
+            <div className="bg-[#0f172a] border border-[#1e293b] rounded-xl p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">Target Weight</h3>
+              <WeightGoalEditor
+                clientId={clientId}
+                currentTarget={client.targetWeight ?? undefined}
+              />
+            </div>
+
+            {/* Weight Metrics Summary */}
+            {weights.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-[#0f172a] border border-[#1e293b] rounded-xl p-6">
+                  <div className="text-sm text-gray-400 mb-1">Latest Weight</div>
+                  <div className="text-3xl font-bold text-white">
+                    {weights[weights.length - 1].weight} kg
+                  </div>
+                </div>
+                <div className="bg-[#0f172a] border border-[#1e293b] rounded-xl p-6">
+                  <div className="text-sm text-gray-400 mb-1">Lightest</div>
+                  <div className="text-3xl font-bold text-white">
+                    {Math.min(...weights.map((w) => w.weight))} kg
+                  </div>
+                </div>
+                <div className="bg-[#0f172a] border border-[#1e293b] rounded-xl p-6">
+                  <div className="text-sm text-gray-400 mb-1">Heaviest</div>
+                  <div className="text-3xl font-bold text-white">
+                    {Math.max(...weights.map((w) => w.weight))} kg
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-[#0f172a] border border-[#1e293b] rounded-xl p-8 text-center">
+                <p className="text-[#94a3b8]">No weight data yet.</p>
+              </div>
+            )}
+
+            {/* Weight Trends Chart */}
+            {weights.length > 0 && (
+              <div className="bg-[#0f172a] border border-[#1e293b] rounded-xl p-6">
+                <h3 className="text-lg font-semibold text-white mb-4">Weight Trend</h3>
+                <WeightTrendsChart weights={weights} />
+              </div>
+            )}
+
+            {/* Weight History Table */}
+            {weights.length > 0 && (
+              <div className="bg-[#0f172a] border border-[#1e293b] rounded-xl p-6">
+                <h3 className="text-lg font-semibold text-white mb-4">Weight History</h3>
+                <WeightRecentRecords weights={weights} />
+              </div>
+            )}
           </div>
         </main>
       </div>
