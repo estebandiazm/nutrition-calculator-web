@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import { DietPlan } from '../../domain/types/DietPlan';
 import { Client as IClient } from '../../domain/types/Client';
+import { DailyWeight } from '../../domain/types/DailyWeight';
 
 // --- Sub-Schemas based on domain/types ---
 
@@ -40,13 +41,20 @@ const DailyStepsSchema = new Schema({
   notes: { type: String }
 }, { _id: false });
 
+const DailyWeightSchema = new Schema({
+  date: { type: Date, required: true },
+  weight: { type: Number, required: true, min: 0.1, max: 500 },
+  notes: { type: String }
+}, { _id: false });
+
 // --- Main Client Schema ---
 
-export interface ClientDocument extends Omit<IClient, 'plans' | 'coachId' | 'authId' | 'dailySteps'>, Document {
+export interface ClientDocument extends Omit<IClient, 'plans' | 'coachId' | 'authId' | 'dailySteps' | 'dailyWeights'>, Document {
   plans: DietPlan[];
   coachId: mongoose.Types.ObjectId;
   authId?: string;
   dailySteps: Array<{ date: Date; steps: number; notes?: string }>;
+  dailyWeights: Array<DailyWeight>;
   stepGoal?: number;
   apiKey?: string;
   createdAt: Date;
@@ -60,6 +68,7 @@ const ClientSchema = new Schema<ClientDocument>({
   authId: { type: String, sparse: true, index: true },
   plans: [DietPlanSchema],
   dailySteps: [DailyStepsSchema],
+  dailyWeights: [DailyWeightSchema],
   stepGoal: { type: Number },
   apiKey: { type: String, unique: true, sparse: true, index: true }
 }, {

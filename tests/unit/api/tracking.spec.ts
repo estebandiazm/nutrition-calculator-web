@@ -1,0 +1,177 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
+/**
+ * Integration tests for POST /api/clients/[clientId]/tracking
+ *
+ * These tests exercise the route handler in isolation by mocking the
+ * infrastructure layer (auth, server actions) so no database is needed.
+ */
+
+// ── Mocks (must be declared before importing the module under test) ──────────
+
+vi.mock('@/app/api/utils/auth', () => ({
+  validateApiKey: vi.fn(),
+}));
+
+vi.mock('@/app/actions/clientActions', () => ({
+  addDailyStep: vi.fn(),
+  addDailyWeight: vi.fn(),
+}));
+
+import { POST } from '@/app/api/clients/[clientId]/tracking/route';
+import { validateApiKey } from '@/app/api/utils/auth';
+import { addDailyStep, addDailyWeight } from '@/app/actions/clientActions';
+import { NextRequest } from 'next/server';
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+
+function makeRequest(body: unknown, apiKey?: string): NextRequest {
+  const headers: Record<string, string> = { 'content-type': 'application/json' };
+  if (apiKey !== undefined) headers['x-api-key'] = apiKey;
+
+  return new NextRequest('http://localhost/api/clients/test-client/tracking', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body),
+  });
+}
+
+const VALID_CLIENT_ID = 'test-client';
+const VALID_API_KEY = 'valid-key-abc123';
+const VALID_PARAMS = Promise.resolve({ clientId: VALID_CLIENT_ID });
+const FAKE_CLIENT = { id: VALID_CLIENT_ID, name: 'Test' };
+
+// ── Tests ────────────────────────────────────────────────────────────────────
+
+describe('POST /api/clients/[clientId]/tracking', () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+    vi.mocked(validateApiKey).mockResolvedValue(true);
+    vi.mocked(addDailyStep).mockResolvedValue(FAKE_CLIENT as any);
+    vi.mocked(addDailyWeight).mockResolvedValue(FAKE_CLIENT as any);
+  });
+
+  // ── Auth ──────────────────────────────────────────────────────────────────
+
+  it('REQ-UTA-02: should return 401 when X-API-Key header is missing', async () => {
+    const req = makeRequest({ date: '2026-04-19', steps: 5000 }); // no apiKey arg
+    const res = await POST(req, { params: VALID_PARAMS });
+
+    expect(res.status).toBe(401);
+    const body = await res.json();
+    expect(body.error).toContain('Missing X-API-Key');
+  });
+
+  it('REQ-UTA-02: should return 403 when API key is invalid for the client', async () => {
+    vi.mocked(validateApiKey).mockResolvedValue(false);
+
+    const req = makeRequest({ date: '2026-04-19', steps: 5000 }, 'wrong-key');
+    const res = await POST(req, { params: VALID_PARAMS });
+
+    expect(res.status).toBe(403);
+    const body = await res.json();
+    expect(body.error).toContain('Invalid or mismatched API key');
+  });
+
+  // ── Validation ────────────────────────────────────────────────────────────
+
+  it('REQ-UTA-03: should return 400 when both steps and weight are absent', async () => {
+    const req = makeRequest({ date: '2026-04-19' }, VALID_API_KEY);
+    const res = await POST(req, { params: VALID_PARAMS });
+
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toBe('Validation failed');
+  });
+
+  it('REQ-UTA-03: should return 400 for an invalid date string', async () => {
+    const req = makeRequest({ date: 'not-a-date', steps: 5000 }, VALID_API_KEY);
+    const res = await POST(req, { params: VALID_PARAMS });
+
+    expect(res.status).toBe(400);
+  });
+
+  it('REQ-UTA-03: should return 400 when steps exceed maximum (100000)', async () => {
+    const req = makeRequest({ date: '2026-04-19', steps: 200000 }, VALID_API_KEY);
+    const res = await POST(req, { params: VALID_PARAMS });
+
+    expect(res.status).toBe(400);
+  });
+
+  it('REQ-UTA-03: should return 400 when weight is below minimum (0.1)', async () => {
+    const req = makeRequest({ date: '2026-04-19', weight: 0.05 }, VALID_API_KEY);
+    const res = await POST(req, { params: VALID_PARAMS });
+
+    expect(res.status).toBe(400);
+  });
+
+  // ── Dispatch ──────────────────────────────────────────────────────────────
+
+  it('REQ-UTA-04: should accept steps only and call addDailyStep', async () => {
+    const req = makeRequest({ date: '2026-04-19', steps: 8000 }, VALID_API_KEY);
+    const res = await POST(req, { params: VALID_PARAMS });
+
+    expect(res.status).toBe(200);
+    expect(vi.mocked(addDailyStep)).toHaveBeenCalledOnce();
+    expect(vi.mocked(addDailyWeight)).not.toHaveBeenCalled();
+
+    const body = await res.json();
+    expect(body.success).toBe(true);
+    expect(body.data.steps).toBe(8000);
+    expect(body.data.weight).toBeUndefined();
+  });
+
+  it('REQ-UTA-04: should accept weight only and call addDailyWeight', async () => {
+    const req = makeRequest({ date: '2026-04-19', weight: 80.5 }, VALID_API_KEY);
+    const res = await POST(req, { params: VALID_PARAMS });
+
+    expect(res.status).toBe(200);
+    expect(vi.mocked(addDailyWeight)).toHaveBeenCalledOnce();
+    expect(vi.mocked(addDailyStep)).not.toHaveBeenCalled();
+
+    const body = await res.json();
+    expect(body.success).toBe(true);
+    expect(body.data.weight).toBe(80.5);
+    expect(body.data.steps).toBeUndefined();
+  });
+
+  it('REQ-UTA-04: should accept both steps and weight and call both actions', async () => {
+    const req = makeRequest(
+      { date: '2026-04-19', steps: 10000, weight: 79.3 },
+      VALID_API_KEY
+    );
+    const res = await POST(req, { params: VALID_PARAMS });
+
+    expect(res.status).toBe(200);
+    expect(vi.mocked(addDailyStep)).toHaveBeenCalledOnce();
+    expect(vi.mocked(addDailyWeight)).toHaveBeenCalledOnce();
+
+    const body = await res.json();
+    expect(body.success).toBe(true);
+    expect(body.data.steps).toBe(10000);
+    expect(body.data.weight).toBe(79.3);
+  });
+
+  it('should return 404 when client is not found', async () => {
+    vi.mocked(addDailyStep).mockResolvedValue(null);
+
+    const req = makeRequest({ date: '2026-04-19', steps: 5000 }, VALID_API_KEY);
+    const res = await POST(req, { params: VALID_PARAMS });
+
+    expect(res.status).toBe(404);
+    const body = await res.json();
+    expect(body.error).toBe('Client not found');
+  });
+
+  it('should include notes in the response when provided', async () => {
+    const req = makeRequest(
+      { date: '2026-04-19', steps: 5000, notes: 'Morning walk' },
+      VALID_API_KEY
+    );
+    const res = await POST(req, { params: VALID_PARAMS });
+
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.data.notes).toBe('Morning walk');
+  });
+});

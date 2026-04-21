@@ -2,6 +2,7 @@ import React from 'react';
 import { TopAppBar } from '@/components/layout/TopAppBar';
 import { BottomNavBar } from '@/components/layout/BottomNavBar';
 import { StepsCounter } from '@/components/dashboard/StepsCounter';
+import { WeightCounter } from '@/components/dashboard/WeightCounter';
 import { HydrationTracker } from '@/components/dashboard/HydrationTracker';
 import { MacrosHUD } from '@/components/dashboard/MacrosHUD';
 import { PlanSectionCard, PlanSectionCardProps } from '@/components/dashboard/PlanSectionCard';
@@ -68,6 +69,10 @@ export default async function ClientDashboard(props: { searchParams: SearchParam
     ? Math.round(dailySteps.reduce((sum, step) => sum + step.steps, 0) / dailySteps.length)
     : 0;
   const stepGoal = clientRecord?.stepGoal || 10000;
+
+  // Weight data
+  const dailyWeights = clientRecord?.dailyWeights || [];
+  const targetWeight = clientRecord?.targetWeight || undefined;
 
   // Determine active plan
   const plans = isMock ? [mockPlan] : clientRecord.plans;
@@ -159,7 +164,11 @@ export default async function ClientDashboard(props: { searchParams: SearchParam
             <MacrosHUD />
             <StepsCounter current={dailyAverage} goal={stepGoal} />
             <HydrationTracker current={3.5} goal={3.5} />
-            
+            <WeightCounter weights={dailyWeights} targetWeight={targetWeight} />
+          </div>
+
+          {/* Snacks count — now below the main widget row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <GlassCard className="rounded-3xl p-6 border-white/10 border-b-4 lg:border-l-4 lg:border-b-0 border-tertiary">
               <h3 className="text-on-surface-variant text-xs font-bold uppercase tracking-widest mb-4">Snacks per Day</h3>
               <div className="flex items-center gap-4">

@@ -5,6 +5,8 @@ import { ClientModel, ClientDocument } from '../../lib/models/Client';
 import { Client } from '../../domain/types/Client';
 import { DietPlan } from '../../domain/types/DietPlan';
 import { DailyStep, DailyStepSchema } from '../../domain/types/DailySteps';
+import { DailyWeight, DailyWeightSchema } from '../../domain/types/DailyWeight';
+import { calculateWeeklyAverage } from '../../domain/services/weightAverageService';
 import { generateApiKey } from '../../lib/utils/crypto';
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -25,6 +27,7 @@ function toClient(doc: ClientDocument): Client & { id: string; updatedAt: Date }
     authId: plain.authId,
     plans: (plain.plans ?? []).map(sanitisePlan),
     dailySteps: plain.dailySteps ?? [],
+    dailyWeights: plain.dailyWeights ?? [],
     stepGoal: plain.stepGoal,
     updatedAt: new Date(plain.updatedAt),
   };
@@ -214,4 +217,78 @@ export async function getStepGoal(
   const doc = await ClientModel.findById(clientId);
   if (!doc) return null;
   return doc.stepGoal ?? null;
+}
+
+// ─── Daily Weights ───────────────────────────────────────────────────────────
+
+export async function addDailyWeight(
+  clientId: string,
+  date: Date,
+  weight: number,
+  notes?: string
+): Promise<(Client & { id: string }) | null> {
+  await dbConnect();
+
+  const parsed = DailyWeightSchema.safeParse({ date, weight, notes });
+  if (!parsed.success) {
+    throw new Error(`Validation error: ${parsed.error.message}`);
+  }
+
+  const normalizedDate = new Date(date);
+  normalizedDate.setHours(0, 0, 0, 0);
+
+  const doc = await ClientModel.findById(clientId);
+  if (!doc) return null;
+
+  const existingIndex = (doc.dailyWeights ?? []).findIndex(
+    (entry: DailyWeight) =>
+      new Date(entry.date).toDateString() === normalizedDate.toDateString()
+  );
+
+  if (existingIndex >= 0) {
+    doc.dailyWeights[existingIndex] = { date: normalizedDate, weight, notes };
+  } else {
+    if (!doc.dailyWeights) doc.dailyWeights = [];
+    doc.dailyWeights.push({ date: normalizedDate, weight, notes });
+  }
+
+  await doc.save();
+  return toClient(doc);
+}
+
+export async function getDailyWeights(
+  clientId: string
+): Promise<DailyWeight[]> {
+  await dbConnect();
+  const doc = await ClientModel.findById(clientId);
+  if (!doc) return [];
+  return doc.dailyWeights ?? [];
+}
+
+export async function getWeeklyWeightAverage(
+  clientId: string,
+  startDate: Date,
+  endDate: Date
+): Promise<number | null> {
+  const weights = await getDailyWeights(clientId);
+  return calculateWeeklyAverage(weights, startDate, endDate);
+}
+
+export async function setTargetWeight(
+  clientId: string,
+  targetWeight: number
+): Promise<(Client & { id: string }) | null> {
+  await dbConnect();
+
+  if (typeof targetWeight !== 'number' || targetWeight <= 0) {
+    throw new Error('Target weight must be a positive number');
+  }
+
+  const doc = await ClientModel.findByIdAndUpdate(
+    clientId,
+    { targetWeight },
+    { new: true }
+  );
+  if (!doc) return null;
+  return toClient(doc);
 }
