@@ -11,9 +11,11 @@ interface WeightRecentRecordsProps {
 export default function WeightRecentRecords({ weights }: WeightRecentRecordsProps) {
   const [displayCount, setDisplayCount] = useState(10);
 
-  const sortedWeights = [...weights].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  const sortedWeights = [...weights].sort((a, b) => {
+    const aISO = new Date(a.date).toISOString();
+    const bISO = new Date(b.date).toISOString();
+    return bISO.localeCompare(aISO);
+  });
   const displayedWeights = sortedWeights.slice(0, displayCount);
 
   if (weights.length === 0) {

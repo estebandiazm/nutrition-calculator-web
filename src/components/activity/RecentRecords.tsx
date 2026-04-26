@@ -12,7 +12,11 @@ interface RecentRecordsProps {
 export default function RecentRecords({ steps, stepGoal }: RecentRecordsProps) {
   const [displayCount, setDisplayCount] = useState(10);
 
-  const sortedSteps = [...steps].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const sortedSteps = [...steps].sort((a, b) => {
+    const aISO = new Date(a.date).toISOString();
+    const bISO = new Date(b.date).toISOString();
+    return bISO.localeCompare(aISO);
+  });
   const displayedSteps = sortedSteps.slice(0, displayCount);
 
   const getStatusBadge = (stepCount: number) => {
