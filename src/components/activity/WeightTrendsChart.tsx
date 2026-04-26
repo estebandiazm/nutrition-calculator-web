@@ -32,9 +32,11 @@ export default function WeightTrendsChart({ weights }: WeightTrendsChartProps) {
     date.setHours(0, 0, 0, 0);
 
     const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    const entry = weights.find(
-      (w) => new Date(w.date).toDateString() === date.toDateString()
-    );
+    const dateISODate = date.toISOString().split('T')[0];
+    const entry = weights.find((w) => {
+      const wISODate = new Date(w.date).toISOString().split('T')[0];
+      return wISODate === dateISODate;
+    });
 
     chartData.push({
       date: dateStr,
