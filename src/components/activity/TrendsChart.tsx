@@ -25,9 +25,11 @@ export default function TrendsChart({ steps }: TrendsChartProps) {
     date.setHours(0, 0, 0, 0);
 
     const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    const stepEntry = filteredSteps.find(
-      (s) => new Date(s.date).toDateString() === date.toDateString()
-    );
+    const dateISODate = date.toISOString().split('T')[0];
+    const stepEntry = filteredSteps.find((s) => {
+      const sISODate = new Date(s.date).toISOString().split('T')[0];
+      return sISODate === dateISODate;
+    });
 
     chartData.push({
       date: dateStr,

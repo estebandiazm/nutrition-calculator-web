@@ -24,6 +24,10 @@ export default async function ActivityPage() {
   const dailyWeights = clientRecord.dailyWeights || [];
   const targetWeight = clientRecord.targetWeight || undefined;
 
+  console.log('[ActivityPage] dailySteps count:', dailySteps.length);
+  console.log('[ActivityPage] dailyWeights count:', dailyWeights.length);
+  console.log('[ActivityPage] dailySteps:', JSON.stringify(dailySteps, null, 2).substring(0, 500));
+
   return (
     <div className="font-display bg-surface-dim text-slate-100 min-h-screen pb-32 lg:pb-0 relative overflow-x-hidden w-full">
       {/* Background Elements */}
