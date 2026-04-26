@@ -234,6 +234,12 @@ export async function addDailyWeight(
     throw new Error(`Validation error: ${parsed.error.message}`);
   }
 
+  let finalNotes = notes;
+  if (weight === 0) {
+    const autoNote = 'Peso no registrado, tomado del dia anterior';
+    finalNotes = notes ? `${notes}. ${autoNote}` : autoNote;
+  }
+
   const normalizedDate = new Date(date);
   normalizedDate.setHours(0, 0, 0, 0);
 
@@ -246,10 +252,10 @@ export async function addDailyWeight(
   );
 
   if (existingIndex >= 0) {
-    doc.dailyWeights[existingIndex] = { date: normalizedDate, weight, notes };
+    doc.dailyWeights[existingIndex] = { date: normalizedDate, weight, finalNotes };
   } else {
     if (!doc.dailyWeights) doc.dailyWeights = [];
-    doc.dailyWeights.push({ date: normalizedDate, weight, notes });
+    doc.dailyWeights.push({ date: normalizedDate, weight, finalNotes });
   }
 
   await doc.save();
