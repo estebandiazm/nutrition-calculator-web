@@ -9,6 +9,19 @@ interface RecentRecordsProps {
   stepGoal?: number;
 }
 
+function formatUTCDate(dateStr: string | Date): string {
+  const isoString = typeof dateStr === 'string' ? dateStr : dateStr.toISOString();
+  const [year, month, day] = isoString.split('T')[0].split('-');
+  const utcDate = new Date(Date.UTC(parseInt(year), parseInt(month) - 1, parseInt(day)));
+
+  return new Intl.DateTimeFormat('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(utcDate);
+}
+
 export default function RecentRecords({ steps, stepGoal }: RecentRecordsProps) {
   const [displayCount, setDisplayCount] = useState(10);
 
@@ -58,11 +71,7 @@ export default function RecentRecords({ steps, stepGoal }: RecentRecordsProps) {
               >
                 <td className="px-6 py-4">
                   <p className="text-white font-medium">
-                    {new Date(step.date).toLocaleDateString('en-US', {
-                      weekday: 'short',
-                      month: 'short',
-                      day: 'numeric',
-                    })}
+                    {formatUTCDate(step.date)}
                   </p>
                   {step.notes && (
                     <p className="text-xs text-gray-400 mt-1">{step.notes}</p>

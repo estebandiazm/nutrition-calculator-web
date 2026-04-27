@@ -8,6 +8,19 @@ interface WeightRecentRecordsProps {
   weights: DailyWeight[];
 }
 
+function formatUTCDate(dateStr: string | Date): string {
+  const isoString = typeof dateStr === 'string' ? dateStr : dateStr.toISOString();
+  const [year, month, day] = isoString.split('T')[0].split('-');
+  const utcDate = new Date(Date.UTC(parseInt(year), parseInt(month) - 1, parseInt(day)));
+
+  return new Intl.DateTimeFormat('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(utcDate);
+}
+
 export default function WeightRecentRecords({ weights }: WeightRecentRecordsProps) {
   const [displayCount, setDisplayCount] = useState(10);
 
@@ -45,11 +58,7 @@ export default function WeightRecentRecords({ weights }: WeightRecentRecordsProp
               >
                 <td className="px-6 py-4">
                   <p className="text-white font-medium">
-                    {new Date(entry.date).toLocaleDateString('en-US', {
-                      weekday: 'short',
-                      month: 'short',
-                      day: 'numeric',
-                    })}
+                    {formatUTCDate(entry.date)}
                   </p>
                 </td>
                 <td className="px-6 py-4 text-right text-blue-400 font-semibold">

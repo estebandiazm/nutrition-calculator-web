@@ -118,7 +118,7 @@ export function ActivityPageClient({
         <>
           <SummaryCard dailyAverage={dailyAverage} stepGoal={stepGoal} />
           {dailySteps.length > 0 && (
-            <TrendsChart steps={dailySteps} key={`chart-${refreshKey}`} />
+            <TrendsChart steps={dailySteps} stepGoal={stepGoal} key={`chart-${refreshKey}`} />
           )}
           {dailySteps.length > 0 ? (
             <RecentRecords
@@ -139,7 +139,7 @@ export function ActivityPageClient({
       {/* Weight Tab */}
       {activeTab === 'weight' && (
         <>
-          <WeightTrendsChart weights={dailyWeights} key={`weight-chart-${refreshKey}`} />
+          <WeightTrendsChart weights={dailyWeights} targetWeight={targetWeight} key={`weight-chart-${refreshKey}`} />
           <div>
             <h3 className="text-white font-semibold text-lg mb-4">Recent Records</h3>
             <WeightRecentRecords
