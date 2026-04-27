@@ -1,0 +1,35 @@
+name: Sync Release to Deployment
+
+on:
+  release:
+    types: [published] # Solo se ejecuta cuando publicas un release oficial
+
+permissions:
+  contents: write # Asegura que el bot tenga permiso para hacer push
+
+jobs:
+  sync-branch:
+    name: Fast-Forward Deployment Branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Necesario para traer todo el historial y ramas
+
+      - name: Configurar Git Identity
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Sincronizar rama deployment
+        run: |
+          # 1. Nos movemos a la rama deployment
+          git checkout deployment
+          
+          # 2. Hacemos un merge fast-forward exacto hacia el tag que disparó la action
+          # ${GITHUB_REF} contiene el nombre del tag (ej. refs/tags/v1.0.0)
+          git merge ${{ github.ref }} --ff-only
+          
+          # 3. Empujamos los cambios a GitHub
+          git push origin deployment
