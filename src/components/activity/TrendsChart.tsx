@@ -95,7 +95,7 @@ export default function TrendsChart({ steps, stepGoal }: TrendsChartProps) {
                 boxShadow: '0 8px 32px rgba(233, 30, 140, 0.2)',
               }}
               labelStyle={{ color: '#fff', fontWeight: 'bold' }}
-              formatter={(value) => [`${value.toLocaleString()} steps`, 'Steps']}
+              formatter={(value) => [value ? `${value.toLocaleString()} steps` : '0 steps', 'Steps']}
               cursor={{ fill: 'rgba(233, 30, 140, 0.1)' }}
             />
             <Bar dataKey="steps" fill="#E91E8C" radius={[8, 8, 0, 0]} />
