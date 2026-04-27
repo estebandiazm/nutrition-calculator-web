@@ -2,22 +2,24 @@
 
 import React, { useState } from 'react';
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  ReferenceLine,
 } from 'recharts';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { DailyWeight } from '@/domain/types/DailyWeight';
 
 interface WeightTrendsChartProps {
   weights: DailyWeight[];
+  targetWeight?: number;
 }
 
-export default function WeightTrendsChart({ weights }: WeightTrendsChartProps) {
+export default function WeightTrendsChart({ weights, targetWeight }: WeightTrendsChartProps) {
   const [period, setPeriod] = useState<'month' | 'week'>('month');
 
   const cutoffDate = new Date();
@@ -72,7 +74,13 @@ export default function WeightTrendsChart({ weights }: WeightTrendsChartProps) {
 
       <div className="w-full h-80">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={chartData}>
+          <AreaChart data={chartData}>
+            <defs>
+              <linearGradient id="colorWeight" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.01} />
+              </linearGradient>
+            </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
             <XAxis dataKey="date" stroke="rgba(255,255,255,0.5)" style={{ fontSize: '0.85rem' }} />
             <YAxis
@@ -80,28 +88,56 @@ export default function WeightTrendsChart({ weights }: WeightTrendsChartProps) {
               style={{ fontSize: '0.85rem' }}
               domain={['dataMin - 2', 'dataMax + 2']}
             />
+            {targetWeight && (
+              <ReferenceLine
+                y={targetWeight}
+                stroke="#10b981"
+                strokeDasharray="5 5"
+                strokeWidth={2}
+                label={{
+                  value: `Target: ${targetWeight} kg`,
+                  position: 'right',
+                  fill: '#10b981',
+                  fontSize: 12,
+                  fontWeight: 'bold',
+                }}
+              />
+            )}
             <Tooltip
               contentStyle={{
-                background: '#0d1a33',
-                border: '1px solid rgba(255,255,255,0.2)',
+                background: 'rgba(13, 26, 51, 0.95)',
+                border: '2px solid #3b82f6',
                 borderRadius: '8px',
+                boxShadow: '0 8px 32px rgba(59, 130, 246, 0.2)',
               }}
-              labelStyle={{ color: '#fff' }}
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              formatter={(value: any) =>
+              labelStyle={{ color: '#fff', fontWeight: 'bold' }}
+              formatter={(value) =>
                 value != null ? [`${value} kg`, 'Weight'] : ['No data', 'Weight']
               }
+              cursor={{ fill: 'rgba(59, 130, 246, 0.1)' }}
             />
-            <Line
+            <Area
               type="monotone"
               dataKey="weight"
-              stroke="#60a5fa"
+              stroke="#3b82f6"
               strokeWidth={2}
-              dot={{ fill: '#60a5fa', r: 4 }}
-              activeDot={{ r: 6 }}
+              fillOpacity={1}
+              fill="url(#colorWeight)"
+              dot={{
+                fill: '#3b82f6',
+                r: 4,
+                strokeWidth: 2,
+                stroke: '#0d1a33',
+              }}
+              activeDot={{
+                r: 6,
+                fill: '#3b82f6',
+                stroke: '#60a5fa',
+                strokeWidth: 2,
+              }}
               connectNulls={false}
             />
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       </div>
     </GlassCard>

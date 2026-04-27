@@ -10,13 +10,16 @@ interface RecentRecordsProps {
 }
 
 function formatUTCDate(dateStr: string | Date): string {
-  const date = new Date(dateStr);
-  const utcDate = new Date(date.toISOString().split('T')[0] + 'T00:00:00Z');
-  return utcDate.toLocaleDateString('en-US', {
+  const isoString = typeof dateStr === 'string' ? dateStr : dateStr.toISOString();
+  const [year, month, day] = isoString.split('T')[0].split('-');
+  const utcDate = new Date(Date.UTC(parseInt(year), parseInt(month) - 1, parseInt(day)));
+
+  return new Intl.DateTimeFormat('en-US', {
     weekday: 'short',
     month: 'short',
     day: 'numeric',
-  });
+    timeZone: 'UTC',
+  }).format(utcDate);
 }
 
 export default function RecentRecords({ steps, stepGoal }: RecentRecordsProps) {
