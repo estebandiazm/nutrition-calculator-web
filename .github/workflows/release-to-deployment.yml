@@ -2,34 +2,28 @@ name: Sync Release to Deployment
 
 on:
   release:
-    types: [published] # Solo se ejecuta cuando publicas un release oficial
+    types: [published]
 
 permissions:
-  contents: write # Asegura que el bot tenga permiso para hacer push
+  contents: write
 
 jobs:
   sync-branch:
-    name: Fast-Forward Deployment Branch
+    name: Force Push Tag to Deployment Branch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Necesario para traer todo el historial y ramas
+          fetch-depth: 0
 
-      - name: Configurar Git Identity
+      - name: Configure Git identity
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Sincronizar rama deployment
+      - name: Sync deployment branch with release tag
         run: |
-          # 1. Nos movemos a la rama deployment
-          git checkout deployment
-          
-          # 2. Hacemos un merge fast-forward exacto hacia el tag que disparó la action
-          # ${GITHUB_REF} contiene el nombre del tag (ej. refs/tags/v1.0.0)
-          git merge ${{ github.ref }} --ff-only
-          
-          # 3. Empujamos los cambios a GitHub
-          git push origin deployment
+          # Pushes the exact code from the triggered Release Tag directly to the deployment branch,
+          # overwriting any diverging history to ensure a clean 1:1 match for Supabase.
+          git push origin ${{ github.ref }}:refs/heads/deployment --force
